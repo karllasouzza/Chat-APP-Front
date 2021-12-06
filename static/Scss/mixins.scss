@@ -20,3 +20,18 @@
     color: $color;
   }
 }
+
+@mixin ButtonHoverToTransparent($Color) {
+  &:hover {
+    background-color: transparent;
+    color: $Color;
+    border: 1px solid $Color;
+  }
+}
+@mixin ButtonHoverToSolidColor($PrimaryColor,$Color){
+  &:hover {
+    background-color: $PrimaryColor;
+    color: $Color;
+    border: none;
+  }
+}
