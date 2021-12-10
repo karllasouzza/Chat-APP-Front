@@ -5,7 +5,7 @@
   color: $color;
   font-family: 'raleway', sans-serif;
 }
-@mixin placeholder($color: Dark) {
+@mixin placeholder($color: red) {
   &::placeholder {
     /* Chrome, Firefox, Opera, Safari 10.1+ */
     color: $color;

@@ -73,15 +73,19 @@ export default {
     langDir: 'lang/',
     defaultLocale: 'en',
   },
+  axios: {
+    proxy: true,
+    retry: { retries: 3 },
+  },
 
   proxy: {
     '/api/': {
       target: 'https://chat-app-karlla.herokuapp.com/',
       pathRewrite: { '^/api/': '' },
     },
-    '/apiDev/': {
-      target: 'https://localhost:4000',
-      pathRewrite: { '^/apiDev/': '' },
+    '/dev/': {
+      target: 'http://localhost:4000',
+      pathRewrite: { '^/dev/': '' },
     },
   },
 

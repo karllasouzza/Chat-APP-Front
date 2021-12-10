@@ -12,6 +12,15 @@ export default {
       { text: 'Login', type: 'button' },
       { text: 'Create Account', type: 'button' },
     ],
+    Error: {
+      Null_email: 'Email format is Invalid',
+      Null_password: 'Password format is Invalid',
+      Null_name: 'Name format is Invalid',
+      Null_password_confirmation: 'Passwords not Match',
+
+      Login: 'Email and Password is incorrect!',
+      Account: "Error Creating Account!"
+    },
     popUps: [
       {
         Label: 'Login',

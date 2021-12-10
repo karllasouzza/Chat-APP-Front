@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Notfy v-if="NotfyView" />
     <Logo />
     <aside>
       <h1>{{ $t('Login.label') }}</h1>
@@ -27,7 +28,7 @@
       @click="login ? (login = false) : (account = false)"
     />
 
-    <form v-if="login" class="login" novalidate @submit.prevent="MakeLogin()">
+    <form v-if="login" class="login" novalidate>
       <div>
         <span>
           <p>{{ $t('Login.popUps[0].Greeting') }}</p>
@@ -51,6 +52,7 @@
       </div>
       <div class="input">
         <input
+          ref="email_login"
           v-model="email_login"
           type="email"
           :placeholder="$t('Login.popUps[0].Placeholder_Email')"
@@ -59,6 +61,7 @@
       </div>
       <div class="input">
         <input
+          ref="password_login"
           v-model="password_login"
           :type="passwordChange"
           :placeholder="$t('Login.popUps[0].Placeholder_Password')"
@@ -96,9 +99,10 @@
         </svg>
       </div>
       <BtnPrimary
-        type="submit"
+        type="button"
         text="Login"
         :title="$t('Login.popUps[0].Title_Button_Login')"
+        @click.native="MakeLogin()"
       />
     </form>
 
@@ -231,7 +235,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 
 export default {
   data() {
@@ -245,46 +249,107 @@ export default {
       /* V models */
       email_login: '',
       password_login: '',
+
+      name_account: '',
+      email_account: '',
+      confirm_password: '',
+      password_account: '',
     }
+  },
+  computed: {
+    ...mapState({
+      NotfyView: (state) => state.Notification.view,
+      NotfyText: (state) => state.Notification.text,
+    }),
   },
   methods: {
     ...mapActions({
       SetUser: 'User/SetUser',
+      SetNotfy: 'Notification/SetNotfy',
+    }),
+    ...mapMutations({
+      CloseNotfy: 'Notification/CloseNotfy',
+      OpenNotfy: 'Notification/OpenNotfy',
     }),
 
     async MakeLogin() {
-      const response = await this.$axios.$post('/login/users', {
-        email: this.email_login,
-        password: this.password_login,
-      })
-
-      if (response.error === false) {
-        this.SetUser({
-          User: response.response[0],
-        })
-        return this.$router.push('/')
-      }
-    },
-    async MakeAccount() {
-      try {
-        await this.$axios
-          .$post('/users', {
+      if (
+        !this.validPassword(this.password_login, this.password_login) |
+        !this.validEmail(this.email_login)
+      )
+        return
+      await this.$axios
+        .$post(
+          '/dev/login/users',
+          {
             email: this.email_login,
             password: this.password_login,
+          },
+          { progress: false }
+        )
+        .then((response) => {
+          this.SetUser({
+            User: response.response[0],
           })
-          .then((response) => {
+          return this.$router.push('/')
+        })
+        .catch(() => {
+          this.SetNotfy(this.$t('Login.Error.Login'))
+        })
+    },
 
-            this.SetUser({
-              User: response.response[0],
-            })
-            return this.$router.push('/')
+    async MakeAccount() {
+      await this.$axios
+        .$post('/dev/users', {
+          email: this.email_login,
+          password: this.password_login,
+        })
+        .then((response) => {
+          this.SetUser({
+            User: response.response[0],
           })
-          .catch((error) => {
-            console.log(error)
-          })
-      } catch (error) {
-        console.log(error)
+          return this.$router.push('/')
+        })
+        .catch(() => {
+          this.SetNotfy(this.$t('Login.Error.Account'))
+        })
+    },
+
+    validName(name) {
+      const regex = /^([a-z]{2,}([\s-][a-z]{2,})+)$/gi
+      if (!regex.test(name)) {
+        this.SetNotfy(this.$t('Login.Error.Null_name'))
+        return false
       }
+
+      this.CloseNotfy()
+      return true
+    },
+    validEmail(email) {
+      const regex =
+        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi
+
+      if (!regex.test(email)) {
+        this.SetNotfy(this.$t('Login.Error.Null_email'))
+        return false
+      }
+
+      this.CloseNotfy()
+      return true
+    },
+    validPassword(password, confirmPassword) {
+      const regex =
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/
+
+      if (!regex.test(password)) {
+        this.SetNotfy(this.$t('Login.Error.Null_password'))
+        return false
+      } else if (password !== confirmPassword) {
+        this.SetNotfy(this.$t('Login.Error.Null_password_confirmation'))
+        return false
+      }
+      this.CloseNotfy()
+      return true
     },
   },
 }

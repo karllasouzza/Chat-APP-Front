@@ -7,7 +7,7 @@ export const state = () => ({
 export const mutations = {
   // Items
   addUser(state, User) {
-    state.user = User.user
+    state.user = User
     state.logado = true
   },
   clearUser(state, User) {
@@ -19,6 +19,6 @@ export const mutations = {
 // actions
 export const actions = {
   SetUser(context, Usuario) {
-    context.commit('addUser', Usuario.User)
+    context.commit('addUser', Usuario)
   },
 }
