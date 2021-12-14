@@ -5,11 +5,11 @@ export const state = () => ({
 
 // mutations
 export const mutations = {
-  OpenNotfy(state, text) {
+  OpenNotify(state, text) {
     state.text = text
     state.view = true
   },
-  CloseNotfy(state) {
+  CloseNotify(state) {
     state.text = ''
     state.view = false
   },
@@ -17,7 +17,7 @@ export const mutations = {
 
 // actions
 export const actions = {
-  SetNotfy(context, text) {
-    context.commit('OpenNotfy', text)
+  SetNotify(context, text) {
+    context.commit('OpenNotify', text)
   },
 }

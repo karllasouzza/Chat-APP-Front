@@ -13,13 +13,22 @@ export default {
       { text: 'Create Account', type: 'button' },
     ],
     Error: {
-      Null_email: 'Email format is Invalid',
-      Null_password: 'Password format is Invalid',
-      Null_name: 'Name format is Invalid',
+      Null_name: 'Name is not defined',
+      Invalid_name: 'Name format is invalid',
+
+      Null_email: 'Email is not defined',
+      Invalid_email: 'Email format is invalid',
+      Duplicate_email: 'Email is already taken',
+      Unregistered_email: 'Unregistered email',
+
+      Null_password: 'Password is not defined',
+      Invalid_password: 'Password format is invalid',
       Null_password_confirmation: 'Passwords not Match',
 
       Login: 'Email and Password is incorrect!',
-      Account: "Error Creating Account!"
+      Account: 'Error Creating Account!',
+
+      Error_Request: 'Sorry, please try again',
     },
     popUps: [
       {

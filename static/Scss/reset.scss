@@ -165,31 +165,17 @@ li {
   list-style: none;
 }
 
-*, *:after, *:before{
+*,
+*:after,
+*:before {
   box-sizing: border-box;
   font-family: 'Montserrat';
 }
 
 html,
-body {
-  width: 100%;
-  height: 100%;
-}
-
-#__nuxt {
-  width: 100%;
-  height: 100%;
-
-  display: grid;
-  grid-template-columns: 10px 1fr 10px;
-  grid-template-rows: 10px 1fr 45px 10px;
-  background-color: #360c8a;
-}
-
+body,
+#__nuxt,
 #__layout {
-  grid-row: 2/4;
-  grid-column: 2/3;
-  background-color: #fff;
-  border-radius: 20px;
+  width: 100%;
+  height: 100%;
 }
-

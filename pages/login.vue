@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Notfy v-if="NotfyView" />
+    <Notify v-if="NotifyView" />
     <Logo />
     <aside>
       <h1>{{ $t('Login.label') }}</h1>
@@ -61,7 +61,7 @@
       </div>
       <div class="input">
         <input
-          ref="password_login"
+          ref="R_password_login"
           v-model="password_login"
           :type="passwordChange"
           :placeholder="$t('Login.popUps[0].Placeholder_Password')"
@@ -130,7 +130,8 @@
       </div>
       <div class="input">
         <input
-          id="name"
+          ref="name_account"
+          v-model="name_account"
           type="text"
           :placeholder="$t('Login.popUps[1].Placeholder_Name')"
           :title="$t('Login.popUps[1].Title_Name')"
@@ -138,7 +139,8 @@
       </div>
       <div class="input">
         <input
-          id="email_account"
+          ref="R_email_account"
+          v-model="email_account"
           type="email"
           :placeholder="$t('Login.popUps[1].Placeholder_Email')"
           :title="$t('Login.popUps[1].Title_Email')"
@@ -146,7 +148,8 @@
       </div>
       <div class="input">
         <input
-          id="password_account"
+          ref="R_password_account"
+          v-model="password_account"
           :type="Account_passwordChange"
           :placeholder="$t('Login.popUps[1].Placeholder_Password')"
           :title="$t('Login.popUps[1].Title_Password')"
@@ -186,11 +189,11 @@
       </div>
       <div class="input">
         <input
-          id="password_account_confirm"
+          ref="R_confirm_password"
+          v-model="confirm_password"
           :placeholder="$t('Login.popUps[1].Placeholder_ConfirmPassword')"
           :title="$t('Login.popUps[1].Title_ConfirmPassword')"
           :type="Confirm_passwordChange"
-          nocomplete
         />
         <svg
           v-if="Confirm_passwordChange == 'password'"
@@ -226,9 +229,10 @@
         </svg>
       </div>
       <BtnPrimary
-        type="submit"
+        type="button"
         :title="$t('Login.popUps[1].Title_Button')"
         :text="$t('Login.popUps[1].Text_Button')"
+        @click.native="MakeAccount()"
       />
     </form>
   </div>
@@ -258,23 +262,22 @@ export default {
   },
   computed: {
     ...mapState({
-      NotfyView: (state) => state.Notification.view,
-      NotfyText: (state) => state.Notification.text,
+      NotifyView: (state) => state.Notification.view,
+      NotifyText: (state) => state.Notification.text,
     }),
   },
   methods: {
     ...mapActions({
       SetUser: 'User/SetUser',
-      SetNotfy: 'Notification/SetNotfy',
+      SetNotify: 'Notification/SetNotify',
     }),
     ...mapMutations({
-      CloseNotfy: 'Notification/CloseNotfy',
-      OpenNotfy: 'Notification/OpenNotfy',
+      OpenNotify: 'Notification/OpenNotify',
     }),
 
     async MakeLogin() {
       if (
-        !this.validPassword(this.password_login, this.password_login) |
+        !this.validPassword(this.password_login) |
         !this.validEmail(this.email_login)
       )
         return
@@ -294,61 +297,154 @@ export default {
           return this.$router.push('/')
         })
         .catch(() => {
-          this.SetNotfy(this.$t('Login.Error.Login'))
+          this.SetNotify(this.$t('Login.Error.Login'))
         })
     },
 
     async MakeAccount() {
+      if (
+        !this.validPasswordAccount(
+          this.password_account,
+          this.confirm_password
+        ) |
+        !this.validEmailAccount(this.email_account) |
+        !this.validName(this.name_account)
+      )
+        return
+
       await this.$axios
-        .$post('/dev/users', {
-          email: this.email_login,
-          password: this.password_login,
+        .$post('/dev/users/', {
+          name: this.name_account,
+          email: this.email_account,
+          password: this.confirm_password,
         })
         .then((response) => {
           this.SetUser({
-            User: response.response[0],
+            User: response.Response[0],
           })
           return this.$router.push('/')
         })
         .catch(() => {
-          this.SetNotfy(this.$t('Login.Error.Account'))
+          this.SetNotify(this.$t('Login.Error.Account'))
         })
     },
 
     validName(name) {
       const regex = /^([a-z]{2,}([\s-][a-z]{2,})+)$/gi
+
+      if (!name) {
+        this.$refs.name_account.focus()
+        this.SetNotify(this.$t('Login.Error.Null_name'))
+
+        return false
+      }
       if (!regex.test(name)) {
-        this.SetNotfy(this.$t('Login.Error.Null_name'))
+        this.$refs.name_account.focus()
+
+        this.SetNotify(this.$t('Login.Error.Invalid_name'))
         return false
       }
 
-      this.CloseNotfy()
       return true
     },
-    validEmail(email) {
+
+    async validEmailAccount(email) {
       const regex =
         /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi
 
-      if (!regex.test(email)) {
-        this.SetNotfy(this.$t('Login.Error.Null_email'))
+      if (!email) {
+        this.$refs.R_email_account.focus()
+        this.SetNotify(this.$t('Login.Error.Null_email'))
+        return false
+      } else if (!regex.test(email)) {
+        this.$refs.R_email_account.focus()
+
+        this.SetNotify(this.$t('Login.Error.Invalid_email'))
+        return false
+      }
+      await this.$axios
+        .$get(`/dev/users/search/${email}`)
+        .then((response) => {
+          this.$refs.R_email_account.focus()
+
+          this.SetNotify(this.$t('Login.Error.Duplicate_email'))
+          return false
+        })
+        .catch(() => {
+          return true
+        })
+    },
+    async validEmail(email) {
+      const regex =
+        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi
+
+      if (!email) {
+        this.$refs.email_login.focus()
+        this.SetNotify(this.$t('Login.Error.Null_email'))
+        return false
+      } else if (!regex.test(email)) {
+        this.$refs.email_login.focus()
+
+        this.SetNotify(this.$t('Login.Error.Invalid_email'))
         return false
       }
 
-      this.CloseNotfy()
-      return true
+      await this.$axios
+        .$get(`/dev/users/search/${email}`)
+        .then((response) => {
+          return true
+        })
+        .catch(() => {
+          this.$refs.email_login.focus()
+
+          this.SetNotify(this.$t('Login.Error.Unregistered_email'))
+          return false
+        })
     },
-    validPassword(password, confirmPassword) {
+    validPasswordAccount(password, confirmPassword) {
       const regex =
         /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/
 
-      if (!regex.test(password)) {
-        this.SetNotfy(this.$t('Login.Error.Null_password'))
+      if (!password) {
+        this.$refs.R_password_account.focus()
+
+        this.SetNotify(this.$t('Login.Error.Null_password'))
+        return false
+      } else if (!confirmPassword) {
+        this.$refs.R_confirm_password.focus()
+
+        this.SetNotify(this.$t('Login.Error.Null_password'))
+        return false
+      } else if (!regex.test(password)) {
+        this.$refs.R_password_account.focus()
+
+        this.SetNotify(this.$t('Login.Error.Null_password'))
         return false
       } else if (password !== confirmPassword) {
-        this.SetNotfy(this.$t('Login.Error.Null_password_confirmation'))
+        this.$refs.R_confirm_password.focus()
+
+        this.SetNotify(this.$t('Login.Error.Null_password_confirmation'))
         return false
       }
-      this.CloseNotfy()
+
+      return true
+    },
+    validPassword(password) {
+      const regex =
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/
+
+      if (!password) {
+        this.$refs.R_password_login.focus()
+
+        this.SetNotify(this.$t('Login.Error.Null_password'))
+        return false
+      } else if (!regex.test(password)) {
+        this.$refs.R_password_login.focus()
+
+        this.SetNotify(this.$t('Login.Error.Null_password'))
+        return false
+      }
+
       return true
     },
   },

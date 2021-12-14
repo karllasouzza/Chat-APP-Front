@@ -8,7 +8,7 @@
       viewBox="0 0 34 34"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      @click="CloseNotfy"
+      @click="CloseNotify"
     >
       <title>{{ $t('Login.close_title') }}</title>
       <path
@@ -22,6 +22,11 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 export default {
+  data() {
+    return {
+      timeout: '',
+    }
+  },
   computed: {
     ...mapState({
       text: (state) => state.Notification.text,
@@ -30,12 +35,14 @@ export default {
   },
   methods: {
     ...mapMutations({
-      CloseNotfy: 'Notification/CloseNotfy',
+      CloseNotify: 'Notification/CloseNotify',
     }),
 
     loading() {
-      setTimeout(() => {
-        this.CloseNotfy()
+      this.timeout = setTimeout(() => {
+        this.CloseNotify()
+
+        clearTimeout(this.timeout)
       }, 3000)
     },
   },
