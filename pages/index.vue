@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <nuxt-link to="/login">Login</nuxt-link>
-  </div>
+  <div></div>
 </template>
 
 <script>
@@ -13,6 +11,7 @@ export default {
       user: (state) => state.User.user,
     }),
   },
+
   created() {
     if (this.user === null) {
       return this.$router.push('/login')

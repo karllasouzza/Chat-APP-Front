@@ -2,6 +2,12 @@ export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
+  // Enable to all ports:
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+  },
+
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 
@@ -35,7 +41,7 @@ export default {
     ],
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [{ src: './plugins/vuexPersistedState.js', mode: 'client' }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -51,7 +57,6 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/i18n',
-    '@nuxtjs/auth-next',
   ],
 
   // i18n
@@ -74,6 +79,7 @@ export default {
     langDir: 'lang/',
     defaultLocale: 'en',
   },
+
   axios: {
     proxy: true,
     retry: { retries: 3 },
@@ -88,9 +94,6 @@ export default {
       target: 'http://localhost:4000',
       pathRewrite: { '^/dev/': '' },
     },
-  },
-
-  auth: {
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
