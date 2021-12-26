@@ -175,7 +175,19 @@ li {
 html,
 body,
 #__nuxt,
-#__layout {
+#__layout,
+main {
   width: 100%;
   height: 100%;
+
+  overflow-y: auto;
+  /* Hidden Scrollbar Firefox, Edge and IE */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Hidden Scrollbar safari and chrome */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
