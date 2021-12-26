@@ -28,7 +28,7 @@
       @click="login ? (login = false) : (account = false)"
     />
 
-    <form v-if="login" class="login" novalidate @submit.prevent="MakeLogin()">
+    <form v-if="login" class="login" novalidate>
       <div>
         <span>
           <p>{{ $t('Login.popUps[0].Greeting') }}</p>
@@ -247,6 +247,7 @@
 import { mapActions, mapState, mapMutations } from 'vuex'
 
 export default {
+  name: 'Login',
   data() {
     return {
       login: false,
@@ -265,6 +266,7 @@ export default {
       password_account: '',
     }
   },
+
   computed: {
     ...mapState({
       NotifyView: (state) => state.Notification.view,
@@ -332,13 +334,6 @@ export default {
           .catch(() => {
             this.SetNotify(this.$t('Login.Error.Account'))
           })
-
-        await this.$auth.loginWith('local', {
-          data: {
-            email: this.email_account,
-            password: this.confirm_password,
-          },
-        })
 
         return this.$router.push('/')
       } catch (e) {

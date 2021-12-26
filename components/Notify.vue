@@ -1,5 +1,5 @@
 <template>
-  <section :load="loading()">
+  <section>
     <p>{{ text }}</p>
     <svg
       class="close"
@@ -27,12 +27,16 @@ export default {
       timeout: '',
     }
   },
+  fetch() {
+    this.loading()
+  },
   computed: {
     ...mapState({
       text: (state) => state.Notification.text,
       View: (state) => state.Notification.view,
     }),
   },
+
   methods: {
     ...mapMutations({
       CloseNotify: 'Notification/CloseNotify',
