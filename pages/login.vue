@@ -28,7 +28,7 @@
       @click="login ? (login = false) : (account = false)"
     />
 
-    <form v-if="login" class="login" novalidate>
+    <form v-if="login" class="login" novalidate @submit.prevent="MakeLogin()">
       <div>
         <span>
           <p>{{ $t('Login.popUps[0].Greeting') }}</p>
@@ -106,7 +106,12 @@
       />
     </form>
 
-    <form v-if="account" class="account" novalidate>
+    <form
+      v-if="account"
+      class="account"
+      novalidate
+      @submit.prevent="MakeAccount()"
+    >
       <div>
         <span>
           <p>{{ $t('Login.popUps[1].Greeting') }}</p>
@@ -302,31 +307,43 @@ export default {
     },
 
     async MakeAccount() {
-      if (
-        !this.validPasswordAccount(
-          this.password_account,
-          this.confirm_password
-        ) |
-        !this.validEmailAccount(this.email_account) |
-        !this.validName(this.name_account)
-      )
-        return
+      try {
+        if (
+          !this.validPasswordAccount(
+            this.password_account,
+            this.confirm_password
+          ) |
+          !this.validEmailAccount(this.email_account) |
+          !this.validName(this.name_account)
+        )
+          return
 
-      await this.$axios
-        .$post('/dev/users/', {
-          name: this.name_account,
-          email: this.email_account,
-          password: this.confirm_password,
-        })
-        .then((response) => {
-          this.SetUser({
-            User: response.Response[0],
+        await this.$axios
+          .$post('/dev/users/', {
+            name: this.name_account,
+            email: this.email_account,
+            password: this.confirm_password,
           })
-          return this.$router.push('/')
+          .then((response) => {
+            this.SetUser({
+              User: response.Response[0],
+            })
+          })
+          .catch(() => {
+            this.SetNotify(this.$t('Login.Error.Account'))
+          })
+
+        await this.$auth.loginWith('local', {
+          data: {
+            email: this.email_account,
+            password: this.confirm_password,
+          },
         })
-        .catch(() => {
-          this.SetNotify(this.$t('Login.Error.Account'))
-        })
+
+        return this.$router.push('/')
+      } catch (e) {
+        alert(e)
+      }
     },
 
     validName(name) {

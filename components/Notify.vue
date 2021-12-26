@@ -74,6 +74,8 @@ section {
   font-size: 17px;
   font-weight: bold;
 
+  z-index: 999;
+
   p {
     width: 85%;
     height: fit-content;
