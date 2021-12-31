@@ -31,6 +31,7 @@ export default {
     '~static/Scss/color.scss',
     '~static/Scss/reset.scss',
     '~static/Scss/mixins.scss',
+    '~static/Scss/imagens.scss',
   ],
 
   styleResources: {

@@ -4,6 +4,7 @@
       v-for="(item, index) in messages.content"
       :key="index"
       :text="item.CONTENT"
+      :user-i-d="item.ID_USERS"
     />
   </main>
 </template>
@@ -19,7 +20,8 @@ export default {
     }
   },
   async fetch() {
-    this.messages = await this.$axios.$get('/dev/messages')
+    const headers = { 'Content-Type': 'application/json' }
+    this.messages = await this.$axios.$get('/dev/messages', { headers })
   },
   fetchOnServer: false,
   fetchDelay: 200,
@@ -38,6 +40,7 @@ export default {
   },
 }
 </script>
+
 <style lang="scss" scoped>
 main {
   width: 100%;

@@ -2,11 +2,11 @@
   <div class="card">
     <header>
       <div>
-        <figure>KS</figure>
-        <figcaption>Karlla</figcaption>
+        <figure :class="imageToProfile(user.response[0].NAME)"></figure>
+        <figcaption>{{ user.response[0].NAME }}</figcaption>
       </div>
       <div>
-        <MoreCard />
+        <MoreCard v-if="text.length > 180" />
       </div>
     </header>
     <span>
@@ -21,11 +21,37 @@ export default {
   components: {
     MoreCard,
   },
+
   props: {
     text: {
       type: String,
-      default: '',
       required: true,
+    },
+    userID: {
+      type: Number,
+      required: true,
+    },
+  },
+
+  data() {
+    return {
+      user: { response: [{ NAME: 'Default User' }] },
+    }
+  },
+  async fetch() {
+    const headers = { 'Content-Type': 'application/json' }
+    this.user = await this.$axios.$get(`/dev/users/${this.userID}`, {
+      headers,
+    })
+  },
+  created() {
+    this.$fetch()
+  },
+  methods: {
+    imageToProfile(name) {
+      name = name[0]
+      name = name.toLowerCase()
+      return `image_${name}`
     },
   },
 }
@@ -46,7 +72,7 @@ export default {
   margin: 20px auto;
   padding: 5px 5px;
 
-  box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.315);
+  box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.212);
 
   header {
     width: 100%;
@@ -62,25 +88,31 @@ export default {
       justify-content: space-around;
 
       &:first-child {
-        width: 40%;
+        width: fit-content;
+        min-width: 80px;
+        max-width: 75%;
+        justify-content: space-between;
 
         figure {
-          width: 30px;
-          height: 30px;
+          width: 35px;
+          height: 35px;
 
-          border-radius: 50%;
+          border-radius: 10px;
 
-          background: red;
+          background-color: rgb(111, 0, 255);
 
           display: flex;
           align-items: center;
           justify-content: center;
         }
         figcaption {
-          font-size: large;
-          font-weight: bold;
+          width: fit-content;
+          margin-left: 5px;
 
+          font-size: 14px;
+          font-weight: bold;
           font-family: 'Raleway';
+          vertical-align: middle;
         }
       }
     }
@@ -94,7 +126,14 @@ export default {
     align-items: center;
     justify-content: flex-start;
 
-    padding: 0 5px;
+    // white-space: pre-wrap;
+    vertical-align: middle;
+    text-align: start;
+    word-wrap: break-word;
+    line-height: 1.3333;
+
+    padding: 10px 5px;
+    font-size: 14px;
   }
 }
 </style>
