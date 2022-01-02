@@ -42,7 +42,10 @@ export default {
     ],
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [{ src: './plugins/vuexPersistedState.js', mode: 'client' }],
+  plugins: [
+    { src: './plugins/vuexPersistedState.js', mode: 'client' },
+    { src: './plugins/auto-resize.js' },
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div :class="userX.ID === userID ? 'MYcard' : 'card'">
     <header>
       <div>
         <figure :class="imageToProfile(user.response[0].NAME)"></figure>
@@ -16,7 +16,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import MoreCard from '~/components/Svgs/MoreCard.vue'
+
 export default {
   components: {
     MoreCard,
@@ -44,6 +46,11 @@ export default {
       headers,
     })
   },
+  computed: {
+    ...mapState({
+      userX: (state) => state.User.user.User,
+    }),
+  },
   created() {
     this.$fetch()
   },
@@ -58,7 +65,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card {
+@import '../static/Scss/color.scss';
+.card,
+.MYcard {
   width: 90%;
   height: fit-content;
   min-height: 80px;
@@ -68,7 +77,7 @@ export default {
   align-items: center;
   justify-content: space-around;
 
-  border-radius: 10px;
+  border-radius: 0px 10px 10px 10px;
   margin: 20px auto;
   padding: 5px 5px;
 
@@ -98,8 +107,6 @@ export default {
           height: 35px;
 
           border-radius: 10px;
-
-          background-color: rgb(111, 0, 255);
 
           display: flex;
           align-items: center;
@@ -135,5 +142,10 @@ export default {
     padding: 10px 5px;
     font-size: 14px;
   }
+}
+
+.MYcard {
+  border-radius: 10px 10px 0px 10px;
+  background: #d7ccff;
 }
 </style>
