@@ -247,7 +247,7 @@
 import { mapActions, mapState, mapMutations } from 'vuex'
 
 export default {
-  name: 'Login',
+  name: 'LoginPage',
   data() {
     return {
       login: false,
@@ -327,7 +327,6 @@ export default {
             password: this.confirm_password,
           })
           .then((response) => {
-            console.log(response.data.response)
             this.SetUser({
               User: response.data.response,
             })

@@ -55,13 +55,15 @@
 </template>
 
 <script>
-export default {}
+export default {
+  name: 'LogoImage',
+}
 </script>
 
 <style scoped>
 .Logo_animate {
   stroke-width: 1px;
-  animation:Change_color 3s infinite;
+  animation: Change_color 3s infinite;
 }
 
 @keyframes Change_color {
@@ -94,6 +96,6 @@ export default {}
   }
   to {
     stroke: #6a4c93;
-    }
+  }
 }
 </style>

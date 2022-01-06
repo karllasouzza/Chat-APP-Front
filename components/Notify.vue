@@ -22,6 +22,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 export default {
+  name: 'NotifyUser',
   data() {
     return {
       timeout: '',

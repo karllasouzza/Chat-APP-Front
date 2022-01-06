@@ -51,7 +51,6 @@ export default {
     const socket = io('http://localhost:4000')
 
     socket.on('message-created', (serverTask) => {
-      console.log(serverTask.Response.response)
       this.messages.push(serverTask.Response.response)
     })
 
