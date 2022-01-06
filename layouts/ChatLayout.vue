@@ -1,12 +1,13 @@
 <template>
   <div id="APP">
     <Nuxt />
-    <Header />
+    <PushMessage />
   </div>
 </template>
 
 <script>
-export default {}
+import PushMessage from '~/components/PushMessage.vue'
+export default { components: { PushMessage } }
 </script>
 
 <style>

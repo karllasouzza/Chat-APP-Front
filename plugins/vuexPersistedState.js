@@ -4,7 +4,7 @@ export default ({ store }) => {
   persistedState({
     key: '_abc',
     reducer: (state) => ({
-      User: state.User,
+      User: state.User ,
     }),
     storage: {
       getItem(key) {

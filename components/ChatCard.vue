@@ -1,6 +1,16 @@
 <template>
-  <div :class="userX.ID === userID ? 'MYcard' : 'card'">
-    <header>
+  <div
+    :class="
+      userX.ID === userID
+        ? before
+          ? 'Sequence MyCard'
+          : 'MyCard'
+        : before
+        ? 'Sequence Card'
+        : 'Card'
+    "
+  >
+    <header v-if="!before">
       <div>
         <figure :class="imageToProfile(user.response[0].NAME)"></figure>
         <figcaption>{{ user.response[0].NAME }}</figcaption>
@@ -30,7 +40,11 @@ export default {
       required: true,
     },
     userID: {
-      type: Number,
+      type: String,
+      required: true,
+    },
+    before: {
+      type: Boolean,
       required: true,
     },
   },
@@ -42,13 +56,17 @@ export default {
   },
   async fetch() {
     const headers = { 'Content-Type': 'application/json' }
-    this.user = await this.$axios.$get(`/dev/users/${this.userID}`, {
-      headers,
-    })
+    await this.$axios
+      .$get(`/dev/users/${this.userID}`, {
+        headers,
+      })
+      .then((response) => {
+        this.user = response.data
+      })
   },
   computed: {
     ...mapState({
-      userX: (state) => state.User.user.User,
+      userX: (state) => state.User.user[0],
     }),
   },
   created() {
@@ -66,19 +84,20 @@ export default {
 
 <style lang="scss" scoped>
 @import '../static/Scss/color.scss';
-.card,
-.MYcard {
-  width: 90%;
+.Card,
+.MyCard {
+  width: fit-content;
+  max-width: 85%;
   height: fit-content;
-  min-height: 80px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+  align-self: flex-start;
 
   border-radius: 0px 10px 10px 10px;
-  margin: 20px auto;
+  margin: 10px 10px;
   padding: 5px 5px;
 
   box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.212);
@@ -92,15 +111,15 @@ export default {
     justify-content: space-between;
 
     div {
+      min-width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-around;
 
       &:first-child {
         width: fit-content;
-        min-width: 80px;
-        max-width: 75%;
-        justify-content: space-between;
+        min-width: 140px;
+        justify-content: flex-start;
 
         figure {
           width: 35px;
@@ -144,8 +163,14 @@ export default {
   }
 }
 
-.MYcard {
+.MyCard {
   border-radius: 10px 10px 0px 10px;
   background: #d7ccff;
+  align-self: flex-end;
+}
+
+.Sequence {
+  min-height: 50px;
+  margin-top: 0px;
 }
 </style>

@@ -299,7 +299,7 @@ export default {
         )
         .then((response) => {
           this.SetUser({
-            User: response.response[0],
+            User: response.data.response,
           })
           return this.$router.push('/')
         })
@@ -327,12 +327,14 @@ export default {
             password: this.confirm_password,
           })
           .then((response) => {
+            console.log(response.data.response)
             this.SetUser({
-              User: response.Response[0],
+              User: response.data.response,
             })
           })
-          .catch(() => {
-            this.SetNotify(this.$t('Login.Error.Account'))
+
+          .catch((error) => {
+            this.SetNotify(error)
           })
 
         return this.$router.push('/')

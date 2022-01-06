@@ -1,33 +1,46 @@
 <template>
   <main>
     <ChatCard
-      v-for="(item, index) in messages.content"
+      v-for="(item, index) in messages"
       :key="index"
       :text="item.CONTENT"
       :user-i-d="item.ID_USERS"
+      :before="
+        index != 0
+          ? messages[index - 1].ID_USERS === item.ID_USERS
+            ? true
+            : false
+          : false
+      "
     />
   </main>
 </template>
 
 <script>
-import io from 'socket.io-client'
+import { io } from 'socket.io-client'
 
 import { mapState } from 'vuex'
 
 export default {
-  name: 'Home',
-  layout: 'Primary',
+  name: 'HomePage',
+
+  layout: 'ChatLayout',
+
   data() {
     return {
-      messages: [],
+      messages: {},
     }
   },
+
   async fetch() {
     const headers = { 'Content-Type': 'application/json' }
-    this.messages = await this.$axios.$get('/dev/messages', { headers })
+    await this.$axios.$get('/dev/messages', { headers }).then((response) => {
+      this.messages = response.data.response
+    })
   },
   fetchOnServer: false,
   fetchDelay: 200,
+
   computed: {
     ...mapState({
       user: (state) => state.User.user,
@@ -35,10 +48,11 @@ export default {
   },
 
   mounted() {
-    const socket = io('http://127.0.0.1:4000')
+    const socket = io('http://localhost:4000')
 
     socket.on('message-created', (serverTask) => {
-      this.messages.push(serverTask)
+      console.log(serverTask.Response.response)
+      this.messages.push(serverTask.Response.response)
     })
 
     // socket.on('message-updated', (serverTask) => {
@@ -54,6 +68,7 @@ export default {
     //   )
     // })
   },
+
   created() {
     if (this.user === null) {
       return this.$router.push('/login')
@@ -67,6 +82,7 @@ main {
   width: 100%;
   height: 100%;
 
-  overflow-x: auto;
+  display: flex;
+  flex-direction: column;
 }
 </style>

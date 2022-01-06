@@ -183,6 +183,7 @@ main {
   /* Hidden Scrollbar Firefox, Edge and IE */
   scrollbar-width: none;
   -ms-overflow-style: none;
+  overflow-y: hidden;
 }
 
 /* Hidden Scrollbar safari and chrome */
