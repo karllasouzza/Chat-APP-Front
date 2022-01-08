@@ -10,7 +10,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import SendMessage from './Svgs/SendMessage.vue'
+
 export default {
   components: { SendMessage },
   data() {
@@ -18,10 +20,24 @@ export default {
       content: '',
     }
   },
+  computed: {
+    ...mapState({
+      userX: (state) => state.User.user[0],
+    }),
+  },
   methods: {
     sendMessages() {
-      if (!this.content) {
-        this.$refs.message.focus()
+      if (this.content) {
+        this.$axios
+          .post('/dev/messages', {
+            content: this.content,
+            id: this.userX.ID,
+          })
+          .then(() => {
+            this.content = ''
+          })
+      } else {
+        // this.$refs.message.focus()
       }
     },
   },

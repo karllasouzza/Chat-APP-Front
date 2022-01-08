@@ -38,7 +38,7 @@ export default { components: { PushMessage } }
   grid-template-rows: 1fr auto;
 }
 
-main {
+.main {
   grid-row: 1/2;
   border-radius: 15px 15px 0 0;
   background: white;

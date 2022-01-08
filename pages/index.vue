@@ -1,7 +1,13 @@
 <template>
-  <main>
+  <main ref="main" class="main">
+    <!-- v-for="(n, index) in pageOffset" :key="index" -->
+    <header>
+      <div ref="infiniteScrollTriggerH"></div>
+      <div v-if="showLoader" class="scroll-loader">CARREGANDOOOOOOOOOO</div>
+    </header>
     <ChatCard
       v-for="(item, index) in messages"
+      :id="`m-${index}`"
       :key="index"
       :text="item.CONTENT"
       :user-i-d="item.ID_USERS"
@@ -13,6 +19,10 @@
           : false
       "
     />
+    <footer>
+      <div ref="infiniteScrollTriggerF"></div>
+      <div v-if="showLoader" class="scroll-loader">CARREGANDOOOOOOOOOO</div>
+    </footer>
   </main>
 </template>
 
@@ -21,22 +31,30 @@ import { io } from 'socket.io-client'
 
 import { mapState } from 'vuex'
 
+import ModelMessage from '~/static/Models/ModelMessage'
+
 export default {
   name: 'HomePage',
-
   layout: 'ChatLayout',
 
   data() {
     return {
-      messages: {},
+      messages: [],
+
+      // InfiniteScroll
+      currentPage: 1,
+      maxPerPage: 6,
+      totalResults: 100,
+      showLoader: false,
     }
   },
 
   async fetch() {
-    const headers = { 'Content-Type': 'application/json' }
-    await this.$axios.$get('/dev/messages', { headers }).then((response) => {
-      this.messages = response.data.response
-    })
+    await this.$axios
+      .$get(`/dev/messages/scroll/${this.maxPerPage},${this.currentPage}`)
+      .then((response) => {
+        this.messages = response.data.response
+      })
   },
   fetchOnServer: false,
   fetchDelay: 200,
@@ -45,14 +63,22 @@ export default {
     ...mapState({
       user: (state) => state.User.user,
     }),
+    pageCount() {
+      return Math.ceil(this.totalResults / this.maxPerPage)
+    },
+    pageOffset() {
+      return this.maxPerPage * this.currentPage
+    },
   },
 
   mounted() {
     const socket = io('http://localhost:4000')
 
     socket.on('message-created', (serverTask) => {
-      this.messages.push(serverTask.Response.response)
+      this.messages.push(ModelMessage(serverTask.response))
     })
+
+    this.scrollTigger()
 
     // socket.on('message-updated', (serverTask) => {
     //   const localTask = this.messages.find(
@@ -67,17 +93,48 @@ export default {
     //   )
     // })
   },
-
   created() {
     if (this.user === null) {
       return this.$router.push('/login')
     }
+    // const el = this.$refs.infiniteScrollTrigger
+    // scrollIntoView(el)
+  },
+  methods: {
+    scrollTigger() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (
+            entry.intersectionRatio > 0 &&
+            this.currentPage < this.pageCount
+          ) {
+            this.showLoader = true
+            setTimeout(async () => {
+              await this.$axios
+                .$get(
+                  `/dev/messages/scroll/${this.maxPerPage + 1},${
+                    this.currentPage + 1
+                  }`
+                )
+                .then((response) => {
+                  for (let i = 0; i < response.data.response.length; i++) {
+                    this.messages.push(response.data.response[i])
+                  }
+                })
+              this.currentPage += 1
+              this.showLoader = false
+            }, 2000)
+          }
+        })
+      })
+      observer.observe(this.$refs.infiniteScrollTriggerF)
+    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-main {
+.main {
   width: 100%;
   height: 100%;
 

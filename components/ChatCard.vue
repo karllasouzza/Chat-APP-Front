@@ -1,5 +1,5 @@
 <template>
-  <div
+  <article
     :class="
       userX.ID === userID
         ? before
@@ -11,28 +11,32 @@
     "
   >
     <header v-if="!before">
+      <!-- <header> -->
       <div>
         <figure :class="imageToProfile(user.response[0].NAME)"></figure>
+        <!-- <figcaption>{{ user.response[0].NAME }}</figcaption> -->
         <figcaption>{{ user.response[0].NAME }}</figcaption>
       </div>
       <div>
+        <!-- <MoreCard v-if="source.CONTENT.length > 180" /> -->
         <MoreCard v-if="text.length > 180" />
       </div>
     </header>
     <span>
+      <!-- {{ source.CONTENT }} -->
       {{ text }}
     </span>
-  </div>
+  </article>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import MoreCard from '~/components/Svgs/MoreCard.vue'
+// import MoreCard from '~/components/Svgs/MoreCard.vue'
 
 export default {
-  components: {
-    MoreCard,
-  },
+  // components: {
+  //   MoreCard,
+  // },
 
   props: {
     text: {
@@ -47,6 +51,17 @@ export default {
       type: Boolean,
       required: true,
     },
+    // source: {
+    //   type: Object,
+    //   default() {
+    //     return {
+    //       ID: '',
+    //       CONTENT: '',
+    //       DATACREATE: '',
+    //       ID_USERS: '',
+    //     }
+    //   },
+    // },
   },
 
   data() {
@@ -57,6 +72,7 @@ export default {
   async fetch() {
     const headers = { 'Content-Type': 'application/json' }
     await this.$axios
+      // .$get(`/dev/users/${this.source.ID_USERS}`, {
       .$get(`/dev/users/${this.userID}`, {
         headers,
       })
@@ -71,6 +87,9 @@ export default {
   },
   created() {
     this.$fetch()
+  },
+  destroyed() {
+    console.log('Compoenente desmontado')
   },
   methods: {
     imageToProfile(name) {
@@ -101,6 +120,7 @@ export default {
   padding: 5px 5px;
 
   box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.212);
+  background: #d7ccff;
 
   header {
     width: 100%;
@@ -165,7 +185,7 @@ export default {
 
 .MyCard {
   border-radius: 10px 10px 0px 10px;
-  background: #d7ccff;
+  background: #887cc9;
   align-self: flex-end;
 }
 
