@@ -43,7 +43,6 @@ export default {
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    // { scr: '~plugins/vueAutoLoading' },
     { src: './plugins/vuexPersistedState.js', mode: 'client' },
     { src: './plugins/auto-resize.js' },
   ],
@@ -101,7 +100,5 @@ export default {
     },
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-    // vendor: ['./plugins/vueAutoLoading.js'],
-  },
+  build: {},
 }

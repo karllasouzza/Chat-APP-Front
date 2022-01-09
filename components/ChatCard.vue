@@ -72,8 +72,7 @@ export default {
   async fetch() {
     const headers = { 'Content-Type': 'application/json' }
     await this.$axios
-      // .$get(`/dev/users/${this.source.ID_USERS}`, {
-      .$get(`/dev/users/${this.userID}`, {
+      .$get(`/api/users/${this.userID}`, {
         headers,
       })
       .then((response) => {
