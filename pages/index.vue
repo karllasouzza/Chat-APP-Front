@@ -151,7 +151,6 @@ export default {
           if (data.length) {
             this.currentPage += 1
             this.messages.unshift(...data.reverse())
-            console.log(data)
             $state.loaded()
           } else {
             $state.complete()
