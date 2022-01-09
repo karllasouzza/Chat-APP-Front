@@ -29,7 +29,7 @@ export default {
     sendMessages() {
       if (this.content) {
         this.$axios
-          .post('/api/messages', {
+          .post('https://chat-app-karlla.herokuapp.com/messages', {
             content: this.content,
             id: this.userX.ID,
           })

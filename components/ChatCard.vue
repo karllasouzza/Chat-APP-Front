@@ -72,7 +72,7 @@ export default {
   async fetch() {
     const headers = { 'Content-Type': 'application/json' }
     await this.$axios
-      .$get(`/api/users/${this.userID}`, {
+      .$get(`https://chat-app-karlla.herokuapp.com/users/${this.userID}`, {
         headers,
       })
       .then((response) => {
