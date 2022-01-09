@@ -9530,6 +9530,11 @@ vue-i18n@^8.26.7:
   resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-8.26.8.tgz#afe936adbf96ff0e9808e04845b8f41cc21c666f"
   integrity sha512-BN2OXolO15AKS95yNF8oOtARibaO6RxyKkAYNV4XpOmL7S4eVZYMIDtyvDv+XGZaiUmBJSH9mdNqzexvGMnK2A==
 
+vue-infinite-loading@^2.4.5:
+  version "2.4.5"
+  resolved "https://registry.yarnpkg.com/vue-infinite-loading/-/vue-infinite-loading-2.4.5.tgz#cc20fd40af7f20188006443c99b60470cf1de1b3"
+  integrity sha512-xhq95Mxun060bRnsOoLE2Be6BR7jYwuC89kDe18+GmCLVrRA/dU0jrGb12Xu6NjmKs+iTW0AA6saSEmEW4cR7g==
+
 vue-loader@^15.9.7:
   version "15.9.8"
   resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.9.8.tgz#4b0f602afaf66a996be1e534fb9609dc4ab10e61"
