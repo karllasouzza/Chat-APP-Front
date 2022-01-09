@@ -88,9 +88,6 @@ export default {
   created() {
     this.$fetch()
   },
-  destroyed() {
-    console.log('Compoenente desmontado')
-  },
   methods: {
     imageToProfile(name) {
       name = name[0]

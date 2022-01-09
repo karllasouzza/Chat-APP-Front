@@ -66,7 +66,7 @@ export default {
 
   async fetch() {
     await this.$axios
-      .$get(`/dev/messages/scroll/${this.maxPerPage},${this.currentPage}`)
+      .$get(`/api/messages/scroll/${this.maxPerPage},${this.currentPage}`)
       .then((response) => {
         this.messages.unshift(...response.data.response.reverse())
       })
@@ -78,35 +78,14 @@ export default {
     ...mapState({
       user: (state) => state.User.user,
     }),
-    pageCount() {
-      return Math.ceil(this.totalResults / this.maxPerPage)
-    },
-    pageOffset() {
-      return this.maxPerPage * this.currentPage
-    },
   },
 
   mounted() {
-    const socket = io('http://localhost:4000')
+    const socket = io('https://chat-app-karlla.herokuapp.com/')
 
     socket.on('message-created', (serverTask) => {
       this.messages.push(ModelMessage(serverTask.response))
     })
-
-    // this.scrollTigger()
-
-    // socket.on('message-updated', (serverTask) => {
-    //   const localTask = this.messages.find(
-    //     (localTask) => localTask.ID === serverTask.ID
-    //   )
-    //   localTask.CONTENT = serverTask.CONTENT
-    // })
-
-    // socket.on('message-removed', (serverTask) => {
-    //   this.messages = this.messages.filter(
-    //     (localTask) => localTask.ID !== serverTask.ID
-    //   )
-    // })
   },
   created() {
     if (this.user === null) {
@@ -114,38 +93,9 @@ export default {
     }
   },
   methods: {
-    // scrollTigger() {
-    //   const observer = new IntersectionObserver((entries) => {
-    //     entries.forEach((entry) => {
-    //       if (
-    //         entry.intersectionRatio > 0 &&
-    //         this.currentPage < this.pageCount
-    //       ) {
-    //         this.showLoader = true
-    //         setTimeout(async () => {
-    //           await this.$axios
-    //             .$get(
-    //               `/dev/messages/scroll/${this.maxPerPage + 1},${
-    //                 this.currentPage + 1
-    //               }`
-    //             )
-    //             .then((response) => {
-    //               for (let i = 0; i < response.data.response.length; i++) {
-    //                 this.messages.unshift(response.data.response[i])
-    //               }
-    //             })
-    //           this.currentPage += 1
-    //           this.showLoader = false
-    //         }, 2000)
-    //       }
-    //     })
-    //   })
-    //   observer.observe(this.$refs.infiniteScrollTriggerH)
-    // },
-
     infiniteHandler($state) {
       this.$axios
-        .get(`/dev/messages/scroll/${this.maxPerPage},${this.currentPage + 1}`)
+        .get(`/api/messages/scroll/${this.maxPerPage},${this.currentPage + 1}`)
         .then((response) => {
           const data = response.data.data.response
           if (data.length) {
