@@ -290,7 +290,7 @@ export default {
         return
       await this.$axios
         .$post(
-          'https://chat-app-karlla.herokuapp.com/login/users',
+          '/dev/login/users',
           {
             email: this.email_login,
             password: this.password_login,
@@ -321,7 +321,7 @@ export default {
           return
 
         await this.$axios
-          .$post('https://chat-app-karlla.herokuapp.com/users/', {
+          .$post('/dev/users/', {
             name: this.name_account,
             email: this.email_account,
             password: this.confirm_password,
@@ -376,7 +376,7 @@ export default {
         return false
       }
       await this.$axios
-        .$get(`https://chat-app-karlla.herokuapp.com/users/search/${email}`)
+        .$get(`/dev/users/search/${email}`)
         .then((response) => {
           this.$refs.R_email_account.focus()
 
@@ -403,7 +403,7 @@ export default {
       }
 
       await this.$axios
-        .$get(`https://chat-app-karlla.herokuapp.com/users/search/${email}`)
+        .$get(`/dev/users/search/${email}`)
         .then((response) => {
           return true
         })

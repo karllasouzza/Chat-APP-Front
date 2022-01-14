@@ -66,7 +66,7 @@ export default {
 
   async fetch() {
     await this.$axios
-      .$get(`https://chat-app-karlla.herokuapp.com/messages/scroll/${this.maxPerPage},${this.currentPage}`)
+      .$get(`/dev/messages/scroll/${this.maxPerPage},${this.currentPage}`)
       .then((response) => {
         this.messages.unshift(...response.data.response.reverse())
       })
@@ -81,7 +81,7 @@ export default {
   },
 
   mounted() {
-    const socket = io('https://chat-app-karlla.herokuapp.com/')
+    const socket = io('http://localhost:4000')
 
     socket.on('message-created', (serverTask) => {
       this.messages.push(ModelMessage(serverTask.response))
@@ -95,7 +95,7 @@ export default {
   methods: {
     infiniteHandler($state) {
       this.$axios
-        .get(`https://chat-app-karlla.herokuapp.com/messages/scroll/${this.maxPerPage},${this.currentPage + 1}`)
+        .get(`/dev/messages/scroll/${this.maxPerPage},${this.currentPage + 1}`)
         .then((response) => {
           const data = response.data.data.response
           if (data.length) {

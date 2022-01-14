@@ -11,19 +11,15 @@
     "
   >
     <header v-if="!before">
-      <!-- <header> -->
       <div>
         <figure :class="imageToProfile(user.response[0].NAME)"></figure>
-        <!-- <figcaption>{{ user.response[0].NAME }}</figcaption> -->
         <figcaption>{{ user.response[0].NAME }}</figcaption>
       </div>
       <div>
-        <!-- <MoreCard v-if="source.CONTENT.length > 180" /> -->
         <MoreCard v-if="text.length > 180" />
       </div>
     </header>
     <span>
-      <!-- {{ source.CONTENT }} -->
       {{ text }}
     </span>
   </article>
@@ -31,13 +27,8 @@
 
 <script>
 import { mapState } from 'vuex'
-// import MoreCard from '~/components/Svgs/MoreCard.vue'
 
 export default {
-  // components: {
-  //   MoreCard,
-  // },
-
   props: {
     text: {
       type: String,
@@ -51,17 +42,6 @@ export default {
       type: Boolean,
       required: true,
     },
-    // source: {
-    //   type: Object,
-    //   default() {
-    //     return {
-    //       ID: '',
-    //       CONTENT: '',
-    //       DATACREATE: '',
-    //       ID_USERS: '',
-    //     }
-    //   },
-    // },
   },
 
   data() {
@@ -72,7 +52,7 @@ export default {
   async fetch() {
     const headers = { 'Content-Type': 'application/json' }
     await this.$axios
-      .$get(`https://chat-app-karlla.herokuapp.com/users/${this.userID}`, {
+      .$get(`/dev/users/${this.userID}`, {
         headers,
       })
       .then((response) => {

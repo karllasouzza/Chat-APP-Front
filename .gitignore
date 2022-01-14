@@ -69,10 +69,10 @@ typings/
 .nuxt
 
 # Nuxt generate
-# dist
+dist
 
 # vuepress build output
-# .vuepress/dist
+.vuepress/dist
 
 # Serverless directories
 .serverless
@@ -181,7 +181,7 @@ out
 
 # Nuxt.js build / generate output
 .nuxt
-# dist
+dist
 
 # Gatsby files
 .cache/
@@ -190,7 +190,7 @@ out
 # public
 
 # vuepress build output
-# .vuepress/dist
+.vuepress/dist
 
 # Serverless directories
 .serverless/
@@ -238,7 +238,7 @@ test/
 ### Vuejs ###
 # Recommended template: Node.gitignore
 
-# dist/
+dist/
 npm-debug.log
 yarn-error.log
 
