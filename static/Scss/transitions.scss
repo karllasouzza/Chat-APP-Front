@@ -1,0 +1,16 @@
+.Opacity-enter-active,
+.Opacity-leave-active {
+  transition: opacity 0.5s;
+}
+.Opacity-enter,
+.Opacity-leave-active {
+  opacity: 0;
+}
+.TranslateY-enter-active,
+.TranslateY-leave-active {
+  transition: transform 0.8s ease-in-out;
+}
+.TranslateY-enter,
+.TranslateY-leave-active {
+  transform: translateY(400px);
+}

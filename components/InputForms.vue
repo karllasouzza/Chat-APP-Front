@@ -54,10 +54,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../static/Scss/mixins.scss';
-@import '../static/Scss/color.scss';
-@import '../static/Scss/transitions.scss';
-
 #input {
   width: 88%;
   height: 40px;

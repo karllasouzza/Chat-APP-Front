@@ -1,132 +1,465 @@
 <template>
-  <main
-    ref="main"
-    :class="showLoader ? 'main animationScrollBeforeRender' : ' main'"
-  >
-    <!-- v-for="(n, index) in pageOffset" :key="index" -->
-    <!-- <header>
-      <div ref="infiniteScrollTriggerH"></div>
-      <div v-if="showLoader" class="scroll-loader">CARREGANDOOOOOOOOOO</div>
-    </header> -->
-    <infinite-loading
-      v-if="showLoader"
-      spinner="waveDots"
-      direction="top"
-      color="red"
-      @infinite="infiniteHandler"
-    ></infinite-loading>
+  <div class="container">
+    <Notify v-if="NotifyView" />
+    <Logo />
+    <aside>
+      <h1>{{ $t('Login.label') }}</h1>
+      <span>
+        {{ $t('Login.text') }}
+      </span>
+    </aside>
+    <div>
+      <BtnPrimary
+        :type="$t('Login.buttons[0].type')"
+        :text="$t('Login.buttons[0].text')"
+        @click.native="login = true"
+      />
 
-    <ChatCard
-      v-for="(item, index) in messages"
-      :key="index"
-      :text="item.CONTENT"
-      :user-i-d="item.ID_USERS"
-      :before="
-        index != 0
-          ? messages[index - 1].ID_USERS === item.ID_USERS
-            ? true
-            : false
-          : false
-      "
-      :last="
-        messages[messages.length - 1].ID_USERS === item.ID_USERS
-          ? (showLoader = true)
-          : ''
-      "
+      <BtnPrimary
+        :type="$t('Login.buttons[1].type')"
+        :text="$t('Login.buttons[1].text')"
+        @click.native="account = true"
+      />
+    </div>
+
+    <BlurPopup
+      v-if="login || account"
+      @click.native="login ? (login = false) : (account = false)"
     />
-  </main>
+    <transition name="TranslateY">
+      <form v-if="login" class="login" novalidate>
+        <div>
+          <span>
+            <p>{{ $t('Login.popUps[0].Greeting') }}</p>
+            <strong>{{ $t('Login.popUps[0].Label') }}</strong>
+          </span>
+          <IconClose @click.native="login = false" />
+        </div>
+        <InputForms
+          ref="email_login"
+          :value="email_login"
+          type="email"
+          :placeholder="$t('Login.popUps[0].Placeholder_Email')"
+          :title="$t('Login.popUps[0].Title_Email')"
+        />
+
+        <InputForms
+          ref="R_password_login"
+          :value="password_login"
+          type="password"
+          :placeholder="$t('Login.popUps[0].Placeholder_Password')"
+          :title="$t('Login.popUps[0].Title_Password')"
+        />
+        <BtnPrimary
+          type="button"
+          text="Login"
+          :title="$t('Login.popUps[0].Title_Button_Login')"
+          @click.native="MakeLogin()"
+        />
+      </form>
+    </transition>
+
+    <transition name="TranslateY">
+      <form v-if="account" class="account" novalidate>
+        <div>
+          <span>
+            <p>{{ $t('Login.popUps[1].Greeting') }}</p>
+            <strong>{{ $t('Login.popUps[1].Label') }}</strong>
+          </span>
+          <IconClose @click.native="account = false" />
+        </div>
+        <InputForms
+          ref="name_account"
+          :value="name_account"
+          type="text"
+          :placeholder="$t('Login.popUps[1].Placeholder_Name')"
+          :title="$t('Login.popUps[1].Title_Name')"
+        />
+        <InputForms
+          ref="R_email_account"
+          :value="email_account"
+          type="email"
+          :placeholder="$t('Login.popUps[1].Placeholder_Email')"
+          :title="$t('Login.popUps[1].Title_Email')"
+        />
+        <InputForms
+          ref="R_password_account"
+          :value="password_account"
+          type="password"
+          :placeholder="$t('Login.popUps[1].Placeholder_Password')"
+          :title="$t('Login.popUps[1].Title_Password')"
+        />
+        <InputForms
+          ref="R_confirm_password"
+          :value="confirm_password"
+          :placeholder="$t('Login.popUps[1].Placeholder_ConfirmPassword')"
+          :title="$t('Login.popUps[1].Title_ConfirmPassword')"
+          type="password"
+        />
+
+        <BtnPrimary
+          type="button"
+          :title="$t('Login.popUps[1].Title_Button')"
+          :text="$t('Login.popUps[1].Text_Button')"
+          @click.native="MakeAccount()"
+        />
+      </form>
+    </transition>
+  </div>
 </template>
 
 <script>
-import { io } from 'socket.io-client'
+import { mapActions, mapState, mapMutations } from 'vuex'
 
-import { mapState } from 'vuex'
-
-import InfiniteLoading from 'vue-infinite-loading'
-
-import ModelMessage from '~/static/Models/ModelMessage'
+import IconClose from '~/components/Svgs/IconClose.vue'
 
 export default {
-  name: 'HomePage',
-  components: {
-    InfiniteLoading,
-  },
-  layout: 'ChatLayout',
+  name: 'LoginPage',
+  components: { IconClose },
+  layout: 'DefaultLayout',
   data() {
     return {
-      messages: [],
+      login: false,
+      account: false,
 
-      // InfiniteScroll
-      currentPage: 1,
-      maxPerPage: 7,
-      totalResults: 100,
-      showLoader: false,
+      /* V values */
+      email_login: '',
+      password_login: '',
+
+      name_account: '',
+      email_account: '',
+      confirm_password: '',
+      password_account: '',
     }
   },
-
-  async fetch() {
-    await this.$axios
-      .$get(`/dev/messages/scroll/${this.maxPerPage},${this.currentPage}`)
-      .then((response) => {
-        this.messages.unshift(...response.data.response.reverse())
-      })
-  },
-  fetchOnServer: false,
-  fetchDelay: 200,
 
   computed: {
     ...mapState({
-      user: (state) => state.User.user,
+      NotifyView: (state) => state.Notification.view,
+      NotifyText: (state) => state.Notification.text,
     }),
   },
-
-  mounted() {
-    const socket = io('http://localhost:4000')
-
-    socket.on('message-created', (serverTask) => {
-      this.messages.push(ModelMessage(serverTask.response))
-    })
-  },
-  created() {
-    if (this.user === null) {
-      return this.$router.push('/login')
-    }
-  },
   methods: {
-    infiniteHandler($state) {
-      this.$axios
-        .get(`/dev/messages/scroll/${this.maxPerPage},${this.currentPage + 1}`)
+    ...mapActions({
+      SetUser: 'User/SetUser',
+      SetNotify: 'Notification/SetNotify',
+    }),
+    ...mapMutations({
+      OpenNotify: 'Notification/OpenNotify',
+    }),
+
+    async MakeLogin() {
+      if (
+        !this.validPassword(this.password_login) |
+        !this.validEmail(this.email_login)
+      )
+        return
+      await this.$axios
+        .$post(
+          '/dev/login/users',
+          {
+            email: this.email_login,
+            password: this.password_login,
+          },
+          { progress: false }
+        )
         .then((response) => {
-          const data = response.data.data.response
-          if (data.length) {
-            this.currentPage += 1
-            this.messages.unshift(...data.reverse())
-            $state.loaded()
-          } else {
-            $state.complete()
-          }
+          this.SetUser({
+            User: response.data.response,
+          })
+          return this.$router.push('/')
         })
+        .catch(() => {
+          this.SetNotify(this.$t('Login.Error.Login'))
+        })
+    },
+
+    async MakeAccount() {
+      try {
+        if (
+          !this.validPasswordAccount(
+            this.password_account,
+            this.confirm_password
+          ) |
+          !this.validEmailAccount(this.email_account) |
+          !this.validName(this.name_account)
+        )
+          return
+
+        await this.$axios
+          .$post('/dev/users/', {
+            name: this.name_account,
+            email: this.email_account,
+            password: this.confirm_password,
+          })
+          .then((response) => {
+            this.SetUser({
+              User: response.data.response,
+            })
+          })
+
+          .catch((error) => {
+            this.SetNotify(error)
+          })
+
+        return this.$router.push('/')
+      } catch (e) {
+        alert(e)
+      }
+    },
+
+    validName(name) {
+      const regex = /^([a-z]{2,}([\s-][a-z]{2,})+)$/gi
+
+      if (!name) {
+        this.$refs.name_account.focus()
+        this.SetNotify(this.$t('Login.Error.Null_name'))
+
+        return false
+      }
+      if (!regex.test(name)) {
+        this.$refs.name_account.focus()
+
+        this.SetNotify(this.$t('Login.Error.Invalid_name'))
+        return false
+      }
+
+      return true
+    },
+
+    async validEmailAccount(email) {
+      const regex =
+        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi
+
+      if (!email) {
+        this.$refs.R_email_account.focus()
+        this.SetNotify(this.$t('Login.Error.Null_email'))
+        return false
+      } else if (!regex.test(email)) {
+        this.$refs.R_email_account.focus()
+
+        this.SetNotify(this.$t('Login.Error.Invalid_email'))
+        return false
+      }
+      await this.$axios
+        .$get(`/dev/users/search/${email}`)
+        .then((response) => {
+          this.$refs.R_email_account.focus()
+
+          this.SetNotify(this.$t('Login.Error.Duplicate_email'))
+          return false
+        })
+        .catch(() => {
+          return true
+        })
+    },
+    async validEmail(email) {
+      const regex =
+        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi
+
+      if (!email) {
+        this.$refs.email_login.focus()
+        this.SetNotify(this.$t('Login.Error.Null_email'))
+        return false
+      } else if (!regex.test(email)) {
+        this.$refs.email_login.focus()
+
+        this.SetNotify(this.$t('Login.Error.Invalid_email'))
+        return false
+      }
+
+      await this.$axios
+        .$get(`/dev/users/search/${email}`)
+        .then((response) => {
+          return true
+        })
+        .catch(() => {
+          this.$refs.email_login.focus()
+
+          this.SetNotify(this.$t('Login.Error.Unregistered_email'))
+          return false
+        })
+    },
+    validPasswordAccount(password, confirmPassword) {
+      const regex =
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/
+
+      if (!password) {
+        this.$refs.R_password_account.focus()
+
+        this.SetNotify(this.$t('Login.Error.Null_password'))
+        return false
+      } else if (!confirmPassword) {
+        this.$refs.R_confirm_password.focus()
+
+        this.SetNotify(this.$t('Login.Error.Null_password'))
+        return false
+      } else if (!regex.test(password)) {
+        this.$refs.R_password_account.focus()
+
+        this.SetNotify(this.$t('Login.Error.Null_password'))
+        return false
+      } else if (password !== confirmPassword) {
+        this.$refs.R_confirm_password.focus()
+
+        this.SetNotify(this.$t('Login.Error.Null_password_confirmation'))
+        return false
+      }
+
+      return true
+    },
+    validPassword(password) {
+      const regex =
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/
+
+      if (!password) {
+        this.$refs.R_password_login.focus()
+
+        this.SetNotify(this.$t('Login.Error.Null_password'))
+        return false
+      } else if (!regex.test(password)) {
+        this.$refs.R_password_login.focus()
+
+        this.SetNotify(this.$t('Login.Error.Null_password'))
+        return false
+      }
+
+      return true
     },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-.main {
+.container {
   width: 100%;
   height: 100%;
 
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  background-color: $white;
 
-  .wave-item {
-    background-color: #360c8a;
+  > div {
+    width: 100%;
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
+    button {
+      width: 80%;
+      height: 40px;
+
+      background: $PrimaryColor;
+      transition: 0.7s ease-in-out;
+
+      @include bold-text($white);
+      @include ButtonHoverToTransparent($PrimaryColor);
+
+      &:last-child {
+        border: solid 1px $Secondary;
+        background: transparent;
+        -webkit-text-stroke: 1px $Secondary;
+        transition: 0.7s ease-in-out;
+
+        @include ButtonHoverToSolidColor($Secondary, $white);
+      }
+    }
   }
-}
+  > svg {
+    width: 130px;
+    height: 130px;
+  }
+  > aside {
+    width: 100%;
+    height: 120px;
 
-.animationScrollBeforeRender {
-  transition: all 0.8s ease-in-out;
-  -webkit-transition: all 0.8s ease-in-out;
-  scroll-behavior: smooth;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
+    h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      font-family: 'Raleway';
+      color: $Secondary;
+    }
+    span {
+      width: 90%;
+      height: fit-content;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      color: $black;
+      text-align: center;
+      font-family: 'Montserrat', 'Helvetica';
+      line-height: 20px;
+      font-size: 1rem;
+    }
+  }
+
+  > form {
+    height: 360px;
+
+    background-color: $white;
+    border-radius: 20px 20px 0 0;
+
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+
+    > div {
+      width: 88%;
+      height: 55px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: row;
+
+      > span {
+        height: 50px;
+
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-evenly;
+        flex-direction: column;
+        > strong {
+          @include bold-text($PrimaryColor);
+        }
+      }
+    }
+
+    > button {
+      width: 88%;
+      height: 40px;
+      background: $PrimaryColor;
+      transition: 0.7s ease-in-out;
+      @include bold-text(#fff);
+
+      &:hover {
+        background-color: transparent;
+        -webkit-text-stroke: 1px $PrimaryColor;
+        border: 1px solid $PrimaryColor;
+      }
+    }
+  }
+
+  > form.account {
+    height: 400px;
+  }
 }
 </style>

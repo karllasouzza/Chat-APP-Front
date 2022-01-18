@@ -78,7 +78,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../static/Scss/color.scss';
 .Card,
 .MyCard {
   width: fit-content;

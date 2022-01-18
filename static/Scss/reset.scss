@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Raleway:wght@700&display=swap');
-
 html,
 body,
 div,
@@ -84,7 +82,7 @@ video {
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: 100%;
+  font-size: calc(0.75em + 1vw);
   font: inherit;
   vertical-align: baseline;
 }
@@ -163,6 +161,11 @@ ol,
 ul,
 li {
   list-style: none;
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
 }
 
 *,

@@ -24,22 +24,37 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossorigin: 'crossorigin',
+      },
+      {
+        href: 'https://fonts.googleapis.com/css2?family=Montserrat&family=Raleway:wght@700&display=swap',
+        rel: 'stylesheet',
+      },
+    ],
   },
+  /*
+
+*/
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    '~static/Scss/color.scss',
-    '~static/Scss/reset.scss',
-    '~static/Scss/mixins.scss',
-    '~static/Scss/imagens.scss',
+    './static/Scss/color.scss',
+    './static/Scss/reset.scss',
+    './static/Scss/mixins.scss',
+    './static/Scss/imagens.scss',
   ],
 
   styleResources: {
     scss: [
-      '~static/Scss/color.scss',
-      '~static/Scss/reset.scss',
-      '~static/Scss/mixins.scss',
+      './static/Scss/color.scss',
+      './static/Scss/reset.scss',
+      './static/Scss/mixins.scss',
     ],
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -57,6 +72,7 @@ export default {
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     '@nuxtjs/pwa',
+    '@nuxtjs/style-resources',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -64,7 +80,7 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/i18n',
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
   ],
 
   // i18n
@@ -115,7 +131,6 @@ export default {
       lang: 'en',
     },
   },
-
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},

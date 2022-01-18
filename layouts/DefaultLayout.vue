@@ -1,15 +1,16 @@
 <template>
   <div id="APP">
     <Nuxt />
-    <PushMessage />
     <VLibras />
   </div>
 </template>
 
 <script>
 import { VLibras } from '@vue-a11y/vlibras'
-import PushMessage from '~/components/PushMessage.vue'
-export default { components: { PushMessage, VLibras } }
+
+export default {
+  components: { VLibras },
+}
 </script>
 
 <style scoped>
@@ -20,7 +21,6 @@ export default { components: { PushMessage, VLibras } }
   display: grid;
   grid-template-columns: 10px 1fr 10px;
   grid-template-rows: 10px 1fr 10px;
-  background-color: #360c8a;
 }
 
 #__layout {
@@ -38,17 +38,5 @@ export default { components: { PushMessage, VLibras } }
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr auto;
-}
-
-.main {
-  grid-row: 1/2;
-  border-radius: 15px 15px 0 0;
-  background: white;
-}
-
-header {
-  grid-row: 2/3;
-  position: sticky;
-  bottom: 0;
 }
 </style>
