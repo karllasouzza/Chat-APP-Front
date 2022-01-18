@@ -46,6 +46,7 @@ export default {
   plugins: [
     { src: './plugins/vuexPersistedState.js', mode: 'client' },
     { src: './plugins/auto-resize.js' },
+    { src: './plugins/vlibras.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

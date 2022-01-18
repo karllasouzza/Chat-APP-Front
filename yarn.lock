@@ -1604,6 +1604,11 @@
     "@typescript-eslint/types" "5.9.0"
     eslint-visitor-keys "^3.0.0"
 
+"@vue-a11y/vlibras@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@vue-a11y/vlibras/-/vlibras-0.1.0.tgz#6ae009b7982f492088517d28ecfed160a175a401"
+  integrity sha512-wklsygWRdVkOssMecDYw/QKrvYqqI2oKsyitouernrWsmwzHgYFdX6tMZ9c+iDd4U0dMRysC4AI9IGrG0ZvIVQ==
+
 "@vue/babel-helper-vue-jsx-merge-props@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@vue/babel-helper-vue-jsx-merge-props/-/babel-helper-vue-jsx-merge-props-1.2.1.tgz#31624a7a505fb14da1d58023725a4c5f270e6a81"
