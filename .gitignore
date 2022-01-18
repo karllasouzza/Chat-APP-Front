@@ -242,4 +242,8 @@ dist/
 npm-debug.log
 yarn-error.log
 
+#### Nuxtjs + PWA ###
+sw.\*
+
+
 # End of https://www.toptal.com/developers/gitignore/api/vuejs,vue,node

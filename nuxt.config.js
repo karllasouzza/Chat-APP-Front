@@ -2,11 +2,12 @@ export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
-  // Enable to all ports:
-  // server: {
-  //   host: '0.0.0.0',
-  //   port: 3000,
-  // },
+  /* Enable to all ports: */
+
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+  },
 
   // Target: https://go.nuxtjs.dev/config-target
   target: 'server',
@@ -54,6 +55,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
+    '@nuxtjs/pwa',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -61,6 +63,7 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/i18n',
+    '@nuxtjs/pwa'
   ],
 
   // i18n
@@ -99,6 +102,20 @@ export default {
       pathRewrite: { '^/dev/': '' },
     },
   },
+
+  pwa: {
+    meta: {
+      title: 'Chat App',
+      author: 'Karlla.Souzza',
+    },
+    manifest: {
+      name: 'aplicativo de chat ao vivo',
+      short_name: 'Chat App',
+      lang: 'en',
+    },
+  },
+
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 }
