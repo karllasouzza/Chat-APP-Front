@@ -27,8 +27,12 @@
           : ''
       "
     />
-    <NewMessage v-if="newMessage" />
-    <div v-observe-visibility="visibilityChanged" />
+    <NewMessage
+      v-if="newMessage"
+      :quant="quantNewMessage"
+      @click.native="ScrollToBottom()"
+    />
+    <div v-observe-visibility="visibilityChanged" class="bottom" />
   </main>
 </template>
 
@@ -57,6 +61,7 @@ export default {
       // New Message
       onBottom: false,
       newMessage: false,
+      quantNewMessage: 0,
     }
   },
 
@@ -86,6 +91,7 @@ export default {
       this.messages.push(ModelMessage(serverTask.response))
       if (!this.onBottom) {
         this.newMessage = true
+        this.quantNewMessage++
       }
     })
   },
@@ -109,6 +115,11 @@ export default {
     visibilityChanged(isVisible, entry) {
       this.isVisible = isVisible
       this.onBottom = entry.isIntersecting
+    },
+    ScrollToBottom() {
+      document.querySelector('.bottom').scrollIntoView()
+      this.newMessage = false
+      this.quantNewMessage = 0
     },
   },
 }

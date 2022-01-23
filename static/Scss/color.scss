@@ -1,12 +1,13 @@
 $PrimaryColor: rgb(53, 12, 136);
 $Secondary: rgb(234, 6, 63);
-$Third:#d7ccff;
+$Third: #d7ccff;
 $black: rgb(0, 0, 0);
 $white: rgb(255, 255, 255);
 
 :export {
   Primary: $PrimaryColor;
   Secondary: $Secondary;
+  Third: $Third;
   Black: $black;
   White: $white;
 }
