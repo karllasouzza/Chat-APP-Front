@@ -2,9 +2,7 @@ export default {
   Title_Icon: 'Chat App. Icon',
   Login: {
     label: 'Welcome',
-    text: `Lorem ipsum dolor sit amet qweqwe
-            consectetur adipisicing elit.
-            Voluptas asperiores placeat.`,
+    text: `Free yourself from all prejudice and leave yourself vulnerable to feel loved.`,
 
     close_title: 'Close',
 
@@ -51,7 +49,7 @@ export default {
         Label: 'Create Account',
         Greeting: 'Wellcome',
 
-        Placeholder_Name: '*Name',
+        Placeholder_Name: '*Full Name',
         Title_Name: 'Name input',
 
         Placeholder_Email: '*Email',
