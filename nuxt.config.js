@@ -48,6 +48,7 @@ export default {
     './static/Scss/reset.scss',
     './static/Scss/mixins.scss',
     './static/Scss/imagens.scss',
+    './static/Scss/transitions.scss',
   ],
 
   styleResources: {
@@ -55,6 +56,8 @@ export default {
       './static/Scss/color.scss',
       './static/Scss/reset.scss',
       './static/Scss/mixins.scss',
+      './static/Scss/imagens.scss',
+      './static/Scss/transitions.scss',
     ],
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -62,6 +65,8 @@ export default {
     { src: './plugins/vuexPersistedState.js', mode: 'client' },
     { src: './plugins/auto-resize.js' },
     { src: './plugins/vlibras.js' },
+    { src: './plugins/vue-chat-scroll.js' },
+    { src: './plugins/VueObserveVisibility.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -87,6 +92,10 @@ export default {
   i18n: {
     locales: [
       {
+        code: 'br',
+        file: 'pt-BR.js',
+      },
+      {
         code: 'en',
         file: 'en-US.js',
       },
@@ -101,7 +110,7 @@ export default {
     ],
     lazy: true,
     langDir: 'lang/',
-    defaultLocale: 'en',
+    defaultLocale: 'br',
   },
 
   axios: {
