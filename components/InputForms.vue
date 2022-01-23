@@ -1,10 +1,11 @@
 <template>
   <div id="input">
     <input
-      :v-model="value"
+      :value="value"
       :type="passwordChange"
       :placeholder="placeholder"
       :title="title"
+      @input="$emit('input', $event.target.value)"
     />
     <div v-if="type === 'password'">
       <transition name="Opacity">

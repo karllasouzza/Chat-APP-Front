@@ -4,8 +4,11 @@
       ref="message"
       v-model="content"
       placeholder="Escreva uma mensagem"
+      @keyup.enter.native="action"
     />
-    <div @click="sendMessages()"><SendMessage /></div>
+    <div @click="sendMessages()">
+      <SendMessage />
+    </div>
   </header>
 </template>
 
@@ -26,6 +29,11 @@ export default {
     }),
   },
   methods: {
+    action(event) {
+      if (!event.shiftKey) {
+        this.sendMessages()
+      } else;
+    },
     sendMessages() {
       if (this.content) {
         this.$axios
@@ -54,6 +62,7 @@ header {
   justify-content: space-between;
 
   border-top: 2px solid #360c8a;
+  background: $Third;
 
   textarea {
     resize: none;
@@ -64,7 +73,6 @@ header {
     flex-grow: 4;
 
     border: none;
-    border-radius: 0 0 0 15px;
     padding: 2px 4px;
 
     vertical-align: middle;
@@ -80,14 +88,11 @@ header {
     max-width: 45px;
     height: 100%;
 
-    background: #d7ccff;
-
     display: flex;
     align-items: center;
     justify-content: center;
     flex-grow: 2;
 
-    border-radius: 0 0 15px 0;
     cursor: pointer;
   }
 }

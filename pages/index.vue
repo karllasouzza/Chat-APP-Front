@@ -37,7 +37,7 @@
         </div>
         <InputForms
           ref="email_login"
-          :value="email_login"
+          v-model="email_login"
           type="email"
           :placeholder="$t('Login.popUps[0].Placeholder_Email')"
           :title="$t('Login.popUps[0].Title_Email')"
@@ -45,7 +45,7 @@
 
         <InputForms
           ref="R_password_login"
-          :value="password_login"
+          v-model="password_login"
           type="password"
           :placeholder="$t('Login.popUps[0].Placeholder_Password')"
           :title="$t('Login.popUps[0].Title_Password')"
@@ -70,28 +70,28 @@
         </div>
         <InputForms
           ref="name_account"
-          :value="name_account"
+          v-model="name_account"
           type="text"
           :placeholder="$t('Login.popUps[1].Placeholder_Name')"
           :title="$t('Login.popUps[1].Title_Name')"
         />
         <InputForms
           ref="R_email_account"
-          :value="email_account"
+          v-model="email_account"
           type="email"
           :placeholder="$t('Login.popUps[1].Placeholder_Email')"
           :title="$t('Login.popUps[1].Title_Email')"
         />
         <InputForms
           ref="R_password_account"
-          :value="password_account"
+          v-model="password_account"
           type="password"
           :placeholder="$t('Login.popUps[1].Placeholder_Password')"
           :title="$t('Login.popUps[1].Title_Password')"
         />
         <InputForms
           ref="R_confirm_password"
-          :value="confirm_password"
+          v-model="confirm_password"
           :placeholder="$t('Login.popUps[1].Placeholder_ConfirmPassword')"
           :title="$t('Login.popUps[1].Title_ConfirmPassword')"
           type="password"
@@ -115,8 +115,11 @@ import IconClose from '~/components/Svgs/IconClose.vue'
 
 export default {
   name: 'LoginPage',
+
   components: { IconClose },
+
   layout: 'DefaultLayout',
+
   data() {
     return {
       login: false,
@@ -139,11 +142,13 @@ export default {
       NotifyText: (state) => state.Notification.text,
     }),
   },
+
   methods: {
     ...mapActions({
       SetUser: 'User/SetUser',
       SetNotify: 'Notification/SetNotify',
     }),
+
     ...mapMutations({
       OpenNotify: 'Notification/OpenNotify',
     }),
@@ -154,6 +159,7 @@ export default {
         !this.validEmail(this.email_login)
       )
         return
+
       await this.$axios
         .$post(
           '/dev/login/users',
@@ -167,7 +173,7 @@ export default {
           this.SetUser({
             User: response.data.response,
           })
-          return this.$router.push('/')
+          return this.$router.push('/chat')
         })
         .catch(() => {
           this.SetNotify(this.$t('Login.Error.Login'))
@@ -198,13 +204,13 @@ export default {
             })
           })
 
-          .catch((error) => {
-            this.SetNotify(error)
+          .catch(() => {
+            this.SetNotify(this.$t('Login.Error.Account'))
           })
 
-        return this.$router.push('/')
+        return this.$router.push('/chat')
       } catch (e) {
-        alert(e)
+        this.SetNotify(this.$t('Login.Error.Error_Request'))
       }
     },
 
@@ -405,7 +411,7 @@ export default {
   }
 
   > form {
-    height: 360px;
+    height: 300px;
 
     background-color: $white;
     border-radius: 20px 20px 0 0;

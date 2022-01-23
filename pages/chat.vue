@@ -1,21 +1,14 @@
 <template>
   <main
-    ref="main"
-    :class="showLoader ? 'main animationScrollBeforeRender' : ' main'"
+    v-chat-scroll="{
+      always: false,
+      smooth: true,
+      notSmoothOnInit: true,
+      scrollonremoved: true,
+    }"
+    class="main"
+    @v-chat-scroll-top-reached="infiniteHandler()"
   >
-    <!-- v-for="(n, index) in pageOffset" :key="index" -->
-    <!-- <header>
-      <div ref="infiniteScrollTriggerH"></div>
-      <div v-if="showLoader" class="scroll-loader">CARREGANDOOOOOOOOOO</div>
-    </header> -->
-    <infinite-loading
-      v-if="showLoader"
-      spinner="waveDots"
-      direction="top"
-      color="red"
-      @infinite="infiniteHandler"
-    ></infinite-loading>
-
     <ChatCard
       v-for="(item, index) in messages"
       :key="index"
@@ -34,6 +27,8 @@
           : ''
       "
     />
+    <NewMessage v-if="newMessage" />
+    <div v-observe-visibility="visibilityChanged" />
   </main>
 </template>
 
@@ -42,15 +37,13 @@ import { io } from 'socket.io-client'
 
 import { mapState } from 'vuex'
 
-import InfiniteLoading from 'vue-infinite-loading'
-
 import ModelMessage from '~/static/Models/ModelMessage'
 
 export default {
   name: 'HomePage',
-  components: {
+  /*   components: {
     InfiniteLoading,
-  },
+  }, */
   layout: 'ChatLayout',
   data() {
     return {
@@ -58,9 +51,12 @@ export default {
 
       // InfiniteScroll
       currentPage: 1,
-      maxPerPage: 7,
+      maxPerPage: parseInt(screen.height / 70),
       totalResults: 100,
-      showLoader: false,
+
+      // New Message
+      onBottom: false,
+      newMessage: false,
     }
   },
 
@@ -78,6 +74,9 @@ export default {
     ...mapState({
       user: (state) => state.User.user,
     }),
+    sumMaxPerPage() {
+      return screen.height / 70
+    },
   },
 
   mounted() {
@@ -85,27 +84,31 @@ export default {
 
     socket.on('message-created', (serverTask) => {
       this.messages.push(ModelMessage(serverTask.response))
+      if (!this.onBottom) {
+        this.newMessage = true
+      }
     })
   },
-  created() {
-    if (this.user === null) {
-/*       return this.$router.push('/login') */
-    }
-  },
   methods: {
-    infiniteHandler($state) {
+    infiniteHandler() {
       this.$axios
-        .get(`/dev/messages/scroll/${this.maxPerPage},${this.currentPage + 1}`)
+        .get(
+          `/dev/messages/scroll/${this.maxPerPage},${this.currentPage + 1}`,
+          {
+            progress: false,
+          }
+        )
         .then((response) => {
           const data = response.data.data.response
           if (data.length) {
             this.currentPage += 1
             this.messages.unshift(...data.reverse())
-            $state.loaded()
-          } else {
-            $state.complete()
-          }
+          } else;
         })
+    },
+    visibilityChanged(isVisible, entry) {
+      this.isVisible = isVisible
+      this.onBottom = entry.isIntersecting
     },
   },
 }
@@ -122,11 +125,5 @@ export default {
   .wave-item {
     background-color: $PrimaryColor;
   }
-}
-
-.animationScrollBeforeRender {
-  transition: all 0.8s ease-in-out;
-  -webkit-transition: all 0.8s ease-in-out;
-  scroll-behavior: smooth;
 }
 </style>
