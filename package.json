@@ -16,13 +16,13 @@
     "@nuxtjs/i18n": "^7.2.0",
     "@nuxtjs/style-resources": "^1.2.1",
     "@vue-a11y/vlibras": "^0.1.0",
-    "core-js": "^3.20.2",
-    "glob-parent": "5.1.2",
+    "core-js": "^3.21.0",
+    "glob-parent": "6.0.2",
     "global": "^4.4.0",
     "node-sass": "^7.0.1",
     "nth-check": "2.0.1",
     "nuxt": "^2.15.8",
-    "socket.io-client": "^4.4.0",
+    "socket.io-client": "^4.4.1",
     "vue-chat-scroll": "^1.4.0",
     "vue-observe-visibility": "^1.0.0",
     "vue-textarea-autosize": "^1.1.1",
@@ -30,16 +30,16 @@
     "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.16.5",
+    "@babel/eslint-parser": "^7.17.0",
     "@nuxtjs/eslint-config": "^8.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/pwa": "^3.3.5",
-    "eslint": "^8.6.0",
+    "eslint": "^8.8.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^3.1.0",
-    "eslint-plugin-vue": "^8.2.0",
+    "eslint-plugin-vue": "^8.4.1",
     "prettier": "^2.5.1",
-    "sass": "^1.46.0",
+    "sass": "^1.49.7",
     "sass-loader": "10.1.1"
   }
 }
