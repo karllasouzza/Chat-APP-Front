@@ -39,9 +39,6 @@ export default {
         Placeholder_Password: '*Password',
         Title_Password: 'Password input',
 
-        Title_Password_Hide_Icon: 'Password Hide',
-        Title_Password_Show_Icon: 'Password Show',
-
         Title_Button_Login: 'Click to login',
         Button_Text: 'Login',
       },
@@ -68,5 +65,34 @@ export default {
         Text_Button: 'Create Account',
       },
     ],
+  },
+
+  Greet: {
+    hello: 'Hi',
+    morning: 'Good Morning',
+    afternoon: 'Good Afternoon',
+    night: 'Good Night',
+  },
+
+  Navbar: {
+    home: 'Home',
+    chat: 'Chat',
+    search: 'Search',
+    profile: 'Profile',
+  },
+
+  Icons: {
+    dot: '.',
+    chat: 'Chat',
+    search: 'Search',
+    home: 'Home',
+    more: 'Add',
+    notification: 'Notifications',
+    password_Hide: 'Password Hide',
+    password_Show: 'Password Show',
+    close: 'Close',
+    profile: 'Profile',
+    more_card: 'Expande',
+    send: 'Send',
   },
 }

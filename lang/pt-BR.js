@@ -62,12 +62,38 @@ export default {
         Placeholder_ConfirmPassword: '*Confirmar Senha',
         Title_ConfirmPassword: 'Confirme sua Senha!',
 
-        Title_Password_Hide_Icon: 'Ocultar Senha',
-        Title_Password_Show_Icon: 'Mostrar Senha',
-
         Title_Button: 'Realizar o Cadastro da sua Conta!',
         Text_Button: 'Criar Conta',
       },
     ],
+  },
+
+  Greet: {
+    hello: 'Olá',
+    morning: 'Bom dia',
+    afternoon: 'Boa tarde',
+    night: 'Boa noite',
+  },
+
+  Navbar: {
+    home: 'Inicio',
+    chat: 'Mensagens',
+    search: 'Procurar',
+    profile: 'Perfil',
+  },
+
+  Icons: {
+    dot: '.',
+    chat: 'Mensagens',
+    search: 'Procurar',
+    home: 'Inicio',
+    more: 'Adicionar',
+    notification: 'Notificações',
+    password_Hide: 'Ocultar Senha',
+    password_Show: 'Mostrar Senha',
+    close: 'Fechar',
+    profile: 'Perfil',
+    more_card: 'Expandir',
+    send: 'Enviar',
   },
 }
