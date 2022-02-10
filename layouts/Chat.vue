@@ -9,7 +9,7 @@
 <script>
 import { VLibras } from '@vue-a11y/vlibras'
 import PushMessage from '~/components/PushMessage.vue'
-export default { components: { PushMessage, VLibras } }
+export default { name: 'ChatLayout', components: { PushMessage, VLibras } }
 </script>
 
 <style scoped>

@@ -1,15 +1,18 @@
 <template>
   <div id="APP">
     <Nuxt />
+    <NavBar />
     <VLibras />
   </div>
 </template>
 
 <script>
 import { VLibras } from '@vue-a11y/vlibras'
+import NavBar from '~/components/NavBar.vue'
 
 export default {
-  components: { VLibras },
+  name: 'LayoutWithNavBar',
+  components: { VLibras, NavBar },
 }
 </script>
 
@@ -36,7 +39,7 @@ export default {
   height: 100%;
 
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr auto;
+  grid-template-columns: 10px 5px 1fr 5px 10px;
+  grid-template-rows: 5px 1fr 40px 5px;
 }
 </style>
