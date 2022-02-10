@@ -16,7 +16,7 @@ export default {
   head: {
     title: 'Chat-APP',
     htmlAttrs: {
-      lang: 'pt-br',
+      lang: 'pt-BR',
     },
     meta: [
       { charset: 'utf-8' },
@@ -67,6 +67,7 @@ export default {
     { src: './plugins/vlibras.js' },
     { src: './plugins/vue-chat-scroll.js' },
     { src: './plugins/VueObserveVisibility.js' },
+    { src: './plugins/vue-toast.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -139,6 +140,11 @@ export default {
       short_name: 'Chat App',
       lang: 'en',
     },
+  },
+
+  toast: {
+    timeout: 2000,
+    closeOnClick: false,
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
