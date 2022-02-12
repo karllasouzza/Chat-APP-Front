@@ -13,6 +13,9 @@ import NavBar from '~/components/NavBar.vue'
 export default {
   name: 'LayoutWithNavBar',
   components: { VLibras, NavBar },
+  head() {
+    return this.$nuxtI18nHead()
+  },
 }
 </script>
 

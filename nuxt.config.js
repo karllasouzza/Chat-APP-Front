@@ -68,6 +68,7 @@ export default {
     { src: './plugins/vue-chat-scroll.js' },
     { src: './plugins/VueObserveVisibility.js' },
     { src: './plugins/vue-toast.js' },
+    { src: './plugins/i18n.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -89,16 +90,31 @@ export default {
     '@nuxtjs/pwa',
   ],
 
+  
+  pwa: {
+    meta: {
+      title: 'Chat App',
+      author: 'Karlla.Souzza',
+    },
+    // manifest: {
+    //   name: 'aplicativo de chat ao vivo',
+    //   short_name: 'Chat App',
+    // },
+  },
+
   // i18n
   i18n: {
+    defaultLocale: 'br',
     locales: [
       {
         code: 'br',
         file: 'pt-BR.js',
+        iso: 'pt-BR',
       },
       {
         code: 'en',
         file: 'en-US.js',
+        iso: 'en',
       },
       /*  {
         code: 'es',
@@ -109,9 +125,15 @@ export default {
         file: 'fr-FR.js',
       }, */
     ],
+    silentTranslationWarn: true,
+    silentFallbackWarn: true,
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root', // recommended
+    },
     lazy: true,
     langDir: 'lang/',
-    defaultLocale: 'br',
   },
 
   axios: {
@@ -130,17 +152,6 @@ export default {
     },
   },
 
-  pwa: {
-    meta: {
-      title: 'Chat App',
-      author: 'Karlla.Souzza',
-    },
-    manifest: {
-      name: 'aplicativo de chat ao vivo',
-      short_name: 'Chat App',
-      lang: 'en',
-    },
-  },
 
   toast: {
     timeout: 2000,
