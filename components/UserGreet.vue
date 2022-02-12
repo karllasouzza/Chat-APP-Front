@@ -7,6 +7,7 @@
     </span>
     <Notifications
       :active="notification"
+      :title="$t('Icons.notification')"
       @click.native="$router.push('/notices')"
     />
   </header>
@@ -49,11 +50,10 @@ header.greet {
 
     strong {
       height: auto;
-      font-size: 1.3rem;
-      font-weight: bold;
+      @include bold-text($black);
     }
     b {
-      color: $PrimaryColor;
+      @include bold-text($PrimaryColor);
     }
   }
 }

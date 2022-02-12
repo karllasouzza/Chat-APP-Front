@@ -1,7 +1,8 @@
 <template>
   <nav class="navbar">
     <nuxt-link :to="localePath('/')">
-      <IconHome v-if="path !== '/'" />
+      <IconHome v-if="routName !== 'index'" :title="$t('Icons.home')" />
+
       <div v-else class="label">
         <span>{{ $t('Navbar.home') }}</span>
         <IconDot :title="$t('Icons.dot')" />
@@ -9,7 +10,8 @@
     </nuxt-link>
 
     <nuxt-link :to="localePath('/chats')">
-      <IconChat v-if="path !== '/chats'" />
+      <IconChat v-if="routName !== 'chats'" :title="$t('Icons.chat')" />
+
       <div v-else class="label">
         <span>{{ $t('Navbar.chat') }}</span>
         <IconDot :title="$t('Icons.dot')" />
@@ -17,7 +19,8 @@
     </nuxt-link>
 
     <nuxt-link :to="localePath('/search')">
-      <IconSearch v-if="path !== '/search'" />
+      <IconSearch v-if="routName !== 'search'" :title="$t('Icons.search')" />
+
       <div v-else class="label">
         <span>{{ $t('Navbar.search') }}</span>
         <IconDot :title="$t('Icons.dot')" />
@@ -25,7 +28,8 @@
     </nuxt-link>
 
     <nuxt-link :to="localePath('/profile')">
-      <IconProfile v-if="path !== '/profile'" />
+      <IconProfile v-if="routName !== 'profile'" :title="$t('Icons.profile')" />
+
       <div v-else class="label">
         <span>{{ $t('Navbar.profile') }}</span>
         <IconDot :title="$t('Icons.dot')" />
@@ -45,8 +49,15 @@ export default {
   components: { IconHome, IconChat, IconSearch, IconProfile, IconDot },
   data() {
     return {
-      path: this.$route.path,
+      routName: this.extractLangInName(this.$route.name),
     }
+  },
+
+  methods: {
+    extractLangInName(name) {
+      name = name.split('___')
+      return name[0]
+    },
   },
 }
 </script>
@@ -64,8 +75,8 @@ nav.navbar {
   justify-content: space-between;
 
   > a > svg {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
   }
 
   .label {

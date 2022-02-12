@@ -1,7 +1,7 @@
 <template>
   <div class="status">
     <figure>
-      <div class="img"><More /></div>
+      <div class="img"><More :title="$t('Icons.more_card')" /></div>
       <figcaption class="name">Criar status</figcaption>
     </figure>
     <ul class="statusList">
