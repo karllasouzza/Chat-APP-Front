@@ -12,7 +12,7 @@ import PushMessage from '~/components/PushMessage.vue'
 export default { name: 'ChatLayout', components: { PushMessage, VLibras } }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 #__nuxt {
   width: 100%;
   height: 100%;
@@ -20,7 +20,7 @@ export default { name: 'ChatLayout', components: { PushMessage, VLibras } }
   display: grid;
   grid-template-columns: 10px 1fr 10px;
   grid-template-rows: 10px 1fr 10px;
-  background-color: #360c8a;
+  background-color: $PrimaryColor;
 }
 
 #__layout {
@@ -43,7 +43,7 @@ export default { name: 'ChatLayout', components: { PushMessage, VLibras } }
 .main {
   grid-row: 1/2;
   border-radius: 15px 15px 0 0;
-  background: white;
+  background: $white;
 }
 
 header {

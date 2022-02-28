@@ -451,7 +451,7 @@ export default {
       height: 40px;
       background: $PrimaryColor;
       transition: 0.7s ease-in-out;
-      @include bold-text(#fff);
+      @include bold-text($white);
 
       &:hover {
         background-color: transparent;
