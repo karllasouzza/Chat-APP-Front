@@ -45,9 +45,6 @@ import ModelMessage from '~/static/Models/ModelMessage'
 
 export default {
   name: 'HomePage',
-  /*   components: {
-    InfiniteLoading,
-  }, */
   layout: 'ChatLayout',
   data() {
     return {
