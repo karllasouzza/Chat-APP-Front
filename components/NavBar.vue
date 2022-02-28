@@ -10,19 +10,10 @@
     </nuxt-link>
 
     <nuxt-link :to="localePath('/chats')">
-      <IconChat v-if="routName !== 'chats'" :title="$t('Icons.chat')" />
+      <IconStatus v-if="routName !== 'chats'" :title="$t('Icons.chat')" />
 
       <div v-else class="label">
         <span>{{ $t('Navbar.chat') }}</span>
-        <IconDot :title="$t('Icons.dot')" />
-      </div>
-    </nuxt-link>
-
-    <nuxt-link :to="localePath('/search')">
-      <IconSearch v-if="routName !== 'search'" :title="$t('Icons.search')" />
-
-      <div v-else class="label">
-        <span>{{ $t('Navbar.search') }}</span>
         <IconDot :title="$t('Icons.dot')" />
       </div>
     </nuxt-link>
@@ -40,13 +31,12 @@
 
 <script>
 import IconHome from './Svgs/IconHome.vue'
-import IconChat from './Svgs/IconChat.vue'
-import IconSearch from './Svgs/IconSearch.vue'
+import IconStatus from './Svgs/IconStatus.vue'
 import IconProfile from './Svgs/IconProfile.vue'
 import IconDot from './Svgs/IconDot.vue'
 
 export default {
-  components: { IconHome, IconChat, IconSearch, IconProfile, IconDot },
+  components: { IconHome, IconStatus, IconProfile, IconDot },
   data() {
     return {
       routName: this.extractLangInName(this.$route.name),
@@ -86,6 +76,7 @@ nav.navbar {
 
     > span {
       @include bold-text($Secondary);
+      font-size: 16px;
       text-decoration: none;
     }
   }
