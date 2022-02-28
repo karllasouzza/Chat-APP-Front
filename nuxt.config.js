@@ -10,7 +10,7 @@ export default {
   },
 
   // Target: https://go.nuxtjs.dev/config-target
-  target: 'server',
+  target: 'static',
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -38,9 +38,6 @@ export default {
       },
     ],
   },
-  /*
-
-*/
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
@@ -90,7 +87,6 @@ export default {
     '@nuxtjs/pwa',
   ],
 
-  
   pwa: {
     meta: {
       title: 'Chat App',
@@ -151,7 +147,6 @@ export default {
       pathRewrite: { '^/dev/': '' },
     },
   },
-
 
   toast: {
     timeout: 2000,

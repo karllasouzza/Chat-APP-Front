@@ -3,7 +3,6 @@ import Vue from 'vue'
 // mutations
 export const mutations = {
   toastError(state, text) {
-    console.log(text)
     Vue.$toast.error(text, {
       position: 'top-center',
       timeout: 5000,
@@ -72,7 +71,6 @@ export const mutations = {
 // actions
 export const actions = {
   ToastError(context, text) {
-    console.log(text)
     context.commit('toastError', text)
   },
   ToastSuccess(context, text) {

@@ -1,10 +1,12 @@
 @mixin bold-text($color: DarkGray) {
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: bold;
   font-size: 18px;
+  line-height: 18px;
   color: $color;
   font-family: 'raleway', sans-serif;
 }
+
 @mixin placeholder($color: red) {
   &::placeholder {
     /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -28,7 +30,7 @@
     border: 1px solid $Color;
   }
 }
-@mixin ButtonHoverToSolidColor($PrimaryColor,$Color){
+@mixin ButtonHoverToSolidColor($PrimaryColor, $Color) {
   &:hover {
     background-color: $PrimaryColor;
     color: $Color;
