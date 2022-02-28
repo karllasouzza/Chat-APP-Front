@@ -122,7 +122,7 @@ export default {
     margin-top: 0;
   }
   &:last-child {
-    margin-bottom: 0;
+    margin-bottom: 5px;
   }
 
   &::before {

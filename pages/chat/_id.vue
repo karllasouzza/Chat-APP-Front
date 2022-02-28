@@ -64,7 +64,9 @@ export default {
 
   async fetch() {
     await this.$axios
-      .$get(`/dev/messages/scroll/${this.maxPerPage},${this.currentPage}`)
+      .$get(
+        `/dev/messages/scroll/${this.$route.params.id},${this.maxPerPage},${this.currentPage}`
+      )
       .then((response) => {
         this.messages.unshift(...response.data.response.reverse())
       })
@@ -96,7 +98,9 @@ export default {
     infiniteHandler() {
       this.$axios
         .get(
-          `/dev/messages/scroll/${this.maxPerPage},${this.currentPage + 1}`,
+          `/dev/messages/scroll/${this.$route.params.id},${this.maxPerPage},${
+            this.currentPage + 1
+          }`,
           {
             progress: false,
           }

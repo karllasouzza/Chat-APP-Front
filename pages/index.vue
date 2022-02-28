@@ -9,7 +9,7 @@
         :key="index"
         :user="item.user"
         :messages="item.messages"
-        @click.native="localePath('/chat/' + item.user.id)"
+        @click.native="$router.push(`chat/${item.user.id}`)"
       />
     </ul>
   </div>
@@ -112,6 +112,9 @@ export default {
         },
       ],
     }
+  },
+  methods: {
+    routerPush(_id) {},
   },
 }
 </script>
