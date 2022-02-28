@@ -55,14 +55,22 @@ export default {
 <style lang="scss" scoped>
 nav.navbar {
   width: 100%;
-  height: 40px;
+  height: 48px;
 
   grid-row: 3/4;
-  grid-column: 3/4;
+  grid-column: 1/5;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+  padding: 0px 15px 0 15px;
+
+  background: $white;
 
   > a > svg {
     width: 25px;
@@ -76,13 +84,37 @@ nav.navbar {
 
     > span {
       @include bold-text($Secondary);
+      text-transform: none;
+
       font-size: 16px;
       text-decoration: none;
+
+      &::first-letter {
+        text-transform: uppercase;
+      }
     }
   }
 
   a {
     text-decoration: none;
+  }
+
+  &::after {
+    width: 100%;
+    height: 40px;
+
+    content: '';
+
+    position: absolute;
+    left: 6px;
+    right: 0;
+    bottom: 84%;
+    margin: 0 auto;
+
+    border-left: 9px solid $white;
+    border-bottom: 9px solid $white;
+    border-right: 9px solid $white;
+    border-radius: 0 0 30px 30px;
   }
 }
 </style>

@@ -44,5 +44,7 @@ export default {
   display: grid;
   grid-template-columns: 10px 5px 1fr 5px 10px;
   grid-template-rows: 5px 1fr 40px 5px;
+
+  overflow-y: scroll;
 }
 </style>

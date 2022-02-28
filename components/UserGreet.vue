@@ -2,7 +2,8 @@
   <header class="greet">
     <span>
       <Strong>
-        {{ $t('Greet.hello') }} <b>{{ userName }}</b></Strong
+        {{ $t('Greet.hello') }}
+        <b>{{ userName[0].toUpperCase() + userName.slice(1) }}</b></Strong
       >
     </span>
     <Notifications
@@ -51,10 +52,20 @@ header.greet {
     strong {
       height: auto;
       @include bold-text($black);
+      text-transform: none;
+      b {
+        @include bold-text($PrimaryColor);
+        text-transform: none;
+      }
+      &::first-letter {
+        text-transform: uppercase;
+      }
     }
-    b {
-      @include bold-text($PrimaryColor);
-    }
+  }
+
+  svg {
+    width: 25px;
+    height: 25px;
   }
 }
 </style>
