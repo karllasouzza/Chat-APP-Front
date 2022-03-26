@@ -66,6 +66,8 @@ export default {
     { src: './plugins/VueObserveVisibility.js' },
     { src: './plugins/vue-toast.js' },
     { src: './plugins/i18n.js' },
+    { src: './plugins/supabase.js' },
+    { src: './plugins/croppie.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -77,6 +79,7 @@ export default {
     '@nuxtjs/eslint-module',
     '@nuxtjs/pwa',
     '@nuxtjs/style-resources',
+    '@nuxtjs/dotenv',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -85,7 +88,12 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/i18n',
     '@nuxtjs/pwa',
+    '@nuxtjs/dotenv',
   ],
+
+  dotenv: {
+    path: './',
+  },
 
   pwa: {
     meta: {
@@ -132,21 +140,21 @@ export default {
     langDir: 'lang/',
   },
 
-  axios: {
-    proxy: true,
-    retry: { retries: 3 },
-  },
+  // axios: {
+  //   proxy: true,
+  //   retry: { retries: 3 },
+  // },
 
-  proxy: {
-    '/api/': {
-      target: 'https://chat-app-karlla.herokuapp.com/',
-      pathRewrite: { '^/api/': '' },
-    },
-    '/dev/': {
-      target: 'http://localhost:4000',
-      pathRewrite: { '^/dev/': '' },
-    },
-  },
+  // proxy: {
+  //   '/api/': {
+  //     target: 'https://chat-app-karlla.herokuapp.com/',
+  //     pathRewrite: { '^/api/': '' },
+  //   },
+  //   '/dev/': {
+  //     target: 'http://localhost:4000',
+  //     pathRewrite: { '^/dev/': '' },
+  //   },
+  // },
 
   toast: {
     timeout: 2000,

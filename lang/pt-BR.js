@@ -1,5 +1,5 @@
 export default {
-  Title_Icon: 'Chat App. Ícone',
+  Title_Icon: 'Chat App',
   Login: {
     label: 'Bem-vindes',
     text: `Liberte-se de todo preconceito e se deixe vulnerável para se sentir amade.`,
@@ -21,7 +21,8 @@ export default {
 
       Null_password: 'Senha não definido!',
       Invalid_password: 'Formato de Senha Invalido!',
-      Null_password_confirmation: 'As Senhas não coincidem!',
+      Null_password_confirmation: 'Confirmação de Senha não definido!',
+      Not_match_passwords: 'As Senhas não coincidem!',
 
       Login: 'Email ou Senha Incorretos!',
       Account: 'Erro na Criação da Conta!',
@@ -66,6 +67,11 @@ export default {
         Text_Button: 'Criar Conta',
       },
     ],
+
+    success: {
+      login: 'Login realizado com sucesso',
+      create_account: 'Cadastro realizado com sucesso',
+    },
   },
 
   Greet: {
@@ -88,12 +94,30 @@ export default {
     search: 'Procurar',
     home: 'Inicio',
     more: 'Adicionar',
-    notification: 'Notificações',
+    addFriends: 'Adicionar amigos',
     password_Hide: 'Ocultar Senha',
     password_Show: 'Mostrar Senha',
-    close: 'Fechar',
+    close: 'Cancelar',
     profile: 'Perfil',
     more_card: 'Expandir',
     send: 'Enviar',
+    ok: 'Confirmar',
+  },
+
+  Dates: {
+    ago: 'Há',
+    yesterday: 'Ontem',
+    now: 'Agora',
+  },
+
+  Profile: {
+    bio: 'Bio',
+    email: 'Email',
+    name: 'Nome',
+    newPassword: 'Nova Senha',
+    oldPassword: 'Senha Antiga',
+    edit: 'Editar',
+    delete: 'Deletar',
+    logout: 'Sair',
   },
 }

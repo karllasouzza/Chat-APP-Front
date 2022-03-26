@@ -1,11 +1,12 @@
 <template>
+  <!-- v-if="load > 4" -->
   <article
     :class="messages.quantMessagesNotView ? ' card NotView' : 'card View'"
   >
-    <img
-      :src="user.img"
-      :alt="'Foto de perfil do usuario:' + user.name + '. Image'"
-    />
+    <!-- <img
+      :src="src"
+      :alt="'Foto de perfil do usuário:' + user.name + '. Image'"
+    /> -->
     <span class="content">
       <strong>{{ user.name }}</strong>
       <p>{{ messages.lastMessage }}</p>
@@ -14,22 +15,96 @@
       <strong>{{
         messages.quantMessagesNotView ? messages.quantMessagesNotView : ''
       }}</strong>
-      <p>{{ messages.momentSend }}</p>
+      <p>{{ countDates(messages.momentSend) }}</p>
     </span>
   </article>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import ModelChats from '~/static/Models/ModelChats'
+
 export default {
   name: 'IndexCards',
   props: {
-    user: {
-      type: Object,
+    item: {
       required: true,
+      type: Object,
     },
-    messages: {
-      type: Object,
-      required: true,
+  },
+
+  data() {
+    return {
+      // src: {},
+      user: {},
+      messages: {},
+      load: 0,
+    }
+  },
+  computed: {
+    ...mapState({
+      userID: (state) => state.User.userID,
+    }),
+  },
+  async created() {
+    await this.getUser(this.item.user_to, this.item.user_from)
+    // await this.getImage(this.item.user_to, this.item.user_from)
+    await this.getMessagesNotView(this.userID, this.item._id)
+  },
+
+  methods: {
+    // async getImage(toId, fromId) {
+    //   await this.$supabase
+    //     .from('users')
+    //     .select('image')
+    //     .filter('_id', 'eq', toId === this.userID ? fromId : toId)
+    //     .then((res) => {
+    //       this.src = res[0].image
+    //       console.log(res[0].image)
+    //     })
+    // },
+
+    async getMessagesNotView(id, chatId) {
+      const { data: res } = await this.$supabase
+        .from('messages')
+        .select('*')
+        .or(`user_to.eq.${id},user_from.eq.${id},and(chat_id.eq.${chatId})`)
+        .order('created_at', { ascending: false })
+      this.messages = ModelChats(this.userID, res)
+    },
+
+    async getUser(toId, fromId) {
+      const { data: res } = await this.$supabase
+        .from('users')
+        .select('*')
+        .eq('_id', toId === this.userID ? fromId : toId)
+
+      console.log(res)
+      this.user = res[0]
+    },
+
+    countDates(seconds) {
+      // Seconds
+      if (seconds >= 60) {
+        // Hours
+        if (seconds >= 3600) {
+          // DAY
+          if (seconds > 86400) {
+            const days = seconds / 86400
+            return `${this.$t('Dates.ago')} ${days.toFixed(0)}d`
+          } else if (seconds === 86400) {
+            return `${this.$t('Dates.yesterday')}`
+          } else {
+            const hours = seconds / 3600
+            return `${this.$t('Dates.ago')} ${hours.toFixed(0)}h`
+          }
+        } else {
+          const minutes = seconds / 60
+          return `${this.$t('Dates.ago')} ${minutes.toFixed(0)}m`
+        }
+      } else {
+        return `${this.$t('Dates.now')}`
+      }
     },
   },
 }
@@ -61,7 +136,7 @@ export default {
 
     display: flex;
     flex-direction: column;
-    align-items: start;
+    align-items: flex-start;
     justify-content: space-around;
 
     padding: 8px 0;

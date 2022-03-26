@@ -39,10 +39,12 @@ export default {
   components: { IconHome, IconStatus, IconProfile, IconDot },
   data() {
     return {
-      routName: this.extractLangInName(this.$route.name),
+      routName: '',
     }
   },
-
+  mounted() {
+    this.routName = this.extractLangInName(this.$route.name)
+  },
   methods: {
     extractLangInName(name) {
       name = name.split('___')
