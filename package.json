@@ -18,7 +18,7 @@
     "@nuxtjs/style-resources": "^1.2.1",
     "@supabase/supabase-js": "^1.30.7",
     "@vue-a11y/vlibras": "^0.1.0",
-    "core-js": "^3.21.0",
+    "core-js": "^3.21.1",
     "glob-parent": "6.0.2",
     "global": "^4.4.0",
     "moment": "^2.29.1",
