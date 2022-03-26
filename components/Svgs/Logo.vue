@@ -1,38 +1,39 @@
 <template>
   <svg
-    width="192"
-    height="192"
-    viewBox="0 0 192 192"
+    width="175"
+    height="154"
+    viewBox="0 0 175 154"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <g filter="url(#filter0_bd_513_58)">
+    <title>{{ title }}</title>
+    <g filter="url(#filter0_bd_501_3)">
       <path
-        d="M108.59 89.2458C108.59 78.2001 99.636 69.2458 88.5903 69.2458H35.7379C24.6922 69.2458 15.7379 78.2002 15.7379 89.2458V160.098C15.7379 161.203 16.6333 162.098 17.7379 162.098H88.5904C99.636 162.098 108.59 153.144 108.59 142.098V89.2458Z"
+        d="M97.5903 72.2458C97.5903 61.2001 88.636 52.2458 77.5903 52.2458H24.7379C13.6922 52.2458 4.73787 61.2002 4.73787 72.2458V140.098C4.73787 142.86 6.97645 145.098 9.73787 145.098H77.5904C88.636 145.098 97.5903 136.144 97.5903 125.098V72.2458Z"
         :fill="colors.Primary"
       />
     </g>
-    <g filter="url(#filter1_bd_513_58)">
+    <g filter="url(#filter1_bd_501_3)">
       <path
-        d="M55.082 58.3279C55.082 41.7594 68.5135 28.3279 85.082 28.3279H144.689C161.257 28.3279 174.689 41.7593 174.689 58.3279V145.934C174.689 147.039 173.793 147.934 172.689 147.934H85.0821C68.5135 147.934 55.082 134.503 55.082 117.934V58.3279Z"
-        fill="white"
+        d="M44.082 41.3279C44.082 24.7594 57.5135 11.3279 74.082 11.3279H133.689C150.257 11.3279 163.689 24.7593 163.689 41.3279V120.934C163.689 126.457 159.211 130.934 153.689 130.934H74.0821C57.5135 130.934 44.082 117.503 44.082 100.934V41.3279Z"
+        :fill="colors.White"
         fill-opacity="0.56"
         shape-rendering="crispEdges"
       />
     </g>
     <path
-      d="M148.122 88.1311C148.122 95.519 142.133 100.721 134.745 100.721C128.45 103.056 119.794 100.721 121.368 87.3442C121.368 79.9563 127.357 73.9672 134.745 73.9672C142.133 73.9672 148.122 80.7432 148.122 88.1311Z"
-      fill="black"
+      d="M137.122 71.1311C137.122 78.519 131.133 83.7213 123.745 83.7213C117.45 86.0562 108.794 83.7213 110.368 70.3442C110.368 62.9563 116.357 56.9672 123.745 56.9672C131.133 56.9672 137.122 63.7432 137.122 71.1311Z"
+      :fill="colors.Black"
     />
     <path
-      d="M81.8362 88.1311C81.8362 95.519 87.8253 100.721 95.2133 100.721C101.508 103.056 110.164 100.721 108.59 87.3442C108.59 79.9563 102.601 73.9672 95.2133 73.9672C87.8253 73.9672 81.8362 80.7432 81.8362 88.1311Z"
-      fill="black"
+      d="M70.8362 71.1311C70.8362 78.519 76.8253 83.7213 84.2133 83.7213C90.5083 86.0562 99.1641 83.7213 97.5903 70.3442C97.5903 62.9563 91.6012 56.9672 84.2133 56.9672C76.8253 56.9672 70.8362 63.7432 70.8362 71.1311Z"
+      :fill="colors.Black"
     />
     <defs>
       <filter
-        id="filter0_bd_513_58"
-        x="11.7378"
-        y="65.2458"
+        id="filter0_bd_501_3"
+        x="0.737793"
+        y="48.2458"
         width="100.853"
         height="104.852"
         filterUnits="userSpaceOnUse"
@@ -43,7 +44,7 @@
         <feComposite
           in2="SourceAlpha"
           operator="in"
-          result="effect1_backgroundBlur_513_58"
+          result="effect1_backgroundBlur_501_3"
         />
         <feColorMatrix
           in="SourceAlpha"
@@ -60,20 +61,20 @@
         />
         <feBlend
           mode="normal"
-          in2="effect1_backgroundBlur_513_58"
-          result="effect2_dropShadow_513_58"
+          in2="effect1_backgroundBlur_501_3"
+          result="effect2_dropShadow_501_3"
         />
         <feBlend
           mode="normal"
           in="SourceGraphic"
-          in2="effect2_dropShadow_513_58"
+          in2="effect2_dropShadow_501_3"
           result="shape"
         />
       </filter>
       <filter
-        id="filter1_bd_513_58"
-        x="44.082"
-        y="17.3279"
+        id="filter1_bd_501_3"
+        x="33.082"
+        y="0.327881"
         width="141.606"
         height="141.607"
         filterUnits="userSpaceOnUse"
@@ -84,7 +85,7 @@
         <feComposite
           in2="SourceAlpha"
           operator="in"
-          result="effect1_backgroundBlur_513_58"
+          result="effect1_backgroundBlur_501_3"
         />
         <feColorMatrix
           in="SourceAlpha"
@@ -101,13 +102,13 @@
         />
         <feBlend
           mode="normal"
-          in2="effect1_backgroundBlur_513_58"
-          result="effect2_dropShadow_513_58"
+          in2="effect1_backgroundBlur_501_3"
+          result="effect2_dropShadow_501_3"
         />
         <feBlend
           mode="normal"
           in="SourceGraphic"
-          in2="effect2_dropShadow_513_58"
+          in2="effect2_dropShadow_501_3"
           result="shape"
         />
       </filter>
@@ -119,6 +120,12 @@
 import colors from '~/static/Scss/color.scss'
 export default {
   name: 'LogoImage',
+  props: {
+    title: {
+      required: true,
+      type: String,
+    },
+  },
   data() {
     return {
       colors: { ...colors },
@@ -126,4 +133,3 @@ export default {
   },
 }
 </script>
-

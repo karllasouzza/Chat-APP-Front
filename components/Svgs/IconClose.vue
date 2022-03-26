@@ -1,7 +1,7 @@
 <template>
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 52 52">
     <g filter="url(#a)">
-      <title>{{ $t('Login.close_title') }}</title>
+      <title>{{ $t('Icons.close') }}</title>
       <path
         :fill="colors.Secondary"
         fill-rule="evenodd"
