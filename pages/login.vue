@@ -5,7 +5,7 @@
       @click.native="login ? (login = false) : (account = false)"
     />
 
-    <Logo />
+    <Logo :title="$t('Title_Icon')" />
     <aside>
       <h1>{{ $t('Login.label') }}</h1>
       <span>
@@ -33,7 +33,7 @@
             <p>{{ $t('Login.popUps[0].Greeting') }}</p>
             <strong>{{ $t('Login.popUps[0].Label') }}</strong>
           </span>
-          <IconClose :title="$t('Icon.close')" @click.native="login = false" />
+          <IconClose :title="$t('Icons.close')" @click.native="login = false" />
         </div>
         <InputForms
           ref="R_email_login"
@@ -67,7 +67,7 @@
             <strong>{{ $t('Login.popUps[1].Label') }}</strong>
           </span>
           <IconClose
-            :title="$t('Icon.close')"
+            :title="$t('Icons.close')"
             @click.native="account = false"
           />
         </div>
@@ -77,6 +77,7 @@
           type="text"
           :placeholder="$t('Login.popUps[1].Placeholder_Name')"
           :title="$t('Login.popUps[1].Title_Name')"
+          @keyup.enter="MakeAccount"
         />
         <InputForms
           ref="R_email_account"
@@ -84,6 +85,7 @@
           type="email"
           :placeholder="$t('Login.popUps[1].Placeholder_Email')"
           :title="$t('Login.popUps[1].Title_Email')"
+          @keyup.enter="MakeAccount"
         />
         <InputForms
           ref="R_password_account"
@@ -91,6 +93,7 @@
           type="password"
           :placeholder="$t('Login.popUps[1].Placeholder_Password')"
           :title="$t('Login.popUps[1].Title_Password')"
+          @keyup.enter="MakeAccount"
         />
         <InputForms
           ref="R_confirm_password"
@@ -98,13 +101,14 @@
           :placeholder="$t('Login.popUps[1].Placeholder_ConfirmPassword')"
           :title="$t('Login.popUps[1].Title_ConfirmPassword')"
           type="password"
+          @keyup.enter="MakeAccount"
         />
 
         <BtnPrimary
           type="button"
           :title="$t('Login.popUps[1].Title_Button')"
           :text="$t('Login.popUps[1].Text_Button')"
-          @click.native="MakeAccount()"
+          @click.native="MakeAccount"
         />
       </form>
     </transition>
@@ -115,11 +119,12 @@
 import { mapActions } from 'vuex'
 
 import IconClose from '~/components/Svgs/IconClose.vue'
+import Logo from '~/components/Svgs/Logo.vue'
 
 export default {
   name: 'LoginPage',
 
-  components: { IconClose },
+  components: { IconClose, Logo },
 
   layout: 'DefaultLayout',
 
@@ -153,58 +158,75 @@ export default {
       )
         return
 
-      await this.$axios
-        .$post(
-          '/dev/login/users',
-          {
+      try {
+        const { session, authError } =
+          await this.$supabase.auth.signIn({
             email: this.email_login,
             password: this.password_login,
-          },
-          { progress: false }
-        )
-        .then((response) => {
-          this.SetUser({
-            User: response.data.response,
           })
-          this.toastSuccess(this.$t('Login.Success.Login'))
-          return this.$router.push('/chat')
+        if (authError) throw new Error(authError.message)
+        if (!session) throw new Error('error in singIn')
+
+        const { data: user } = await this.$supabase
+          .from('users')
+          .select('*')
+          .filter('_id', 'eq', session.user.id)
+
+        if (!user) throw new Error('not auth')
+
+        this.SetUser({
+          User: user[0]._id,
         })
-        .catch(() => {
+
+        this.toastSuccess(this.$t('Login.success.login'))
+        return this.$router.push('/')
+      } catch (error) {
+        if (error.message === 'Email not confirmed') {
+          this.$router.push(`/confirm?${this.email_login}`)
+        } else {
+          console.log(error)
           this.toastError(this.$t('Login.Error.Login'))
-        })
+        }
+      }
     },
 
     async MakeAccount() {
+      if (
+        !this.validPasswordAccount(
+          this.password_account,
+          this.confirm_password
+        ) |
+        !this.validEmailAccount(this.email_account) |
+        !this.validName(this.name_account)
+      )
+        return
+
       try {
-        if (
-          !this.validPasswordAccount(
-            this.password_account,
-            this.confirm_password
-          ) |
-          !this.validEmailAccount(this.email_account) |
-          !this.validName(this.name_account)
-        )
-          return
+        const { user, authError } = await this.$supabase.auth.signUp({
+          email: this.email_account,
+          password: this.confirm_password,
+        })
 
-        await this.$axios
-          .$post('/dev/users/', {
-            name: this.name_account,
-            email: this.email_account,
-            password: this.confirm_password,
-          })
-          .then((response) => {
-            this.toastSuccess(this.$t('Login.Success.Account'))
-            this.SetUser({
-              User: response.data.response,
-            })
-            return this.$router.push('/chat')
-          })
+        if (!user) throw new Error(authError.message)
 
-          .catch(() => {
-            this.toastError(this.$t('Login.Error.Account'))
-          })
-      } catch (e) {
-        this.toastError(this.$t('Login.Error.Error_Request'))
+        const { data, error } = await this.$supabase.from('users').insert({
+          _id: user.id,
+          name: this.name_account,
+          bio: null,
+          created_at: user.created_at,
+        })
+
+        if (error) throw new Error(authError.message)
+        if (!data) throw new Error('Error in Insert')
+
+        if (user.aud === 'authenticated') {
+          this.toastSuccess(this.$t('Login.success.create_account'))
+          return this.$router.push('/confirm')
+        } else {
+          this.toastError(this.$t('Login.Error.Account'))
+        }
+      } catch (error) {
+        this.toastError(this.$t('Login.Error.Account'))
       }
     },
 
@@ -212,13 +234,13 @@ export default {
       const regex = /^([a-z]{2,}([\s-][a-z]{2,})+)$/gi
 
       if (!name) {
-        this.$refs.name_account.focus()
+        this.$refs.name_account.$el.children[0].focus()
         this.toastError(this.$t('Login.Error.Null_name'))
 
         return false
       }
       if (!regex.test(name)) {
-        this.$refs.name_account.focus()
+        this.$refs.name_account.$el.children[0].focus()
 
         this.toastError(this.$t('Login.Error.Invalid_name'))
         return false
@@ -227,59 +249,33 @@ export default {
       return true
     },
 
-    async validEmailAccount(email) {
+    validEmailAccount(email) {
       const regex =
         /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi
 
       if (!email) {
-        this.$refs.R_email_account.focus()
+        this.$refs.R_email_account.$el.children[0].focus()
+
         this.toastError(this.$t('Login.Error.Null_email'))
         return false
       } else if (!regex.test(email)) {
-        this.$refs.R_email_account.focus()
+        this.$refs.R_email_account.$el.children[0].focus()
 
         this.toastError(this.$t('Login.Error.Invalid_email'))
         return false
       }
-      await this.$axios
-        .$get(`/dev/users/search/${email}`)
-        .then((response) => {
-          this.$refs.R_email_account.focus()
 
-          this.toastError(this.$t('Login.Error.Duplicate_email'))
-          return false
-        })
-        .catch(() => {
-          return true
-        })
+      return true
     },
 
-    async validEmail(email) {
-      const regex =
-        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi
-
+    validEmail(email) {
       if (!email) {
-        this.$refs.R_email_login.focus()
+        this.$refs.R_email_login.$el.children[0].focus()
+
         this.toastError(this.$t('Login.Error.Null_email'))
         return false
-      } else if (!regex.test(email)) {
-        this.$refs.R_email_login.focus()
-
-        this.toastError(this.$t('Login.Error.Invalid_email'))
-        return false
       }
-
-      await this.$axios
-        .$get(`/dev/users/search/${email}`)
-        .then((response) => {
-          return true
-        })
-        .catch(() => {
-          this.$refs.R_email_login.focus()
-
-          this.toastError(this.$t('Login.Error.Unregistered_email'))
-          return false
-        })
+      return true
     },
 
     validPasswordAccount(password, confirmPassword) {
@@ -287,24 +283,25 @@ export default {
         /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/
 
       if (!password) {
-        this.$refs.R_password_account.focus()
-
-        this.toastError(this.$t('Login.Error.Null_password'))
-        return false
-      } else if (!confirmPassword) {
-        this.$refs.R_confirm_password.focus()
+        this.$refs.R_password_account.$el.children[0].focus()
 
         this.toastError(this.$t('Login.Error.Null_password'))
         return false
       } else if (!regex.test(password)) {
-        this.$refs.R_password_account.focus()
+        this.$refs.R_password_account.$el.children[0].focus()
 
-        this.toastError(this.$t('Login.Error.Null_password'))
+        this.toastError(this.$t('Login.Error.Invalid_password'))
         return false
-      } else if (password !== confirmPassword) {
-        this.$refs.R_confirm_password.focus()
+      }
+      if (!confirmPassword) {
+        this.$refs.R_confirm_password.$el.children[0].focus()
 
         this.toastError(this.$t('Login.Error.Null_password_confirmation'))
+        return false
+      } else if (password !== confirmPassword) {
+        this.$refs.R_confirm_password.$el.children[0].focus()
+
+        this.toastError(this.$t('Login.Error.Not_match_passwords'))
         return false
       }
 
@@ -312,16 +309,8 @@ export default {
     },
 
     validPassword(password) {
-      const regex =
-        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/
-
       if (!password) {
-        this.$refs.R_Password_login.focus()
-
-        this.toastError(this.$t('Login.Error.Null_password'))
-        return false
-      } else if (!regex.test(password)) {
-        this.$refs.R_Password_login.focus()
+        this.$refs.R_Password_login.$el.children[0].focus()
 
         this.toastError(this.$t('Login.Error.Null_password'))
         return false
@@ -368,6 +357,8 @@ export default {
         -webkit-text-stroke: 1px $Secondary;
         transition: 0.7s ease-in-out;
 
+        border-radius: 1.5px 10px 10px 10px;
+
         @include ButtonHoverToSolidColor($Secondary, $white);
       }
     }
@@ -411,7 +402,7 @@ export default {
     height: 300px;
 
     background-color: $white;
-    border-radius: 20px 20px 0 0;
+    border-radius: 10px 50px 0 0;
 
     flex-direction: column;
     display: flex;
@@ -426,7 +417,7 @@ export default {
 
     > div {
       width: 88%;
-      height: 55px;
+      height: 40px;
 
       display: flex;
       align-items: center;
@@ -463,6 +454,22 @@ export default {
 
   > form.account {
     height: 400px;
+
+    > div:nth-child(2) {
+      border-radius: 10px 10px 10px 1.5px;
+    }
+    > div:nth-child(5) {
+      border-radius: 1.5px 10px 10px 10px;
+    }
+  }
+
+  > form.login {
+    > div:nth-child(2) {
+      border-radius: 10px 10px 10px 1.5px;
+    }
+    > div:nth-child(3) {
+      border-radius: 1.5px 10px 10px 10px;
+    }
   }
 }
 </style>

@@ -9,12 +9,10 @@ export default {
   props: {
     text: {
       type: String,
-      default: '',
       required: true,
     },
     type: {
       type: String,
-      default: 'text',
       required: true,
     },
   },
@@ -28,6 +26,6 @@ button {
   font-size: 1.2em;
   background-color: $PrimaryColor;
 
-  border-radius: 10px;
+  border-radius: 10px 10px 10px 1.5px;
 }
 </style>

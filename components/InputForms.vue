@@ -1,5 +1,5 @@
 <template>
-  <div id="input">
+  <div class="Input">
     <input
       :value="value"
       :type="passwordChange"
@@ -55,13 +55,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#input {
+.Input {
   width: 88%;
   height: 40px;
 
   border: none;
   border: 1px solid $black;
-  border-radius: 8px;
+  border-radius: 10px;
   position: relative;
 
   @include placeholder(#000);
@@ -84,7 +84,7 @@ export default {
     height: 100%;
 
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 5px;
     box-shadow: 0 0 0 0;
     outline: 0;
