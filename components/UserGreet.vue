@@ -6,26 +6,49 @@
         <b>{{ userName[0].toUpperCase() + userName.slice(1) }}</b></Strong
       >
     </span>
-    <Notifications
+    <IconAddFriends
       :active="notification"
-      :title="$t('Icons.notification')"
-      @click.native="$router.push('/notices')"
+      :title="$t('Icons.addFriends')"
+      @click.native="$router.push('/addFriends')"
     />
   </header>
 </template>
 
 <script>
-import Notifications from '~/components/Svgs/Notifications.vue'
+import { mapState } from 'vuex'
+
+import IconAddFriends from '~/components/Svgs/IconAddFriends.vue'
 
 export default {
   components: {
-    Notifications,
+    IconAddFriends,
   },
   data() {
     return {
       userName: 'karlla',
       notification: false,
     }
+  },
+  computed: {
+    ...mapState({
+      userID: (state) => state.User.userID,
+    }),
+  },
+  async created() {
+    await this.getUserByID()
+  },
+  methods: {
+    async getUserByID() {
+      const { data: user } = await this.$supabase
+        .from('users')
+        .select('name')
+        .filter('_id', 'eq', this.userID)
+
+      if (user) {
+        const userSplited = user[0].name.split(' ')
+        this.userName = userSplited[0]
+      }
+    },
   },
 }
 </script>
@@ -66,6 +89,8 @@ header.greet {
   svg {
     width: 25px;
     height: 25px;
+
+    cursor: pointer;
   }
 }
 </style>

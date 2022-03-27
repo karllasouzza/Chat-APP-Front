@@ -1,22 +1,19 @@
 export const state = () => ({
-  user: null,
+  userID: null,
   logado: false,
 })
 
-// mutations
 export const mutations = {
-  // Items
   addUser(state, Usuario) {
-    state.user = Usuario
+    state.userID = Usuario
     state.logado = true
   },
   clearUser(state, User) {
-    state.user = {}
+    state.userID = ''
     state.logado = false
   },
 }
 
-// actions
 export const actions = {
   SetUser(context, Usuario) {
     context.commit('addUser', Usuario.User)

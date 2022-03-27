@@ -61,7 +61,7 @@ header {
   align-items: center;
   justify-content: space-between;
 
-  border-top: 2px solid #360c8a;
+  border-top: 2px solid  $PrimaryColor;
   background: $Third;
 
   textarea {
