@@ -9,7 +9,7 @@
     <section
       :class="edit ? 'ContainerImage ContainerImageEdit' : 'ContainerImage'"
     >
-      <CutImg :user-img="thumbnail" :edit="edit" />
+      <CutImg :user-img="thumbnail" :edit="edit" :profile="withThumbnail" />
       <TitleProfile v-if="!edit" :text="user.name" is-label="false" />
     </section>
 
@@ -131,9 +131,9 @@ export default {
       }
 
       if (!this.withThumbnail) {
-        await this.insertProfileImage()
+        await this.insertProfileImage('profile', this.img)
       } else {
-        await this.updateProfileImage()
+        await this.updateProfileImage('profile', this.img)
       }
     },
 
@@ -149,11 +149,11 @@ export default {
       }
     },
 
-    async getSignedUrlProfileImage() {
+    async listProfileImages(from, route) {
       try {
         const { data, error } = await this.$supabase.storage
-          .from('profile-images')
-          .list(`${this.userID}/profile`, {
+          .from(from)
+          .list(route, {
             limit: 100,
             offset: 0,
             sortBy: { column: 'name', order: 'asc' },
@@ -162,28 +162,77 @@ export default {
         if (!data) throw new Error(error)
         if (error) throw new Error(error)
 
+        return data
+      } catch (error) {}
+    },
+
+    async setFirstPublicProfileImage() {
+      try {
+        const data = await this.listProfileImages('public', 'avatars/')
+
+        const index = Math.floor(Math.random() * data.length)
+
+        const { publicURL, error } = await this.$supabase.storage
+          .from('public')
+          .getPublicUrl(`avatars/${data[index].name}`)
+
+        if (!publicURL) throw new Error(error)
+        if (error) throw new Error(error)
+
+        await this.insertProfileImage('public', publicURL)
+
+        this.withThumbnail = false
+
+        this.thumbnail = publicURL
+      } catch (error) {}
+    },
+
+    async getPublicProfile() {
+      try {
+        const { data, error } = await this.$supabase.storage
+          .from('profile-images')
+          .createSignedUrl(`${this.userID}/profile/public.png`, 60)
+
+        if (!data) throw new Error(error)
+        if (error) throw new Error(error)
+
+        const imageLink = await this.getProfileImage(data.signedURL)
+
+        this.thumbnail = imageLink
+      } catch (error) {}
+    },
+
+    async getSignedUrlProfileImage() {
+      try {
+        const data = await this.listProfileImages(
+          'profile-images',
+          `${this.userID}/profile`
+        )
+
         const img = data.filter((image) => {
-          return image.name.includes('profile')
+          return image.name.includes('profile') || image.name.includes('public')
         })
 
-        if (img.length !== 1) throw new Error('multiple images')
+        if (img.length > 2) throw new Error('multiple images')
+        if (!img.length) await this.setFirstPublicProfileImage()
 
-        this.withThumbnail = true
+        if (img[0].name === 'public.png') this.getPublicProfile()
 
-        const { dataSigned, errorSigned } = await this.$supabase.storage
-          .from('public')
+        const { data: dataSigned, errorSigned } = await this.$supabase.storage
+          .from('profile-images')
           .createSignedUrl(`${this.userID}/profile/${img[0].name}`, 60)
 
         if (!dataSigned) throw new Error('not signed url')
         if (errorSigned) throw new Error('not signed url')
 
-        this.thumbnail = await this.getProfileImage(dataSigned.signedURL)
+        this.thumbnail = dataSigned.signedURL
+
+        this.withThumbnail = true
       } catch (error) {}
     },
 
     async getProfileImage(url) {
       return await this.$axios.get(url).then((response) => {
-        console.log(response)
         return response.data
       })
     },
@@ -205,32 +254,32 @@ export default {
       } catch (error) {}
     },
 
-    async insertProfileImage() {
-      const { data, error } = await this.$supabase.storage
-        .from('profile-images')
-        .upload(`${this.userID}/profile/profile.png`, this.img)
-
-      if (!data) throw new Error(error)
-      if (error) throw new Error(error)
-    },
-
-    async updateProfileImage() {
+    async insertProfileImage(fileName, image) {
       try {
         const { data, error } = await this.$supabase.storage
           .from('profile-images')
-          .update(`${this.userID}/profile/profile.png`, this.img, {
+          .upload(`${this.userID}/profile/${fileName}.png`, image)
+
+        if (!data) throw new Error(error)
+        if (error) throw new Error(error)
+
+        this.getSignedUrlProfileImage()
+      } catch (error) {}
+    },
+
+    async updateProfileImage(fileName, image) {
+      try {
+        const { data, error } = await this.$supabase.storage
+          .from('profile-images')
+          .update(`${this.userID}/profile/${fileName}.png`, image, {
             cacheControl: '300',
           })
 
         if (!data) throw new Error(error)
         if (error) throw new Error(error)
 
-        this.thumbnail = this.img
-
-        console.log(data)
-      } catch (error) {
-        console.log(error)
-      }
+        this.getSignedUrlProfileImage()
+      } catch (error) {}
     },
 
     async deleteProfileImage() {

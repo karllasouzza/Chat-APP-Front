@@ -2,7 +2,23 @@
   <div>
     <input ref="fileSelect" type="file" @input="croppie" />
     <div :class="edit ? 'img edit' : 'img'">
-      <img :src="edit ? (!cropped ? userImg : cropped) : userImg" alt="" />
+      <img
+        v-if="profile || thumbnail"
+        :src="edit ? (!thumbnail ? userImg : thumbnail) : userImg"
+        alt=""
+      />
+      <p
+        v-else
+        :style="
+          edit
+            ? !thumbnail
+              ? { backgroundImage: `url(${userImg})` }
+              : { backgroundImage: `url(${thumbnail})` }
+            : { backgroundImage: `url(${userImg})` }
+        "
+        alt=""
+        class="public"
+      />
 
       <div v-if="edit" class="addImage">
         <IconAddImage @click.native="activeCut()" />
@@ -45,11 +61,16 @@ export default {
       type: String,
       required: true,
     },
+    profile: {
+      type: Boolean,
+      required: false,
+    },
   },
   data() {
     return {
       croppieImage: '',
       cropped: null,
+      thumbnail: null,
     }
   },
   computed: {
@@ -66,6 +87,13 @@ export default {
     ...mapActions({
       addImage: 'Cut/SetImage',
     }),
+
+    clean() {
+      this.close()
+      this.cropped = null
+      this.croppieImage = null
+      this.thumbnail = null
+    },
 
     change() {
       this.$refs.fileSelect.click()
@@ -90,15 +118,25 @@ export default {
 
     crop() {
       const options = {
-        type: 'base64',
+        type: 'blob',
         size: { width: 500, height: 500 },
         format: 'png',
       }
       this.$refs.croppieRef.result(options, (output) => {
+        this.blobToBase64(output)
         this.cropped = this.croppieImage = output
         this.addImage(output)
         this.offCut()
       })
+    },
+
+    blobToBase64(blob) {
+      const reader = new FileReader()
+      reader.readAsDataURL(blob)
+      reader.onloadend = () => {
+        const base64data = reader.result
+        this.thumbnail = base64data
+      }
     },
   },
 }
@@ -217,5 +255,14 @@ export default {
 
 input {
   display: none;
+}
+
+.public {
+  width: 120px;
+  height: 120px;
+  background-color: $PrimaryColor;
+  background-size: 81%;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 </style>

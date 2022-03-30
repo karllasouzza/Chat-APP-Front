@@ -1,18 +1,13 @@
 export default {
-  // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
-
-  /* Enable to all ports: */
 
   server: {
     host: '0.0.0.0',
     port: 3000,
   },
 
-  // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 
-  // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'Chat-APP',
     htmlAttrs: {
@@ -39,25 +34,22 @@ export default {
     ],
   },
 
-  // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-    './static/Scss/color.scss',
-    './static/Scss/reset.scss',
-    './static/Scss/mixins.scss',
-    './static/Scss/imagens.scss',
-    './static/Scss/transitions.scss',
-  ],
+  // css: [
+  //   './static/Scss/color.scss',
+  //   './static/Scss/reset.scss',
+  //   './static/Scss/mixins.scss',
+  //   './static/Scss/transitions.scss',
+  // ],
 
   styleResources: {
     scss: [
       './static/Scss/color.scss',
       './static/Scss/reset.scss',
       './static/Scss/mixins.scss',
-      './static/Scss/imagens.scss',
       './static/Scss/transitions.scss',
     ],
   },
-  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
+
   plugins: [
     { src: './plugins/vuexPersistedState.js', mode: 'client' },
     { src: './plugins/auto-resize.js' },
@@ -70,26 +62,16 @@ export default {
     { src: './plugins/croppie.js' },
   ],
 
-  // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
-  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     '@nuxtjs/pwa',
     '@nuxtjs/style-resources',
     '@nuxtjs/dotenv',
   ],
 
-  // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
-    '@nuxtjs/i18n',
-    '@nuxtjs/pwa',
-    '@nuxtjs/dotenv',
-  ],
+  modules: ['@nuxtjs/axios', '@nuxtjs/i18n', '@nuxtjs/pwa', '@nuxtjs/dotenv'],
 
   dotenv: {
     path: './',
@@ -162,5 +144,14 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    loaders: {
+      sass: {
+        implementation: require('sass'),
+      },
+      scss: {
+        implementation: require('sass'),
+      },
+    },
+  },
 }
