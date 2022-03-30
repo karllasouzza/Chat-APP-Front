@@ -13,26 +13,26 @@
       <TitleProfile v-if="!edit" :text="user.name" is-label="false" />
     </section>
 
-    <section v-if="edit" :class="edit ? 'editData first' : ''">
+    <section v-if="edit" :class="edit ? 'editData first' : '.section'">
       <TitleProfile :text="$t('Profile.name')" is-label="true" />
       <span v-if="!edit">{{ user.email }}</span>
 
       <input v-else v-model="name" type="text" />
     </section>
 
-    <section :class="edit ? 'editData middle' : ''">
+    <section :class="edit ? 'editData middle' : 'section'">
       <TitleProfile :text="$t('Profile.bio')" is-label="true" />
       <span v-if="!edit">{{ user.bio ? user.bio : '-----' }}</span>
-      <textarea v-else v-model="bio"></textarea>
+      <textarea-autosize v-else ref="bio" v-model="bio" />
     </section>
 
-    <section :class="edit ? 'editData middle' : ''">
+    <section :class="edit ? 'editData middle' : 'section'">
       <TitleProfile :text="$t('Profile.email')" is-label="true" />
       <span v-if="!edit">{{ user.email }}</span>
       <input v-else v-model="email" type="email" />
     </section>
 
-    <section v-if="edit" :class="edit ? 'editData last' : ''">
+    <section v-if="edit" :class="edit ? 'editData last' : 'section'">
       <TitleProfile :text="$t('Profile.newPassword')" is-label="true" />
       <span v-if="!edit">{{ user.email }}</span>
       <input
@@ -323,7 +323,7 @@ export default {
 
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
 
   padding: 20px 0;
   .ContainerImage {
@@ -352,47 +352,22 @@ export default {
     justify-content: space-evenly;
     align-items: flex-start;
 
-    p {
-      margin-bottom: 8px;
-
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-
-      strong {
-        @include bold-text($PrimaryColor);
-        text-transform: none;
-
-        display: flex;
-        align-items: flex-start;
-        justify-content: flex-start;
-      }
-    }
-    > span {
+    span {
       font-family: 'Montserrat';
       font-weight: 600;
+      // font-size: 28px;
 
       display: flex;
       align-items: flex-start;
       justify-content: flex-start;
     }
-  }
-  .bio {
-    height: fit-content;
-
-    grid-row: 2/3;
-    grid-column: 1/3;
-
-    // margin-top: 15px;
-    // margin-bottom: 15px;
-  }
-  .email {
-    grid-row: 4/5;
-    grid-column: 1/3;
   }
 
   .editData {
     position: relative;
+
+    display: flex;
+    align-items: center;
 
     textarea,
     input {
@@ -409,7 +384,10 @@ export default {
     }
 
     textarea {
-      padding: 15px 5px 5px 10px;
+      padding: 5% 4%;
+      padding: 8px;
+
+      min-height: 15px;
     }
 
     input {

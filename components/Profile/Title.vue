@@ -24,7 +24,7 @@ export default {
 p.title > strong {
   @include bold-text($PrimaryColor);
   text-transform: none;
-  font-size: 24px;
+  font-size: 28px;
 }
 
 p.label {
@@ -36,6 +36,7 @@ p.label {
 
   strong {
     @include bold-text($PrimaryColor);
+    font-size: 20px;
     text-transform: none;
 
     display: flex;
