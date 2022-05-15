@@ -6,7 +6,7 @@
   font-family: 'raleway', sans-serif;
 }
 
-@mixin placeholder($color: red) {
+@mixin placeholder($color: $Secondary) {
   &::placeholder {
     /* Chrome, Firefox, Opera, Safari 10.1+ */
     color: $color;
@@ -34,5 +34,11 @@
     background-color: $PrimaryColor;
     color: $Color;
     border: none;
+  }
+}
+
+@mixin FilterShadow($color: $PrimaryColor) {
+  &:hover {
+    box-shadow: 2px 4px 45px 3px $color;
   }
 }

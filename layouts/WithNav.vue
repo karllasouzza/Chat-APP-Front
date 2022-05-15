@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import { VLibras } from '@vue-a11y/vlibras'
 import NavBar from '~/components/NavBar.vue'
 
@@ -15,6 +17,34 @@ export default {
   components: { VLibras, NavBar },
   head() {
     return this.$nuxtI18nHead()
+  },
+  computed: {
+    ...mapState({
+      user: (state) => state.User.userID,
+    }),
+  },
+  async created() {
+    await this.authUser()
+  },
+
+  methods: {
+    async authUser() {
+      try {
+        if (!this.user.app_metadata?.aud) throw new Error('not logged')
+
+        const { data: user } = await this.$supabase
+          .from('users')
+          .select('*')
+          .filter('_id', 'eq', this.user?.app_metadata.id)
+
+        if (!user) throw new Error('not logged')
+      } catch (e) {
+        this.$router.push('/login')
+      }
+    },
+  },
+  async render() {
+    return await this.authUser()
   },
 }
 </script>

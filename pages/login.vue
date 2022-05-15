@@ -2,7 +2,7 @@
   <div class="container">
     <BlurPopup
       v-if="login || account"
-      @click.native="login ? (login = false) : (account = false)"
+      @click.native="login ? closeLogin() : closeAccount()"
     />
 
     <Logo :title="$t('Title_Icon')" />
@@ -14,15 +14,14 @@
     </aside>
     <div>
       <BtnPrimary
-        :type="$t('Login.buttons[0].type')"
-        :text="$t('Login.buttons[0].text')"
-        @click.native="login = true"
-      />
-
-      <BtnPrimary
         :type="$t('Login.buttons[1].type')"
         :text="$t('Login.buttons[1].text')"
         @click.native="account = true"
+      />
+      <BtnPrimary
+        :type="$t('Login.buttons[0].type')"
+        :text="$t('Login.buttons[0].text')"
+        @click.native="login = true"
       />
     </div>
 
@@ -33,7 +32,7 @@
             <p>{{ $t('Login.popUps[0].Greeting') }}</p>
             <strong>{{ $t('Login.popUps[0].Label') }}</strong>
           </span>
-          <IconClose :title="$t('Icons.close')" @click.native="login = false" />
+          <IconClose :title="$t('Icons.close')" @click.native="closeLogin()" />
         </div>
         <InputForms
           ref="R_email_login"
@@ -68,26 +67,11 @@
           </span>
           <IconClose
             :title="$t('Icons.close')"
-            @click.native="account = false"
+            @click.native="closeAccount()"
           />
         </div>
         <InputForms
-          ref="name_account"
-          v-model="name_account"
-          type="text"
-          :placeholder="$t('Login.popUps[1].Placeholder_Name')"
-          :title="$t('Login.popUps[1].Title_Name')"
-          @keyup.enter="MakeAccount"
-        />
-        <InputForms
-          ref="R_email_account"
-          v-model="email_account"
-          type="email"
-          :placeholder="$t('Login.popUps[1].Placeholder_Email')"
-          :title="$t('Login.popUps[1].Title_Email')"
-          @keyup.enter="MakeAccount"
-        />
-        <InputForms
+          v-if="accountPoint === 1"
           ref="R_password_account"
           v-model="password_account"
           type="password"
@@ -96,6 +80,17 @@
           @keyup.enter="MakeAccount"
         />
         <InputForms
+          v-else
+          ref="name_account"
+          v-model="name_account"
+          type="text"
+          :placeholder="$t('Login.popUps[1].Placeholder_Name')"
+          :title="$t('Login.popUps[1].Title_Name')"
+          @keyup.enter="MakeAccount"
+        />
+
+        <InputForms
+          v-if="accountPoint === 1"
           ref="R_confirm_password"
           v-model="confirm_password"
           :placeholder="$t('Login.popUps[1].Placeholder_ConfirmPassword')"
@@ -103,13 +98,38 @@
           type="password"
           @keyup.enter="MakeAccount"
         />
+        <InputForms
+          v-else
+          ref="R_email_account"
+          v-model="email_account"
+          type="email"
+          :placeholder="$t('Login.popUps[1].Placeholder_Email')"
+          :title="$t('Login.popUps[1].Title_Email')"
+          @keyup.enter="MakeAccount"
+        />
 
         <BtnPrimary
+          v-if="accountPoint === 0"
           type="button"
-          :title="$t('Login.popUps[1].Title_Button')"
-          :text="$t('Login.popUps[1].Text_Button')"
-          @click.native="MakeAccount"
+          :title="$t('Login.popUps[1].Text_Button_first_point')"
+          :text="$t('Login.popUps[1].Text_Button_first_point')"
+          @click.native="accountPoint = 1"
         />
+        <div v-else>
+          <BtnPrimary
+            class="returnBtn"
+            type="button"
+            :title="$t('Login.popUps[1].Text_Button_return_to_first_point')"
+            :text="$t('Login.popUps[1].Text_Button_return_to_first_point')"
+            @click.native="accountPoint = 0"
+          />
+          <BtnPrimary
+            type="button"
+            :title="$t('Login.popUps[1].Text_Button_last_point')"
+            :text="$t('Login.popUps[1].Text_Button_last_point')"
+            @click.native="MakeAccount"
+          />
+        </div>
       </form>
     </transition>
   </div>
@@ -132,6 +152,7 @@ export default {
     return {
       login: false,
       account: false,
+      accountPoint: 0,
 
       /* V values */
       email_login: '',
@@ -151,6 +172,21 @@ export default {
       toastSuccess: 'Notification/ToastSuccess',
     }),
 
+    closeLogin() {
+      this.email_login = ''
+      this.password_login = ''
+      this.login = false
+    },
+
+    closeAccount() {
+      this.name_account = ''
+      this.email_account = ''
+      this.confirm_password = ''
+      this.password_account = ''
+      this.account = false
+      this.accountPoint = 0
+    },
+
     async MakeLogin() {
       if (
         !this.validPassword(this.password_login) |
@@ -159,11 +195,10 @@ export default {
         return
 
       try {
-        const { session, authError } =
-          await this.$supabase.auth.signIn({
-            email: this.email_login,
-            password: this.password_login,
-          })
+        const { session, authError } = await this.$supabase.auth.signIn({
+          email: this.email_login,
+          password: this.password_login,
+        })
         if (authError) throw new Error(authError.message)
         if (!session) throw new Error('error in singIn')
 
@@ -184,7 +219,6 @@ export default {
         if (error.message === 'Email not confirmed') {
           this.$router.push(`/confirm?${this.email_login}`)
         } else {
-          console.log(error)
           this.toastError(this.$t('Login.Error.Login'))
         }
       }
@@ -324,8 +358,8 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 
   display: flex;
   flex-direction: column;
@@ -343,23 +377,21 @@ export default {
 
     button {
       width: 80%;
-      height: 40px;
+      height: 50px;
 
       background: $PrimaryColor;
       transition: 0.7s ease-in-out;
 
+      border-radius: 10pt;
+
+      color: $white;
+
       @include bold-text($white);
-      @include ButtonHoverToTransparent($PrimaryColor);
+      @include FilterShadow($PrimaryColor);
 
       &:last-child {
-        border: solid 1px $Secondary;
-        background: transparent;
-        -webkit-text-stroke: 1px $Secondary;
-        transition: 0.7s ease-in-out;
-
-        border-radius: 1.5px 10px 10px 10px;
-
-        @include ButtonHoverToSolidColor($Secondary, $white);
+        background: $Secondary;
+        @include FilterShadow($Secondary);
       }
     }
   }
@@ -383,7 +415,7 @@ export default {
       color: $Secondary;
     }
     span {
-      width: 90%;
+      width: 80%;
       height: fit-content;
 
       display: flex;
@@ -402,14 +434,14 @@ export default {
     height: 300px;
 
     background-color: $white;
-    border-radius: 10px 50px 0 0;
+    border-radius: 20px 20px 0 0;
 
     flex-direction: column;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
 
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
@@ -431,44 +463,41 @@ export default {
         align-items: flex-start;
         justify-content: space-evenly;
         flex-direction: column;
+
+        color: $black;
+
         > strong {
-          @include bold-text($PrimaryColor);
+          @include bold-text($black);
+          font-size: 1.2rem;
         }
       }
     }
 
-    > button {
+    button {
       width: 88%;
       height: 40px;
       background: $PrimaryColor;
       transition: 0.7s ease-in-out;
       @include bold-text($white);
 
-      &:hover {
-        background-color: transparent;
-        -webkit-text-stroke: 1px $PrimaryColor;
-        border: 1px solid $PrimaryColor;
-      }
+      border-radius: 10pt;
+      @include FilterShadow();
+    }
+
+    .returnBtn {
+      width: 95px;
+
+      margin-right: 10px;
+      font-size: 14px;
+
+      background: $Secondary;
     }
   }
 
-  > form.account {
-    height: 400px;
-
-    > div:nth-child(2) {
-      border-radius: 10px 10px 10px 1.5px;
-    }
-    > div:nth-child(5) {
-      border-radius: 1.5px 10px 10px 10px;
-    }
-  }
-
-  > form.login {
-    > div:nth-child(2) {
-      border-radius: 10px 10px 10px 1.5px;
-    }
-    > div:nth-child(3) {
-      border-radius: 1.5px 10px 10px 10px;
+  > form {
+    > button,
+    input {
+      border-radius: 10pt;
     }
   }
 }

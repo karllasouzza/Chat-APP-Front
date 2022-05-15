@@ -173,6 +173,7 @@ input::-ms-clear {
 *:before {
   box-sizing: border-box;
   font-family: 'Montserrat';
+  -webkit-tap-highlight-color: transparent;
 }
 
 html,
@@ -180,8 +181,8 @@ body,
 #__nuxt,
 #__layout,
 main {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 
   /* Hidden Scrollbar Firefox, Edge and IE */
   scrollbar-width: none;

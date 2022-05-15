@@ -2,7 +2,7 @@ export default {
   Title_Icon: 'Chat App',
   Login: {
     label: 'Bem-vindes',
-    text: `Liberte-se de todo preconceito e se deixe vulnerável para se sentir amade.`,
+    text: `Compartilhe momentos, experiencias de vida ou somente seja voce mesmo :)`,
 
     close_title: 'Fechar',
 
@@ -64,7 +64,9 @@ export default {
         Title_ConfirmPassword: 'Confirme sua Senha!',
 
         Title_Button: 'Realizar o Cadastro da sua Conta!',
-        Text_Button: 'Criar Conta',
+        Text_Button_first_point: 'Continuar',
+        Text_Button_return_to_first_point: 'Voltar',
+        Text_Button_last_point: 'Criar Conta',
       },
     ],
 
