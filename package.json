@@ -24,7 +24,7 @@
     "core-js": "^3.21.1",
     "glob-parent": "6.0.2",
     "global": "^4.4.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.3",
     "node-sass": "^7.0.1",
     "nth-check": "2.0.1",
     "nuxt": "^2.15.8",
