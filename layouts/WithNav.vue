@@ -30,12 +30,12 @@ export default {
   methods: {
     async authUser() {
       try {
-        if (!this.user.app_metadata?.aud) throw new Error('not logged')
+        if (!this.user) throw new Error('not logged')
 
         const { data: user } = await this.$supabase
           .from('users')
           .select('*')
-          .filter('_id', 'eq', this.user?.app_metadata.id)
+          .filter('_id', 'eq', this.user)
 
         if (!user) throw new Error('not logged')
       } catch (e) {

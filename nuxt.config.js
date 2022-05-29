@@ -15,7 +15,10 @@ export default {
     },
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1, user-scalable=no' },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1, user-scalable=no',
+      },
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
     ],
@@ -56,10 +59,10 @@ export default {
     { src: './plugins/vlibras.js' },
     { src: './plugins/vue-chat-scroll.js' },
     { src: './plugins/VueObserveVisibility.js' },
-    { src: './plugins/vue-toast.js' },
+    { src: './plugins/vue-toast.js', mode: 'client' },
     { src: './plugins/i18n.js' },
     { src: './plugins/supabase.js' },
-    { src: './plugins/croppie.js' },
+    { src: './plugins/croppie.js', mode: 'client' },
   ],
 
   components: true,

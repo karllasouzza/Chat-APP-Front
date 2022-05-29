@@ -7,8 +7,8 @@
       scrollonremoved: true,
     }"
     class="main"
-    @v-chat-scroll-top-reached="infiniteHandler()"
   >
+    <!-- @v-chat-scroll-top-reached="infiniteHandler()" -->
     <ChatCard
       v-for="(item, index) in messages"
       :key="index"
@@ -37,14 +37,12 @@
 </template>
 
 <script>
-import { io } from 'socket.io-client'
-
 import { mapState } from 'vuex'
 
-import ModelMessage from '~/static/Models/ModelMessage'
+// import ModelMessage from '~/static/Models/ModelMessage'
 
 export default {
-  name: 'HomePage',
+  name: 'ChatPage',
   layout: 'ChatLayout',
   data() {
     return {
@@ -62,18 +60,6 @@ export default {
     }
   },
 
-  async fetch() {
-    await this.$axios
-      .$get(
-        `/dev/messages/scroll/${this.$route.params.id},${this.maxPerPage},${this.currentPage}`
-      )
-      .then((response) => {
-        this.messages.unshift(...response.data.response.reverse())
-      })
-  },
-  fetchOnServer: false,
-  fetchDelay: 200,
-
   computed: {
     ...mapState({
       user: (state) => state.User.user,
@@ -82,37 +68,33 @@ export default {
       return screen.height / 70
     },
   },
-
-  mounted() {
-    const socket = io('http://localhost:4000')
-
-    socket.on('message-created', (serverTask) => {
-      this.messages.push(ModelMessage(serverTask.response))
-      if (!this.onBottom) {
-        this.newMessage = true
-        this.quantNewMessage++
-      }
-    })
+  async created() {
+    await this.fetchMessages()
+    this.subscribeMessages()
+  },
+  destroyed() {
+    this.unsubscribeMessages()
   },
   methods: {
-    infiniteHandler() {
-      this.$axios
-        .get(
-          `/dev/messages/scroll/${this.$route.params.id},${this.maxPerPage},${
-            this.currentPage + 1
-          }`,
-          {
-            progress: false,
-          }
-        )
-        .then((response) => {
-          const data = response.data.data.response
-          if (data.length) {
-            this.currentPage += 1
-            this.messages.unshift(...data.reverse())
-          } else;
-        })
-    },
+    // infiniteHandler() {
+    //   this.$axios
+    //     .get(
+    //       `/dev/messages/scroll/${this.$route.params.id},${this.maxPerPage},${
+    //         this.currentPage + 1
+    //       }`,
+    //       {
+    //         progress: false,
+    //       }
+    //     )
+    //     .then((response) => {
+    //       const data = response.data.data.response
+    //       if (data.length) {
+    //         this.currentPage += 1
+    //         this.messages.unshift(...data.reverse())
+    //       } else;
+    //     })
+    // },
+
     visibilityChanged(isVisible, entry) {
       this.isVisible = isVisible
       this.onBottom = entry.isIntersecting
@@ -121,6 +103,34 @@ export default {
       document.querySelector('.bottom').scrollIntoView()
       this.newMessage = false
       this.quantNewMessage = 0
+    },
+
+    async fetchMessages() {
+      const { data: messages } = await this.$supabase
+        .from('messages')
+        .select('*')
+        .eq('chat_id', this.$route.params.id)
+      this.messages = messages
+      // this.loaded = true
+    },
+
+    subscribeMessages() {
+      this.subscriptionChats = this.$supabase
+        .from('pub_messages')
+        .on('INSERT', (messages) => {
+          if (messages.new) {
+            return this.messages.push(messages.new)
+          }
+        })
+        .on('DELETE', (messages) => {
+          const index = this.messages.indexOf(messages)
+          this.messages.splice(index, 1)
+        })
+        .subscribe()
+    },
+
+    unsubscribeMessages() {
+      this.$supabase.removeSubscription(this.subscribeMessages)
     },
   },
 }

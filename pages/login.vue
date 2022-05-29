@@ -214,7 +214,7 @@ export default {
         })
 
         this.toastSuccess(this.$t('Login.success.login'))
-        return this.$router.push('/')
+        return this.$router.push('/HomePage')
       } catch (error) {
         if (error.message === 'Email not confirmed') {
           this.$router.push(`/confirm?${this.email_login}`)
@@ -358,8 +358,8 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 
   display: flex;
   flex-direction: column;

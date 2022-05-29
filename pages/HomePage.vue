@@ -1,14 +1,13 @@
 <template>
   <div v-if="loaded" id="container">
     <UserGreet />
-    <UsersStatus />
 
     <ul class="chats">
       <Cards
         v-for="(item, index) in items"
         :key="index"
         :item="item"
-        @click.native="$router.push(`chat/${item.user._id}`)"
+        @click.native="$router.push(`chat/${item._id}`)"
       />
     </ul>
   </div>
@@ -16,13 +15,11 @@
 
 <script>
 import { mapState } from 'vuex'
-import UsersStatus from '~/components/Status/UsersStatus.vue'
 import Cards from '~/components/Chat/Cards.vue'
 
 export default {
   name: 'HomePage',
   components: {
-    UsersStatus,
     Cards,
   },
   layout: 'WithNav',
@@ -99,8 +96,3 @@ export default {
   overflow-y: scroll;
 }
 </style>
-
-//
-"#access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNjQ4MDA2NDYyLCJzdWIiOiI0Mjk0ZjBmMi01NmM0LTQzZTktODI0ZC1mM2MwYTQ0ODIyNDQiLCJlbWFpbCI6ImthcmxsYS5zb3V6emE3QGdtYWlsLmNvbSIsInBob25lIjoiIiwiYXBwX21ldGFkYXRhIjp7InByb3ZpZGVyIjoiZW1haWwiLCJwcm92aWRlcnMiOlsiZW1haWwiXX0sInVzZXJfbWV0YWRhdGEiOnt9LCJyb2xlIjoiYXV0aGVudGljYXRlZCJ9.rzXuuf2gcMwOdtSv-fxdBqAdsl-3RXST6YnZGPXbj5o
-// &expires_in=3600 // &refresh_token=YLkvfiia5szjMcEOHt3uyA //
-&token_type=bearer&type=signup"

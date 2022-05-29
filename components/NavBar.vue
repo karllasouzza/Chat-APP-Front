@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
-    <nuxt-link :to="localePath('/')">
-      <IconHome v-if="routName !== 'index'" :title="$t('Icons.home')" />
+    <nuxt-link :to="localePath('/HomePage')">
+      <IconHome v-if="routName !== 'HomePage'" :title="$t('Icons.home')" />
 
       <div v-else class="label">
         <span>{{ $t('Navbar.home') }}</span>

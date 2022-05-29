@@ -3,10 +3,10 @@
   <article
     :class="messages.quantMessagesNotView ? ' card NotView' : 'card View'"
   >
-    <!-- <img
+    <img
       :src="src"
       :alt="'Foto de perfil do usuário:' + user.name + '. Image'"
-    /> -->
+    />
     <span class="content">
       <strong>{{ user.name }}</strong>
       <p>{{ messages.lastMessage }}</p>
@@ -35,7 +35,7 @@ export default {
 
   data() {
     return {
-      // src: {},
+      src: '',
       user: {},
       messages: {},
       load: 0,
@@ -48,21 +48,29 @@ export default {
   },
   async created() {
     await this.getUser(this.item.user_to, this.item.user_from)
-    // await this.getImage(this.item.user_to, this.item.user_from)
+    await this.getImage(this.item.user_to, this.item.user_from)
     await this.getMessagesNotView(this.userID, this.item._id)
   },
 
   methods: {
-    // async getImage(toId, fromId) {
-    //   await this.$supabase
-    //     .from('users')
-    //     .select('image')
-    //     .filter('_id', 'eq', toId === this.userID ? fromId : toId)
-    //     .then((res) => {
-    //       this.src = res[0].image
-    //       console.log(res[0].image)
-    //     })
-    // },
+    async getImage(toId, fromId) {
+      try {
+        const { data: dataSigned, errorSigned } = await this.$supabase.storage
+          .from('public')
+          .createSignedUrl(
+            `/userProfile/${toId === this.userID ? fromId : toId}.png`,
+            60
+          )
+
+        if (!dataSigned) throw new Error('no data')
+        if (errorSigned) throw new Error(errorSigned)
+
+        this.src = dataSigned.signedURL
+        console.log(dataSigned.signedURL)
+      } catch (e) {
+        console.log(e)
+      }
+    },
 
     async getMessagesNotView(id, chatId) {
       const { data: res } = await this.$supabase
@@ -70,7 +78,8 @@ export default {
         .select('*')
         .or(`user_to.eq.${id},user_from.eq.${id},and(chat_id.eq.${chatId})`)
         .order('created_at', { ascending: false })
-      this.messages = ModelChats(this.userID, res)
+
+      if (res.length > 0) this.messages = ModelChats(this.userID, res)
     },
 
     async getUser(toId, fromId) {

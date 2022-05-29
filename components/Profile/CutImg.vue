@@ -118,25 +118,18 @@ export default {
 
     crop() {
       const options = {
-        type: 'blob',
+        type: 'base64',
         size: { width: 500, height: 500 },
         format: 'png',
       }
       this.$refs.croppieRef.result(options, (output) => {
-        this.blobToBase64(output)
-        this.cropped = this.croppieImage = output
-        this.addImage(output)
+        this.thumbnail = output
+        this.croppieImage = output
+
+        const baseCrop = output.split(',')
+        this.addImage(baseCrop[1])
         this.offCut()
       })
-    },
-
-    blobToBase64(blob) {
-      const reader = new FileReader()
-      reader.readAsDataURL(blob)
-      reader.onloadend = () => {
-        const base64data = reader.result
-        this.thumbnail = base64data
-      }
     },
   },
 }
