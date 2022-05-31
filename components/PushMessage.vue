@@ -1,32 +1,36 @@
 <template>
-  <header>
+  <footer class="pushMessage">
     <textarea-autosize
       ref="message"
       v-model="content"
+      :min-height="30"
+      :max-height="250"
+      spellcheck="true"
       placeholder="Escreva uma mensagem"
       @keyup.enter.native="action"
     />
     <div @click="sendMessages()">
       <SendMessage />
     </div>
-  </header>
+  </footer>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import SendMessage from './Svgs/SendMessage.vue'
 
 export default {
   components: { SendMessage },
+  props: {
+    chat: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       content: '',
+      user: this.$supabase.auth.user(),
     }
-  },
-  computed: {
-    ...mapState({
-      userX: (state) => state.User.user[0],
-    }),
   },
   methods: {
     action(event) {
@@ -34,16 +38,18 @@ export default {
         this.sendMessages()
       } else;
     },
-    sendMessages() {
-      if (this.content) {
-        this.$axios
-          .post('/dev/messages', {
+    async sendMessages() {
+      if (this.content && this.user.id) {
+        await this.$supabase.from('messages').insert([
+          {
             content: this.content,
-            id: this.userX.ID,
-          })
-          .then(() => {
-            this.content = ''
-          })
+            status: 'Send',
+            user_from: this.user.id,
+            chat_id: this.chat,
+          },
+        ])
+
+        this.content = ''
       } else {
         // this.$refs.message.focus()
       }
@@ -53,16 +59,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-header {
-  width: 100%;
+footer.pushMessage {
+  width: 96%;
   height: auto;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  border-top: 2px solid  $PrimaryColor;
   background: $Third;
+  border-radius: 30pt;
+  margin: auto;
+  margin-top: 5px;
+  padding:  10px 10px;
 
   textarea {
     resize: none;
@@ -70,17 +79,34 @@ header {
     height: auto;
     overflow: hidden;
 
-    flex-grow: 4;
+    flex-grow: 3;
 
     border: none;
-    padding: 2px 4px;
 
-    vertical-align: middle;
+    background: transparent;
+    color: $white;
+
     text-align: start;
-    word-wrap: break-word;
+
+    font-family: 'Ubuntu', sans-serif;
 
     &:focus {
       outline: none;
+    }
+
+    &::placeholder {
+      /* Firefox, Chrome, Opera */
+      color: $white;
+    }
+
+    &:-ms-input-placeholder {
+      /* Internet Explorer 10-11 */
+      color: $white;
+    }
+
+    &::-ms-input-placeholder {
+      /* Microsoft Edge */
+      color: $white;
     }
   }
 

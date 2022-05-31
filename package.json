@@ -22,6 +22,7 @@
     "@supabase/supabase-js": "^1.35.3",
     "@vue-a11y/vlibras": "^0.1.0",
     "core-js": "^3.21.1",
+    "emoji-mart-vue-fast": "^10.2.2",
     "glob-parent": "6.0.2",
     "global": "^4.4.0",
     "moment": "^2.29.3",
@@ -41,6 +42,7 @@
     "@nuxtjs/eslint-config": "^9.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/pwa": "^3.3.5",
+    "@originjs/vite-plugin-commonjs": "^1.0.1",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-nuxt": "^3.1.0",
@@ -48,10 +50,9 @@
     "prettier": "^2.6.0",
     "sass": "^1.49.9",
     "sass-loader": "10.1.1",
-    "vite-plugin-vue2": "^1.9.0",
+    "vite": "^2.7.2",
     "vite-plugin-env-compatible": "^1.1.1",
     "vite-plugin-html": "2.1.1",
-    "vite": "^2.7.2",
-    "@originjs/vite-plugin-commonjs": "^1.0.1"
+    "vite-plugin-vue2": "^1.9.0"
   }
 }

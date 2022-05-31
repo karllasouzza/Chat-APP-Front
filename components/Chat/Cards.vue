@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import ModelChats from '~/static/Models/ModelChats'
 
 export default {
@@ -39,17 +38,13 @@ export default {
       user: {},
       messages: {},
       load: 0,
+      userID: this.$supabase.auth.user(),
     }
-  },
-  computed: {
-    ...mapState({
-      userID: (state) => state.User.userID,
-    }),
   },
   async created() {
     await this.getUser(this.item.user_to, this.item.user_from)
     await this.getImage(this.item.user_to, this.item.user_from)
-    await this.getMessagesNotView(this.userID, this.item._id)
+    await this.getMessagesNotView(this.userID.id, this.item._id)
   },
 
   methods: {
@@ -58,7 +53,7 @@ export default {
         const { data: dataSigned, errorSigned } = await this.$supabase.storage
           .from('public')
           .createSignedUrl(
-            `/userProfile/${toId === this.userID ? fromId : toId}.png`,
+            `/userProfile/${toId === this.userID.id ? fromId : toId}.png`,
             60
           )
 
@@ -76,17 +71,17 @@ export default {
       const { data: res } = await this.$supabase
         .from('messages')
         .select('*')
-        .or(`user_to.eq.${id},user_from.eq.${id},and(chat_id.eq.${chatId})`)
+        .or(`user_from.eq.${id},user_from.eq.${id},and(chat_id.eq.${chatId})`)
         .order('created_at', { ascending: false })
-
-      if (res.length > 0) this.messages = ModelChats(this.userID, res)
+console.log(res)
+      if (res.length > 0) this.messages = ModelChats(this.userID.id, res)
     },
 
     async getUser(toId, fromId) {
       const { data: res } = await this.$supabase
         .from('users')
         .select('*')
-        .eq('_id', toId === this.userID ? fromId : toId)
+        .eq('_id', toId === this.userID.id ? fromId : toId)
 
       console.log(res)
       this.user = res[0]

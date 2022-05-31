@@ -1,7 +1,7 @@
 <template>
   <article
     :class="
-      userX.ID === userID
+      userX.id === userID
         ? before
           ? 'Sequence MyCard'
           : 'MyCard'
@@ -10,15 +10,6 @@
         : 'Card'
     "
   >
-    <header v-if="!before">
-      <div>
-        <figure :class="imageToProfile(user.response[0].NAME)"></figure>
-        <figcaption>{{ user.response[0].NAME }}</figcaption>
-      </div>
-      <div>
-        <MoreCard v-if="text.length > 180" />
-      </div>
-    </header>
     <span>
       {{ text }}
     </span>
@@ -26,8 +17,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
   props: {
     text: {
@@ -46,33 +35,8 @@ export default {
 
   data() {
     return {
-      user: { response: [{ NAME: 'Default User' }] },
+      userX: this.$supabase.auth.user(),
     }
-  },
-  async fetch() {
-    const headers = { 'Content-Type': 'application/json' }
-    await this.$axios
-      .$get(`/dev/users/${this.userID}`, {
-        headers,
-      })
-      .then((response) => {
-        this.user = response.data
-      })
-  },
-  computed: {
-    ...mapState({
-      userX: (state) => state.User.user[0],
-    }),
-  },
-  created() {
-    this.$fetch()
-  },
-  methods: {
-    imageToProfile(name) {
-      name = name[0]
-      name = name.toLowerCase()
-      return `image_${name}`
-    },
   },
 }
 </script>
@@ -90,54 +54,12 @@ export default {
   justify-content: space-around;
   align-self: flex-start;
 
-  border-radius: 0px 10px 10px 10px;
-  margin: 10px 10px;
+  border-radius: 0px 25px 25px 25px;
+  margin: 10px 5px;
   padding: 5px 5px;
 
-  box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.212);
-  background: #d7ccff;
-
-  header {
-    width: 100%;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-
-    div {
-      min-width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-
-      &:first-child {
-        width: fit-content;
-        min-width: 140px;
-        justify-content: flex-start;
-
-        figure {
-          width: 35px;
-          height: 35px;
-
-          border-radius: 10px;
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        figcaption {
-          width: fit-content;
-          margin-left: 5px;
-
-          font-size: 14px;
-          font-weight: bold;
-          font-family: 'Raleway';
-          vertical-align: middle;
-        }
-      }
-    }
-  }
+  box-shadow: 0 0 2px 0.3px rgba(0, 0, 0, 0.212);
+  background: $white;
 
   span {
     width: 100%;
@@ -147,7 +69,8 @@ export default {
     align-items: center;
     justify-content: flex-start;
 
-    // white-space: pre-wrap;
+    font-family: 'Ubuntu', sans-serif;
+
     vertical-align: middle;
     text-align: start;
     word-wrap: break-word;
@@ -159,13 +82,15 @@ export default {
 }
 
 .MyCard {
-  border-radius: 10px 10px 0px 10px;
-  background: #887cc9;
+  border-radius: 25px 25px 0px 25px;
+
+  background: $Third;
   align-self: flex-end;
 }
 
 .Sequence {
   min-height: 50px;
   margin-top: 0px;
+  border-radius: 25px;
 }
 </style>
