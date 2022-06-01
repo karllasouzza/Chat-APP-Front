@@ -13,13 +13,23 @@
     <span>
       {{ text }}
     </span>
+    <footer>
+      <IconDot v-if="status === 'View'" color="green" />
+      <IconDot v-else color="yellow" />
+    </footer>
   </article>
 </template>
 
 <script>
+import IconDot from './Svgs/IconDot.vue'
 export default {
+  components: { IconDot },
   props: {
     text: {
+      type: String,
+      required: true,
+    },
+    status: {
       type: String,
       required: true,
     },
@@ -32,7 +42,6 @@ export default {
       required: true,
     },
   },
-
   data() {
     return {
       userX: this.$supabase.auth.user(),
@@ -45,6 +54,8 @@ export default {
 .Card,
 .MyCard {
   width: fit-content;
+
+  min-width: 45px;
   max-width: 85%;
   height: fit-content;
 
@@ -79,6 +90,16 @@ export default {
     padding: 10px 5px;
     font-size: 14px;
   }
+
+  footer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+
+    svg {
+      margin: 0 2px;
+    }
+  }
 }
 
 .MyCard {
@@ -86,11 +107,27 @@ export default {
 
   background: $Third;
   align-self: flex-end;
+
+  footer {
+    svg {
+      transform: scaleX(-1);
+    }
+  }
 }
 
-.Sequence {
-  min-height: 50px;
-  margin-top: 0px;
-  border-radius: 25px;
-}
+// .Sequence {
+//   min-width: 80px;
+//   min-height: 50px;
+//   margin-top: 0px;
+//   border-radius: 20px;
+
+//   footer {
+//     margin-right: 20px;
+//     svg {
+//       path {
+//         border-radius: 50%;
+//       }
+//     }
+//   }
+// }
 </style>

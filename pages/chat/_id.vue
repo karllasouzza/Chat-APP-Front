@@ -18,6 +18,11 @@
       <ChatCard
         v-for="(item, index) in messages"
         :key="index"
+        v-observe-visibility="
+          user.id !== item.user_from
+            ? updateStatusMessage(item._id, 'View')
+            : ''
+        "
         :text="item.content"
         :user-i-d="item.user_from"
         :before="
@@ -34,6 +39,7 @@
         "
         :user-to="userTo"
         :src="src"
+        :status="item.status"
       />
       <NewMessage
         v-if="newMessage"
@@ -109,36 +115,53 @@ export default {
       this.isVisible = isVisible
       this.onBottom = entry.isIntersecting
     },
+
     ScrollToBottom() {
       document.querySelector('.bottom').scrollIntoView()
       this.newMessage = false
       this.quantNewMessage = 0
     },
+
     async fetchMessages() {
       const { data: messages } = await this.$supabase
         .from('messages')
         .select('*')
         .eq('chat_id', this.$route.params.id)
+        .order('created_at', { ascending: true })
 
-        messages.map()
       this.messages = messages
       // this.loaded = true
     },
+
     subscribeMessages() {
       this.subscriptionMessages = this.$supabase
         .from(`messages:chat_id=eq.${this.$route.params.id}`)
         .on('INSERT', (message) => {
-          return this.messages.push(message.new)
+          if (message.new.user_from !== this.user.id) {
+            const update = this.updateStatusMessage(
+              message.new._id,
+              'Delivered'
+            )
+            if (update) {
+              return this.messages.push(message.new)
+            }
+          } else return this.messages.push(message.new)
+        })
+        .on('UPDATE', (message) => {
+          const index = this.messages.indexOf(message.new)
+          this.messages.splice(index, 1)
         })
         .on('DELETE', (message) => {
-          const index = this.messages.indexOf(message)
+          const index = this.messages.indexOf(message.new)
           this.messages.splice(index, 1)
         })
         .subscribe()
     },
+
     unsubscribeMessages() {
       this.$supabase.removeSubscription(this.subscribeMessages)
     },
+
     async getChat() {
       try {
         const { data: res, error } = await this.$supabase
@@ -154,6 +177,7 @@ export default {
         console.log(e)
       }
     },
+
     async getUser(userId) {
       try {
         const { data: res, error } = await this.$supabase
@@ -168,6 +192,7 @@ export default {
         console.log(e)
       }
     },
+
     async getImage(userID) {
       try {
         const { data: dataSigned, errorSigned } = await this.$supabase.storage
@@ -179,6 +204,15 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+
+    updateStatusMessage(id, NewStatus) {
+      this.$supabase
+        .from('messages')
+        .update({ status: NewStatus })
+        .match({ _id: id })
+        .then(() => true)
+        .catch(() => false)
     },
   },
 }

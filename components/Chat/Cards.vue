@@ -44,7 +44,7 @@ export default {
   async created() {
     await this.getUser(this.item.user_to, this.item.user_from)
     await this.getImage(this.item.user_to, this.item.user_from)
-    await this.getMessagesNotView(this.userID.id, this.item._id)
+    await this.getMessagesNotView(this.user._id, this.item._id)
   },
 
   methods: {
@@ -61,7 +61,6 @@ export default {
         if (errorSigned) throw new Error(errorSigned)
 
         this.src = dataSigned.signedURL
-        console.log(dataSigned.signedURL)
       } catch (e) {
         console.log(e)
       }
@@ -71,9 +70,12 @@ export default {
       const { data: res } = await this.$supabase
         .from('messages')
         .select('*')
-        .or(`user_from.eq.${id},user_from.eq.${id},and(chat_id.eq.${chatId})`)
+        .eq('user_from', id)
+        .eq('chat_id', chatId)
+        .or('status.eq.Delivered,status.eq.Send')
+
         .order('created_at', { ascending: false })
-console.log(res)
+      console.log(res)
       if (res.length > 0) this.messages = ModelChats(this.userID.id, res)
     },
 
@@ -106,8 +108,11 @@ console.log(res)
           const minutes = seconds / 60
           return `${this.$t('Dates.ago')} ${minutes.toFixed(0)}m`
         }
-      } else {
+      } else if(seconds > 0) {
         return `${this.$t('Dates.now')}`
+      }else {
+        return ``
+
       }
     },
   },
@@ -120,7 +125,6 @@ console.log(res)
   height: 70px;
   padding: 0 5px;
   margin: 15px 0;
-  border-radius: 40px;
   position: relative;
 
   display: flex;
@@ -131,7 +135,7 @@ console.log(res)
     width: 60px;
     height: 60px;
 
-    border-radius: 50% 50% 50% 20%;
+    border-radius: 50%;
     z-index: 1;
   }
 
@@ -181,7 +185,7 @@ console.log(res)
     justify-content: space-around;
 
     > p {
-      @include bold-text($white);
+      @include bold-text($black);
       text-transform: none;
       font-size: 12px;
 
@@ -189,7 +193,7 @@ console.log(res)
     }
 
     > strong {
-      @include bold-text($white);
+      @include bold-text($black);
       text-transform: none;
       font-size: 20px;
 
@@ -203,27 +207,30 @@ console.log(res)
   &:last-child {
     margin-bottom: 5px;
   }
-
-  &::before {
-    content: '';
-    width: 100%;
-    height: 70px;
-    border-radius: 40px 40px 40px 20px;
-
-    margin: 0;
-
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    background: $PrimaryColor;
-    opacity: 0.5;
-  }
 }
 
 .NotView {
-  &::before {
-    background: $Secondary;
+  > span.datetime {
+    width: fit-content;
+    height: 100%;
+    padding: 8px 0;
+    padding: 5px 15px;
+    border-radius: 50%;
+
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
+    > p {
+      color: $PrimaryColor;
+    }
+
+    > strong {
+      color: $PrimaryColor;
+    }
   }
 }
 
