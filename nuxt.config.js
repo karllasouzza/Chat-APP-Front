@@ -1,7 +1,7 @@
 export default {
-  env: {
-    SUPABASE_URL: process.env.NUXT_ENV_SUPABASE_URL,
-    SUPABASE_KEY: process.env.NUXT_ENV_SUPABASE_KEY,
+  publicRuntimeConfig: {
+    SUPABASE_URL: process.env.SUPABASE_URL,
+    SUPABASE_KEY: process.env.SUPABASE_KEY,
   },
 
   ssr: false,
