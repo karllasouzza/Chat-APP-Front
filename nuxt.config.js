@@ -1,7 +1,8 @@
 export default {
+
   publicRuntimeConfig: {
-    SUPABASE_URL: process.env.SUPABASE_URL,
-    SUPABASE_KEY: process.env.SUPABASE_KEY,
+    SUPABASE_URL: process.env.VECEL_SUPABASE_URL,
+    SUPABASE_KEY: process.env.VECEL_SUPABASE_KEY,
   },
 
   ssr: false,
