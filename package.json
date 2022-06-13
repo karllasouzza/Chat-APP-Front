@@ -50,7 +50,7 @@
     "prettier": "^2.6.0",
     "sass": "^1.49.9",
     "sass-loader": "10.1.1",
-    "vite": "^2.7.2",
+    "vite": "^2.9.12",
     "vite-plugin-env-compatible": "^1.1.1",
     "vite-plugin-html": "2.1.1",
     "vite-plugin-vue2": "^1.9.0"
