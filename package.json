@@ -21,7 +21,7 @@
     "@nuxtjs/style-resources": "^1.2.1",
     "@supabase/supabase-js": "^1.35.3",
     "@vue-a11y/vlibras": "^0.1.0",
-    "core-js": "^3.21.1",
+    "core-js": "^3.23.0",
     "emoji-mart-vue-fast": "^10.2.2",
     "glob-parent": "6.0.2",
     "global": "^4.4.0",
