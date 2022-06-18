@@ -13,17 +13,17 @@
     <span>
       {{ text }}
     </span>
-    <footer>
+    <!--  <footer>
       <IconDot v-if="status === 'View'" color="green" />
       <IconDot v-else color="yellow" />
-    </footer>
+      </footer> -->
   </article>
 </template>
 
 <script>
-import IconDot from './Svgs/IconDot.vue'
+// import IconDot from './Svgs/IconDot.vue'
 export default {
-  components: { IconDot },
+  // components: { IconDot },
   props: {
     text: {
       type: String,

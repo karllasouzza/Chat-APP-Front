@@ -1,21 +1,25 @@
 <template>
-  <!-- v-if="load > 4" -->
   <article
     :class="messages.quantMessagesNotView ? ' card NotView' : 'card View'"
   >
+    <figure v-if="!load" class="load_img"></figure>
     <img
+      v-else
       :src="src"
       :alt="'Foto de perfil do usuário:' + user.name + '. Image'"
     />
+
     <span class="content">
-      <strong>{{ user.name }}</strong>
-      <p>{{ messages.lastMessage }}</p>
+      <strong :class="load ? '' : 'load_text'">{{ user.name }}</strong>
+      <p :class="load ? '' : 'load_text'">{{ messages.lastMessage }}</p>
     </span>
     <span class="datetime">
-      <strong>{{
+      <strong :class="load ? '' : 'load_text'">{{
         messages.quantMessagesNotView ? messages.quantMessagesNotView : ''
       }}</strong>
-      <p>{{ countDates(messages.momentSend) }}</p>
+      <p :class="load ? '' : 'load_text'">
+        {{ countDates(messages.momentSend) }}
+      </p>
     </span>
   </article>
 </template>
@@ -34,10 +38,12 @@ export default {
 
   data() {
     return {
+      load: false,
+
       src: '',
       user: {},
       messages: {},
-      load: 0,
+
       userID: this.$supabase.auth.user(),
     }
   },
@@ -45,6 +51,7 @@ export default {
     await this.getUser(this.item.user_to, this.item.user_from)
     await this.getImage(this.item.user_to, this.item.user_from)
     await this.getMessagesNotView(this.user._id, this.item._id)
+    this.load = true
   },
 
   methods: {
@@ -61,9 +68,7 @@ export default {
         if (errorSigned) throw new Error(errorSigned)
 
         this.src = dataSigned.signedURL
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     },
 
     async getMessagesNotView(id, chatId) {
@@ -75,7 +80,6 @@ export default {
         .or('status.eq.Delivered,status.eq.Send')
 
         .order('created_at', { ascending: false })
-      console.log(res)
       if (res.length > 0) this.messages = ModelChats(this.userID.id, res)
     },
 
@@ -85,7 +89,6 @@ export default {
         .select('*')
         .eq('_id', toId === this.userID.id ? fromId : toId)
 
-      console.log(res)
       this.user = res[0]
     },
 
@@ -108,11 +111,10 @@ export default {
           const minutes = seconds / 60
           return `${this.$t('Dates.ago')} ${minutes.toFixed(0)}m`
         }
-      } else if(seconds > 0) {
+      } else if (seconds > 0) {
         return `${this.$t('Dates.now')}`
-      }else {
+      } else {
         return ``
-
       }
     },
   },
@@ -122,21 +124,29 @@ export default {
 <style lang="scss" scoped>
 .card {
   width: 100%;
-  height: 70px;
-  padding: 0 5px;
+  height: 75px;
+  padding: 0 10px;
   margin: 15px 0;
   position: relative;
+  border-radius: 16px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  > img {
-    width: 60px;
-    height: 60px;
+  transition: all 0.8s ease-in-out;
+
+  > img,
+  .load_img {
+    width: 55px;
+    height: 55px;
 
     border-radius: 50%;
-    z-index: 1;
+    @include Elevation_1;
+  }
+
+  .load_img {
+    background: $Primary10;
   }
 
   > span.content {
@@ -151,20 +161,15 @@ export default {
     margin-right: auto;
     margin-left: 10px;
 
-    z-index: 1;
-
     > Strong {
-      @include bold-text($black);
-      text-transform: none;
+      @include title_medium;
 
-      font-size: 16px;
+      color: $Neural10;
+      font-weight: bold;
     }
 
     > p {
-      @include bold-text($black);
-      text-transform: none;
-      font-size: 14px;
-      font-family: 'Montserrat';
+      @include body_medium;
 
       filter: opacity(0.7);
     }
@@ -172,9 +177,8 @@ export default {
 
   > span.datetime {
     width: fit-content;
-    height: 100%;
-    padding: 8px 0;
-    padding: 5px 15px;
+    height: 80%;
+    padding: 10px 15px;
     border-radius: 50%;
 
     position: relative;
@@ -185,19 +189,14 @@ export default {
     justify-content: space-around;
 
     > p {
-      @include bold-text($black);
-      text-transform: none;
-      font-size: 12px;
-
-      z-index: 1;
+      @include body_small;
+      font-weight: bold;
     }
 
     > strong {
-      @include bold-text($black);
-      text-transform: none;
-      font-size: 20px;
-
-      z-index: 1;
+      @include title_large;
+      color: $Neural10;
+      font-weight: bold;
     }
   }
 
@@ -210,6 +209,9 @@ export default {
 }
 
 .NotView {
+  background: $Primary90;
+  @include Elevation_1;
+
   > span.datetime {
     width: fit-content;
     height: 100%;
@@ -238,5 +240,11 @@ export default {
   &::before {
     background: $PrimaryColor;
   }
+}
+
+.load_text {
+  background-color: $Primary10;
+  color: transparent !important;
+  border-radius: 16px;
 }
 </style>

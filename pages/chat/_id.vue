@@ -20,7 +20,9 @@
         :key="index"
         v-observe-visibility="
           user.id !== item.user_from
-            ? updateStatusMessage(item._id, 'View')
+            ? 'View'
+              ? ''
+              : updateStatusMessage(item._id, 'View')
             : ''
         "
         :text="item.content"
@@ -93,24 +95,6 @@ export default {
     this.unsubscribeMessages()
   },
   methods: {
-    // infiniteHandler() {
-    //   this.$axios
-    //     .get(
-    //       `/dev/messages/scroll/${this.$route.params.id},${this.maxPerPage},${
-    //         this.currentPage + 1
-    //       }`,
-    //       {
-    //         progress: false,
-    //       }
-    //     )
-    //     .then((response) => {
-    //       const data = response.data.data.response
-    //       if (data.length) {
-    //         this.currentPage += 1
-    //         this.messages.unshift(...data.reverse())
-    //       } else;
-    //     })
-    // },
     visibilityChanged(isVisible, entry) {
       this.isVisible = isVisible
       this.onBottom = entry.isIntersecting
@@ -149,6 +133,7 @@ export default {
         })
         .on('UPDATE', (message) => {
           const index = this.messages.indexOf(message.new)
+          console.log(index)
           this.messages.splice(index, 1)
         })
         .on('DELETE', (message) => {

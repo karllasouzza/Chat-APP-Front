@@ -6,23 +6,16 @@
         <b>{{ userName[0].toUpperCase() + userName.slice(1) }}</b></Strong
       >
     </span>
-    <IconAddFriends
-      :active="notification"
-      :title="$t('Icons.addFriends')"
-      @click.native="$router.push('/addFriends')"
-    />
+    <AccountCircle @click.native="$router.push('/profile')" />
   </header>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-
-import IconAddFriends from '~/components/Svgs/IconAddFriends.vue'
+import AccountCircle from '~/assets/icons/AccountCircle'
 
 export default {
-  components: {
-    IconAddFriends,
-  },
+  components: { AccountCircle },
   data() {
     return {
       userName: 'karlla',
@@ -43,7 +36,6 @@ export default {
         .from('users')
         .select('name')
         .filter('_id', 'eq', this.userID)
-
       if (user) {
         const userSplited = user[0].name.split(' ')
         this.userName = userSplited[0]
@@ -56,9 +48,14 @@ export default {
 <style lang="scss" scoped>
 header.greet {
   width: 100%;
-  height: 100%;
+  height: 61px;
 
-  grid-row: 1;
+  background: $Neural99;
+
+  grid-row: 2/3;
+  grid-column: 1/4;
+
+  padding: 0 10px;
 
   display: flex;
   align-items: center;
@@ -74,11 +71,9 @@ header.greet {
 
     strong {
       height: auto;
-      @include bold-text($black);
-      text-transform: none;
+      @include title_medium;
       b {
-        @include bold-text($PrimaryColor);
-        text-transform: none;
+        color: $Primary40;
       }
       &::first-letter {
         text-transform: uppercase;
@@ -87,9 +82,6 @@ header.greet {
   }
 
   svg {
-    width: 25px;
-    height: 25px;
-
     cursor: pointer;
   }
 }

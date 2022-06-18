@@ -10,17 +10,21 @@
         @click.native="$router.push(`chat/${item._id}`)"
       />
     </ul>
+
+    <AddUsers />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import Cards from '~/components/Chat/Cards.vue'
+import AddUsers from '~/components/Chat/AddUsers.vue'
 
 export default {
   name: 'HomePage',
   components: {
     Cards,
+    AddUsers,
   },
   layout: 'WithNav',
   data() {
@@ -82,16 +86,19 @@ export default {
   width: 100%;
   height: 100%;
 
-  grid-row: 2/3;
-  grid-column: 3/4;
+  grid-row: 1/3;
+  grid-column: 1/4;
 
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 45px 5px 90px 40px 1fr;
+  grid-template-columns: 10px 1fr 10px;
+  grid-template-rows: auto 5px 90px 5px 1fr;
+
+  position: relative;
 }
 
 .chats {
   grid-row: 5/5;
+  grid-column: 2/3;
 
   overflow-y: scroll;
 }

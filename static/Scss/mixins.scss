@@ -1,5 +1,7 @@
-@mixin bold-text($color: DarkGray) {
-  text-transform: uppercase;
+@import './mixins/elevations.scss';
+@import './mixins/font_android.scss';
+
+@mixin bold-text($color: $Neutral-Variant30) {
   font-weight: bold;
   font-size: 18px;
   color: $color;
