@@ -8,10 +8,7 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
-    "lint": "yarn lint:js",
-    "serve-vite": "vite",
-    "build-vite": "vite build",
-    "preview-vite": "vite preview"
+    "lint": "yarn lint:js"
   },
   "dependencies": {
     "@nuxtjs/auth": "4.9.1",
@@ -21,6 +18,7 @@
     "@nuxtjs/style-resources": "^1.2.1",
     "@supabase/supabase-js": "^1.35.3",
     "@vue-a11y/vlibras": "^0.1.0",
+    "base64-arraybuffer": "^1.0.2",
     "core-js": "^3.21.1",
     "emoji-mart-vue-fast": "^10.2.2",
     "glob-parent": "6.0.2",
@@ -49,10 +47,6 @@
     "eslint-plugin-vue": "^8.4.1",
     "prettier": "^2.6.0",
     "sass": "^1.49.9",
-    "sass-loader": "10.1.1",
-    "vite": "^2.7.2",
-    "vite-plugin-env-compatible": "^1.1.1",
-    "vite-plugin-html": "2.1.1",
-    "vite-plugin-vue2": "^1.9.0"
+    "sass-loader": "10.1.1"
   }
 }

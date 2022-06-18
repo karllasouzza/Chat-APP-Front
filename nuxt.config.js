@@ -1,8 +1,9 @@
-export default {
+require('dotenv').config()
 
-  publicRuntimeConfig: {
-    SUPABASE_URL: process.env.VECEL_SUPABASE_URL,
-    SUPABASE_KEY: process.env.VECEL_SUPABASE_KEY,
+export default {
+  env: {
+    SUPABASE_URL: process.env.EXTERNAL_ENV_SUPABASE_URL,
+    SUPABASE_KEY: process.env.EXTERNAL_ENV_SUPABASE_KEY,
   },
 
   ssr: false,
@@ -37,18 +38,11 @@ export default {
         crossorigin: 'crossorigin',
       },
       {
-        href: 'https://fonts.googleapis.com/css2?family=Montserrat&family=Raleway:wght@700&display=swap',
+        href: 'https://fonts.googleapis.com/css2?family=Flow+Circular&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap',
         rel: 'stylesheet',
       },
     ],
   },
-
-  // css: [
-  //   './static/Scss/color.scss',
-  //   './static/Scss/reset.scss',
-  //   './static/Scss/mixins.scss',
-  //   './static/Scss/transitions.scss',
-  // ],
 
   styleResources: {
     scss: [
