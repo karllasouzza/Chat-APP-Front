@@ -37,8 +37,6 @@ export default {
       try {
         if (this.userEmail === this.mySelf.email) throw new Error('your email')
 
-        if (this.userEmail === this.mySelf.email) throw new Error('your email')
-
         const { data, error } = await this.$supabase
           .from('users')
           .select('_id, name, email, bio')

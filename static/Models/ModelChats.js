@@ -1,7 +1,6 @@
 import moment from 'moment'
 
 export default (userId, res) => {
-  console.log(res)
   function FormatContent(content) {
     if (content.length > 50) {
       return content.substr(0, 50) + '...'

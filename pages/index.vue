@@ -2,33 +2,45 @@
   <div>loading</div>
 </template>
 
+//
 <script>
-import { mapState } from 'vuex'
+import { mapActions } from 'vuex'
+import { getUserByToken } from '~/utils/Supabase/auth.js'
+import { getUser } from '~/utils/Supabase/user.js'
 
 export default {
   name: 'LoadingPage',
-  computed: {
-    ...mapState({
-      user: (state) => state.User.userID,
-    }),
+  data() {
+    return {
+      user: this.$supabase.auth.user(),
+    }
   },
   async created() {
     await this.authUser()
   },
-
   methods: {
+    ...mapActions({
+      toastSuccess: 'Notification/ToastSuccess',
+    }),
     async authUser() {
       try {
-        if (!this.user.app_metadata?.aud) throw new Error('not logged')
+        const hash = this.$route.hash.replace('=', '&').split('&')
+        if (hash.length > 1) {
+          const { user: authUser, error } = await getUserByToken(hash[1])
+          if (!authUser) throw new Error('not logged')
+          if (error) throw new Error(error)
 
-        const { data: user } = await this.$supabase
-          .from('users')
-          .select('*')
-          .filter('_id', 'eq', this.user?.app_metadata.id)
+          if (authUser.id) {
+            this.toastSuccess('Email Confirmado com sucesso!!')
+            // this.$router.push('/login')
+          }
+        }
 
-        if (!user) throw new Error('not logged')
+        const { data } = await getUser(this.user.id)
 
-        this.$router.push('/')
+        if (!data) throw new Error('not logged')
+
+        this.$router.push('/homePage')
       } catch (e) {
         this.$router.push('/login')
       }

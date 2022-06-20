@@ -58,7 +58,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import { decode } from 'base64-arraybuffer'
 
 import TitleProfile from '../components/Profile/Title.vue'
 import IconOk from '../components/Svgs/IconOk.vue'
@@ -109,170 +108,6 @@ export default {
   },
 
   methods: {
-    async getUser() {
-      const { data: user } = await this.$supabase
-        .from('users')
-        .select('*')
-        .filter('_id', 'eq', this.userID)
-
-      if (user) {
-        this.user = user[0]
-        this.loaded = true
-      }
-    },
-
-    async simpleUpdateUser() {
-      if (this.user.name !== this.name || this.user.bio !== this.bio) {
-        this.updateUserNameAndBio()
-      }
-
-      if (!this.withThumbnail) {
-        await this.insertProfileImage(this.img)
-      } else {
-        await this.updateProfileImage(this.img)
-      }
-    },
-
-    async updateUserNameAndBio() {
-      try {
-        const { data: user, error } = await this.$supabase
-          .from('users')
-          .update({
-            name: this.name === this.user.name ? this.user.name : this.name,
-            bio: this.bio === this.user.bio ? this.user.bio : this.bio,
-          })
-          .eq('_id', this.userID)
-
-        if (!user) throw new Error(error)
-        if (error) throw new Error(error)
-
-        this.user = user[0]
-      } catch (error) {
-        console.log('updateUserNameAndBio', error)
-      }
-    },
-
-    // --
-    async getSignedUrlProfileImage() {
-      try {
-        const { data, error } = await this.$supabase.storage
-          .from('public')
-          .list('userProfile', {
-            limit: 100,
-            offset: 0,
-            sortBy: { column: 'name', order: 'asc' },
-            search: this.userID,
-          })
-
-        if (error) throw new Error(error.message)
-        if (data.length === 0 || !data) this.setFirstPublicProfileImage()
-        if (data.length > 1) throw new Error('multiple images')
-        console.log(data)
-
-        const { data: dataSigned, errorSigned } = await this.$supabase.storage
-          .from('public')
-          .createSignedUrl(`/userProfile/${data[0].name}`, 60)
-
-        if (!dataSigned) throw new Error('not signed url')
-        if (errorSigned) throw new Error('not signed url')
-
-        // const img = await this.getProfileImage()
-
-        this.thumbnail = dataSigned.signedURL
-
-        this.withThumbnail = true
-      } catch (error) {
-        console.log(error)
-      }
-    },
-
-    async setFirstPublicProfileImage() {
-      try {
-        const { data, error: listError } = await this.$supabase.storage
-          .from('public')
-          .list('avatars', {
-            limit: 100,
-            offset: 0,
-            sortBy: { column: 'name', order: 'asc' },
-          })
-
-        if (!data) throw new Error('not data')
-        if (listError) throw new Error(listError.message)
-
-        const index = Math.floor(Math.random() * data.length)
-
-        const { publicURL, error } = await this.$supabase.storage
-          .from('public')
-          .getPublicUrl(`avatars/${data[index].name}`)
-
-        if (!publicURL) throw new Error(error)
-        if (error) throw new Error(error)
-
-        const image = await this.getProfileImage(publicURL)
-
-        await this.insertProfileImage(image)
-
-        this.getSignedUrlProfileImage()
-      } catch (error) {
-        console.log('setFirstPublicProfileImage', error)
-      }
-    },
-
-    async getProfileImage(url) {
-      const response = await this.$axios.get(url, {
-        responseType: 'arraybuffer',
-      })
-      const buffer64 = Buffer.from(response.data, 'binary').toString('base64')
-
-      return buffer64
-    },
-
-    async insertProfileImage(image) {
-      try {
-        const { data, error } = await this.$supabase.storage
-          .from('public')
-          .upload(`/userProfile/${this.userID}.png`, decode(image), {
-            contentType: 'image/png',
-          })
-
-        if (!data) throw new Error(error.message)
-        if (error) throw new Error(error.message)
-
-        this.getSignedUrlProfileImage()
-      } catch (error) {
-        console.log('insertProfileImage', error)
-      }
-    },
-
-    async updateProfileImage(image) {
-      try {
-        console.log(image)
-        const { data, error } = await this.$supabase.storage
-          .from('public')
-          .update(`/userProfile/${this.userID}.png`, decode(image), {
-            contentType: 'image/png',
-          })
-        console.log(data)
-        if (!data) throw new Error(error)
-        if (error) throw new Error(error)
-
-        this.getSignedUrlProfileImage()
-      } catch (error) {
-        console.log('updateProfileImage', error)
-      }
-    },
-
-    async deleteProfileImage() {
-      try {
-        const { data, error } = await this.$supabase.storage
-          .from('public')
-          .remove([`/userProfile/${this.userID}.png`])
-
-        if (!data) throw new Error(error)
-        if (error) throw new Error(error)
-      } catch (error) {}
-    },
-
     activeEdit() {
       this.bio = this.user.bio
       this.name = this.user.name
@@ -299,7 +134,7 @@ export default {
   height: 100%;
 
   grid-row: 2/3;
-  grid-column: 3/4;
+  grid-column: 2/3;
 
   display: flex;
   flex-direction: column;

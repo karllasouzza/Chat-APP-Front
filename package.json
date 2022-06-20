@@ -30,6 +30,7 @@
     "socket.io-client": "^4.4.1",
     "vue-chat-scroll": "^1.4.0",
     "vue-croppie": "^2.0.2",
+    "vue-material-design-icons": "^5.0.0",
     "vue-observe-visibility": "^1.0.0",
     "vue-textarea-autosize": "^1.1.1",
     "vue-toastification": "^1.7.14",

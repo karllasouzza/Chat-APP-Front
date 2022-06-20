@@ -1,21 +1,22 @@
 export const state = () => ({
-  userID: null,
-  logado: false,
+  user: {},
+  userImg: '',
+  userChats: [],
+  friendsProfiles: [],
 })
 
 export const mutations = {
-  addUser(state, Usuario) {
-    state.userID = Usuario
-    state.logado = true
+  addUser(state, user) {
+    state.user = user
   },
-  clearUser(state, User) {
-    state.userID = ''
-    state.logado = false
+
+  clearUser(state, user) {
+    state.user = ''
   },
 }
 
 export const actions = {
-  SetUser(context, Usuario) {
-    context.commit('addUser', Usuario.User)
+  SetUser(context, user) {
+    context.commit('addUser', user)
   },
 }
