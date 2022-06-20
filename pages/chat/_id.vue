@@ -1,30 +1,19 @@
 <template>
   <section class="container">
-    <header>
-      <nuxt-link to="/homePage">Esk</nuxt-link>
-      <img :src="src" alt="" />
-      <h1>{{ userTo.name }}</h1>
-    </header>
+    <ReturnSmallChat :label="userTo.name" :src="src" to="/homePage" />
 
     <main
       v-chat-scroll="{
         always: false,
         smooth: true,
         notSmoothOnInit: true,
-        scrollonremoved: true,
       }"
       class="main"
     >
       <ChatCard
         v-for="(item, index) in messages"
         :key="index"
-        v-observe-visibility="
-          user.id !== item.user_from
-            ? 'View'
-              ? ''
-              : updateStatusMessage(item._id, 'View')
-            : ''
-        "
+        v-observe-visibility="item.user_from !== user.id ? Viewer(item) : ''"
         :text="item.content"
         :user-i-d="item.user_from"
         :before="
@@ -58,11 +47,12 @@
 
 <script>
 import PushMessage from '~/components/PushMessage.vue'
+import ReturnSmallChat from '~/components/topBar/ReturnSmallChat.vue'
 // import ModelMessage from '~/static/Models/ModelMessage'
 
 export default {
   name: 'ChatPage',
-  components: { PushMessage },
+  components: { PushMessage, ReturnSmallChat },
   layout: 'ChatLayout',
   data() {
     return {
@@ -77,14 +67,9 @@ export default {
       quantNewMessage: 0,
       user: this.$supabase.auth.user(),
       userTo: {},
-      src: {},
+      src: '',
       subscriptionMessages: undefined,
     }
-  },
-  computed: {
-    sumMaxPerPage() {
-      return screen.height / 70
-    },
   },
   async created() {
     await this.fetchMessages()
@@ -132,9 +117,14 @@ export default {
           } else return this.messages.push(message.new)
         })
         .on('UPDATE', (message) => {
-          const index = this.messages.indexOf(message.new)
-          console.log(index)
-          this.messages.splice(index, 1)
+          if (message.new.user_from === this.user.id) {
+            setTimeout(() => {
+              const index = this.messages
+                .map((msg) => msg._id)
+                .indexOf(message.new._id)
+              this.messages[index].status = message.new.status
+            }, 800)
+          }
         })
         .on('DELETE', (message) => {
           const index = this.messages.indexOf(message.new)
@@ -182,7 +172,7 @@ export default {
       try {
         const { data: dataSigned, errorSigned } = await this.$supabase.storage
           .from('public')
-          .createSignedUrl(`userProfile/${userID}.png`, 60)
+          .createSignedUrl(`userProfile/${userID}.png`, 60000)
         if (!dataSigned) throw new Error('no data')
         if (errorSigned) throw new Error(errorSigned)
         this.src = dataSigned.signedURL
@@ -191,13 +181,17 @@ export default {
       }
     },
 
-    updateStatusMessage(id, NewStatus) {
-      this.$supabase
+    async updateStatusMessage(idOut, statusOut) {
+      await this.$supabase
         .from('messages')
-        .update({ status: NewStatus })
-        .match({ _id: id })
-        .then(() => true)
-        .catch(() => false)
+        .update({ status: statusOut })
+        .match({ _id: idOut })
+    },
+
+    Viewer(message) {
+      if (message.user_from === this.userTo._id && message.status !== 'View') {
+        this.updateStatusMessage(message._id, 'View')
+      }
     },
   },
 }
@@ -210,37 +204,13 @@ section.container {
 
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 55px 1fr auto;
+  grid-template-rows: 62px 1fr auto;
 
   padding-bottom: 6px;
+  background: $Neural99;
 
   header {
-    width: 100%;
-    height: 55px;
-
     grid-row: 1/2;
-
-    background-color: $PrimaryColor;
-
-    display: flex;
-    align-items: center;
-
-    padding: 0 5px;
-
-    img {
-      width: 45px;
-      height: 45px;
-
-      border-radius: 50%;
-
-      margin-left: 10px;
-    }
-
-    h1 {
-      @include bold-text($white);
-      text-transform: none;
-      margin-left: 10px;
-    }
   }
 
   main.main {
@@ -252,14 +222,11 @@ section.container {
 
     padding: 10px 5px;
     margin: auto;
+    background: $Neural99;
   }
 
   footer {
     grid-row: 3/4;
-  }
-
-  .wave-item {
-    background-color: $PrimaryColor;
   }
 }
 </style>

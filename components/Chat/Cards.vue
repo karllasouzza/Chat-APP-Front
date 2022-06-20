@@ -78,8 +78,8 @@ export default {
         .eq('user_from', id)
         .eq('chat_id', chatId)
         .or('status.eq.Delivered,status.eq.Send')
-
         .order('created_at', { ascending: false })
+
       if (res.length > 0) this.messages = ModelChats(this.userID.id, res)
     },
 

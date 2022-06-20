@@ -11,7 +11,7 @@
       />
     </ul>
 
-    <AddUsers />
+    <AddUsers @click.native="$router.push('/addFriends')" />
   </div>
 </template>
 
@@ -19,12 +19,14 @@
 import { mapState } from 'vuex'
 import Cards from '~/components/Chat/Cards.vue'
 import AddUsers from '~/components/Chat/AddUsers.vue'
+import UserGreet from '~/components/topBar/UserGreet.vue'
 
 export default {
   name: 'HomePage',
   components: {
     Cards,
     AddUsers,
+    UserGreet,
   },
   layout: 'WithNav',
   data() {
