@@ -169,7 +169,7 @@ export default {
     },
 
     Viewer(message) {
-      if (message.user_from === this.userTo._id && message.status !== 'View') {
+      if (message.user_from !== this.user.id && message.status !== 'View') {
         this.updateStatusMessage(message._id, 'View')
       }
     },

@@ -1,15 +1,9 @@
 <template>
-  <form
-    v-if="loaded"
-    novalidate
-    autocomplete="off"
-    class="container"
-    @submit.prevent
-  >
+  <form novalidate autocomplete="off" class="container" @submit.prevent>
     <section
       :class="edit ? 'ContainerImage ContainerImageEdit' : 'ContainerImage'"
     >
-      <CutImg :user-img="thumbnail" :edit="edit" :profile="withThumbnail" />
+      <CutImg :user-img="user.src" :edit="edit" :profile="withThumbnail" />
       <TitleProfile v-if="!edit" :text="user.name" is-label="false" />
     </section>
 
@@ -80,10 +74,7 @@ export default {
 
   data() {
     return {
-      loaded: false,
-
       edit: false,
-      user: {},
 
       bio: '',
       email: '',
@@ -97,14 +88,9 @@ export default {
 
   computed: {
     ...mapState({
-      userID: (state) => state.User.userID,
+      user: (state) => state.User.user,
       img: (state) => state.Cut.image,
     }),
-  },
-
-  async created() {
-    await this.getUser()
-    await this.getSignedUrlProfileImage()
   },
 
   methods: {
