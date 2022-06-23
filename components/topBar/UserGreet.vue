@@ -3,43 +3,22 @@
     <span>
       <Strong>
         {{ $t('Greet.hello') }}
-        <b>{{ userName[0].toUpperCase() + userName.slice(1) }}</b></Strong
+        <b>{{ name[0].toUpperCase() + name.slice(1) }}</b></Strong
       >
     </span>
-    <AccountCircle @click.native="$router.push('/profile')" />
+    <!-- <AccountCircle @click.native="$router.push('/profile')" /> -->
   </header>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import AccountCircle from '~/assets/icons/AccountCircle'
+// import AccountCircle from '~/assets/icons/AccountCircle'
 
 export default {
-  components: { AccountCircle },
-  data() {
-    return {
-      userName: 'karlla',
-      notification: false,
-    }
-  },
-  computed: {
-    ...mapState({
-      userID: (state) => state.User.userID,
-    }),
-  },
-  async created() {
-    await this.getUserByID()
-  },
-  methods: {
-    async getUserByID() {
-      const { data: user } = await this.$supabase
-        .from('users')
-        .select('name')
-        .filter('_id', 'eq', this.userID)
-      if (user) {
-        const userSplited = user[0].name.split(' ')
-        this.userName = userSplited[0]
-      }
+  // components: { AccountCircle },
+  props: {
+    name: {
+      type: String,
+      required: true,
     },
   },
 }
@@ -51,6 +30,7 @@ header.greet {
   height: 61px;
 
   background: $Neural99;
+  // @include Elevation_1;
 
   grid-row: 2/3;
   grid-column: 1/4;

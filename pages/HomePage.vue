@@ -1,10 +1,10 @@
 <template>
   <div v-if="loaded" id="container">
-    <UserGreet />
+    <UserGreet :name="user.name.split(' ')[0]" />
 
-    <ul class="chats">
+    <ul v-if="chats.length > 0" class="chats">
       <Cards
-        v-for="(item, index) in items"
+        v-for="(item, index) in chats"
         :key="index"
         :item="item"
         @click.native="$router.push(`chat/${item._id}`)"
@@ -16,10 +16,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import Cards from '~/components/Chat/Cards.vue'
 import AddUsers from '~/components/Chat/AddUsers.vue'
 import UserGreet from '~/components/topBar/UserGreet.vue'
+import { fetchChats } from '~/utils/Supabase/chats'
+import { supabase } from '~/plugins/supabase'
 
 export default {
   name: 'HomePage',
@@ -31,18 +33,18 @@ export default {
   layout: 'WithNav',
   data() {
     return {
-      items: [],
       loaded: false,
       subscriptionChats: undefined,
     }
   },
   computed: {
     ...mapState({
-      user: (state) => state.User.userID,
+      user: (state) => state.User.user,
+      chats: (state) => state.Chats.userChats,
     }),
   },
   async created() {
-    await this.fetchChats()
+    await this.getChats()
     this.subscribeChats()
   },
   destroyed() {
@@ -50,28 +52,37 @@ export default {
   },
 
   methods: {
-    async fetchChats() {
-      const { data: chats } = await this.$supabase
-        .from('chats')
-        .select('*')
-        .or(
-          `user_to.eq.${this.user},user_from.eq.${this.user},and(status.eq.Accepted)`
-        )
-      this.items = chats
-      this.loaded = true
+    ...mapActions({
+      SetUserChats: 'Chats/SetUserChats',
+      SetNewUserChats: 'Chats/SetNewUserChats',
+      DropUserChat: 'Chats/DropUserChat',
+    }),
+
+    async getChats() {
+      try {
+        this.loaded = true
+        const { data: chats, error } = await fetchChats(this.user._id)
+
+        if (error) throw new Error(error)
+
+        if (chats.length > 0) {
+          this.SetUserChats(chats)
+        }
+      } catch (e) {}
     },
 
     subscribeChats() {
-      this.subscriptionChats = this.$supabase
+      this.subscriptionChats = supabase
         .from('pub_chats')
         .on('INSERT', (chat) => {
           if (chat.new) {
-            return this.items.push(chat.new)
+            return this.SetNewUserChats(chat.new)
           }
         })
         .on('DELETE', (chat) => {
-          const index = this.items.indexOf(chat)
-          this.items.splice(index, 1)
+          const index = this.chats.indexOf(chat)
+          console.log(chat, index)
+          this.DropUserChat(index)
         })
         .subscribe()
     },
@@ -96,6 +107,8 @@ export default {
   grid-template-rows: auto 5px 90px 5px 1fr;
 
   position: relative;
+
+  background: $Neural99;
 }
 
 .chats {

@@ -1,6 +1,11 @@
 <template>
   <section class="container">
-    <ReturnSmallChat :label="userTo.name" :src="src" to="/homePage" />
+    <ReturnSmallChat
+      v-if="indexFriendProfile > -1"
+      :label="friendsProfiles[indexFriendProfile].name"
+      :src="friendsProfiles[indexFriendProfile].src"
+      to="/homePage"
+    />
 
     <main
       v-chat-scroll="{
@@ -46,6 +51,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import PushMessage from '~/components/PushMessage.vue'
 import ReturnSmallChat from '~/components/topBar/ReturnSmallChat.vue'
 // import ModelMessage from '~/static/Models/ModelMessage'
@@ -57,19 +64,20 @@ export default {
   data() {
     return {
       messages: [],
-      // InfiniteScroll
-      currentPage: 1,
-      maxPerPage: parseInt(screen.height / 70),
-      totalResults: 100,
-      // New Message
+
       onBottom: false,
       newMessage: false,
       quantNewMessage: 0,
       user: this.$supabase.auth.user(),
-      userTo: {},
-      src: '',
+      indexFriendProfile: -1,
       subscriptionMessages: undefined,
     }
+  },
+  computed: {
+    ...mapState({
+      friendsProfiles: (state) => state.FriendsProfiles.profiles,
+      chats: (state) => state.Chats.userChats,
+    }),
   },
   async created() {
     await this.fetchMessages()
@@ -137,50 +145,22 @@ export default {
       this.$supabase.removeSubscription(this.subscribeMessages)
     },
 
-    async getChat() {
+    getChat() {
       try {
-        const { data: res, error } = await this.$supabase
-          .from('chats')
-          .select('*')
-          .eq('_id', this.$route.params.id)
-        if (!res) throw new Error('no data')
-        if (error) throw new Error(error)
-        await this.getUser(
-          this.user.id !== res[0].user_from ? res[0].user_from : res[0].user_to
+        const chat = this.chats.filter(
+          (chat) => chat._id === this.$route.params.id
         )
+        this.indexFriendProfile = this.friendsProfiles
+          .map((profile) => profile._id)
+          .indexOf(
+            this.user.id !== chat[0].user_from
+              ? chat[0].user_from
+              : chat[0].user_to
+          )
       } catch (e) {
         console.log(e)
       }
     },
-
-    async getUser(userId) {
-      try {
-        const { data: res, error } = await this.$supabase
-          .from('users')
-          .select('*')
-          .eq('_id', userId)
-        if (!res) throw new Error('no data')
-        if (error) throw new Error(error)
-        this.userTo = res[0]
-        await this.getImage(userId)
-      } catch (e) {
-        console.log(e)
-      }
-    },
-
-    async getImage(userID) {
-      try {
-        const { data: dataSigned, errorSigned } = await this.$supabase.storage
-          .from('public')
-          .createSignedUrl(`userProfile/${userID}.png`, 60000)
-        if (!dataSigned) throw new Error('no data')
-        if (errorSigned) throw new Error(errorSigned)
-        this.src = dataSigned.signedURL
-      } catch (e) {
-        console.log(e)
-      }
-    },
-
     async updateStatusMessage(idOut, statusOut) {
       await this.$supabase
         .from('messages')

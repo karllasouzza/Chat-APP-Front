@@ -139,7 +139,7 @@ import { mapActions } from 'vuex'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import Logo from '~/components/Svgs/Logo.vue'
 import { createAccount, makeLogin } from '~/utils/Supabase/auth.js'
-import { insertUser } from '~/utils/Supabase/user.js'
+import { insertUser, getUser } from '~/utils/Supabase/user.js'
 
 export default {
   name: 'LoginPage',
@@ -195,26 +195,23 @@ export default {
         return
 
       try {
-        const { session, error: authError } =  await makeLogin(
+        const { session, error: authError } = await makeLogin(
           this.email_login,
           this.password_login
         )
-        console.log(session)
         if (authError) throw new Error(authError)
         if (!session) throw new Error('error in singIn')
 
-        const { data: user } = await this.$supabase
-          .from('users')
-          .select('*')
-          .filter('_id', 'eq', session.user.id)
+        const { data: user } = await getUser(session.user.id)
 
-        if (!user) throw new Error('not auth')
+        if (user.length === 0) throw new Error('not auth')
 
         this.SetUser(user[0])
 
         this.toastSuccess(this.$t('Login.success.login'))
         return this.$router.push('/HomePage')
       } catch (error) {
+        console.log(error)
         if (error.message === 'Email not confirmed') {
           this.$router.push(`/confirm?${this.email_login}`)
         } else {
@@ -251,6 +248,8 @@ export default {
         if (error) throw new Error(authError.message)
         if (!data) throw new Error('Error in Insert')
 
+        this.SetUser(data[0])
+
         if (user.aud === 'authenticated') {
           this.toastSuccess(this.$t('Login.success.create_account'))
           return this.$router.push(`/confirm?${this.email_account}`)
@@ -258,7 +257,6 @@ export default {
           this.toastError(this.$t('Login.Error.Account'))
         }
       } catch (error) {
-        console.log(error)
         this.toastError(this.$t('Login.Error.Account'))
       }
     },

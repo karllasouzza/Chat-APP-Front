@@ -18,7 +18,7 @@ export default {
 
   border-radius: 16px;
   background: $Tertiary90;
-  @include Elevation_3;
+  @include Elevation_2;
 
   display: flex;
   align-items: center;
