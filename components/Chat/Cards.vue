@@ -3,15 +3,22 @@
     :class="messages.quantMessagesNotView ? ' card NotView' : 'card View'"
   >
     <figure v-if="!load" class="load_img"></figure>
-    <img
-      v-else
-      :src="src"
-      :alt="'Foto de perfil do usuário:' + user.name + '. Image'"
-    />
+    <img v-else :src="friendsProfiles[indexFriendProfile].src" />
+    <!-- :alt="
+        'Foto de perfil do usuário:' +
+        friendsProfiles[indexFriendProfile].name +
+        '. Image'
+      " -->
 
-    <span class="content">
-      <strong :class="load ? '' : 'load_text'">{{ user.name }}</strong>
+    <span v-if="load" class="content">
+      <strong :class="load ? '' : 'load_text'">{{
+        friendsProfiles[indexFriendProfile].name
+      }}</strong>
       <p :class="load ? '' : 'load_text'">{{ messages.lastMessage }}</p>
+    </span>
+    <span v-else class="content">
+      <strong class="load_text"></strong>
+      <p class="load_text"></p>
     </span>
     <span class="datetime">
       <strong :class="load ? '' : 'load_text'">{{
@@ -25,7 +32,11 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import ModelChats from '~/static/Models/ModelChats'
+import { getImageLinkSignedById } from '~/utils/Supabase/images'
+import { getMessages } from '~/utils/Supabase/messages'
+import { getUser } from '~/utils/Supabase/user'
 
 export default {
   name: 'IndexCards',
@@ -35,61 +46,60 @@ export default {
       type: Object,
     },
   },
-
   data() {
     return {
       load: false,
 
-      src: '',
-      user: {},
+      indexFriendProfile: 0,
       messages: {},
 
       userID: this.$supabase.auth.user(),
     }
   },
+  computed: {
+    ...mapState({
+      friendsProfiles: (state) => state.FriendsProfiles.profiles,
+    }),
+  },
   async created() {
-    await this.getUser(this.item.user_to, this.item.user_from)
-    await this.getImage(this.item.user_to, this.item.user_from)
+    await this.getUser(this.item.user_to, this.item.user_from, this.item._id)
     await this.getMessagesNotView(this.user._id, this.item._id)
-    this.load = true
   },
 
   methods: {
-    async getImage(toId, fromId) {
-      try {
-        const { data: dataSigned, errorSigned } = await this.$supabase.storage
-          .from('public')
-          .createSignedUrl(
-            `/userProfile/${toId === this.userID.id ? fromId : toId}.png`,
-            60
-          )
-
-        if (!dataSigned) throw new Error('no data')
-        if (errorSigned) throw new Error(errorSigned)
-
-        this.src = dataSigned.signedURL
-      } catch (e) {}
-    },
+    ...mapActions({
+      SetNewFriendProfile: 'FriendsProfiles/SetNewFriendProfile',
+    }),
 
     async getMessagesNotView(id, chatId) {
-      const { data: res } = await this.$supabase
-        .from('messages')
-        .select('*')
-        .eq('user_from', id)
-        .eq('chat_id', chatId)
-        .or('status.eq.Delivered,status.eq.Send')
-
-        .order('created_at', { ascending: false })
-      if (res.length > 0) this.messages = ModelChats(this.userID.id, res)
+      const { data: res } = await getMessages(chatId)
+      if (
+        res.filter((msg) => msg.user_from === id && msg.status !== 'View')
+          .length > 0
+      ) {
+        this.messages = ModelChats(this.userID.id, res)
+      } else if (res.length > 0) {
+        this.messages = ModelChats(this.userID.id, res)
+      }
     },
 
-    async getUser(toId, fromId) {
-      const { data: res } = await this.$supabase
-        .from('users')
-        .select('*')
-        .eq('_id', toId === this.userID.id ? fromId : toId)
+    async getUser(toId, fromId, chatId) {
+      this.indexFriendProfile = this.friendsProfiles
+        .map((profile) => profile._id)
+        .indexOf(toId === this.userID.id ? fromId : toId)
 
-      this.user = res[0]
+      if (this.indexFriendProfile > -1) {
+        this.user = this.friendsProfiles[this.indexFriendProfile]
+        this.load = true
+      } else if (this.indexFriendProfile === -1) {
+        const { data } = await getUser(toId === this.userID.id ? fromId : toId)
+        const signedURL = await getImageLinkSignedById(
+          toId === this.userID.id ? fromId : toId
+        )
+        data[0].src = signedURL
+        this.SetNewFriendProfile(data[0])
+        await this.getUser(toId, fromId, chatId)
+      }
     },
 
     countDates(seconds) {
@@ -173,12 +183,21 @@ export default {
 
       filter: opacity(0.7);
     }
+
+    .load_text {
+      width: 100px;
+      height: 25px;
+
+      background-color: $Primary10;
+      color: transparent !important;
+      border-radius: 16px;
+    }
   }
 
   > span.datetime {
     width: fit-content;
-    height: 80%;
-    padding: 10px 15px;
+    height: 100%;
+    padding: 8px 15px;
     border-radius: 50%;
 
     position: relative;
@@ -194,6 +213,12 @@ export default {
     }
 
     > strong {
+      height: 24px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
       @include title_large;
       color: $Neural10;
       font-weight: bold;
@@ -240,11 +265,5 @@ export default {
   &::before {
     background: $PrimaryColor;
   }
-}
-
-.load_text {
-  background-color: $Primary10;
-  color: transparent !important;
-  border-radius: 16px;
 }
 </style>

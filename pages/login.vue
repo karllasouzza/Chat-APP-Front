@@ -32,7 +32,7 @@
             <p>{{ $t('Login.popUps[0].Greeting') }}</p>
             <strong>{{ $t('Login.popUps[0].Label') }}</strong>
           </span>
-          <IconClose :title="$t('Icons.close')" @click.native="closeLogin()" />
+          <CloseIcon @click.native="closeLogin()" />
         </div>
         <InputForms
           ref="R_email_login"
@@ -65,10 +65,7 @@
             <p>{{ $t('Login.popUps[1].Greeting') }}</p>
             <strong>{{ $t('Login.popUps[1].Label') }}</strong>
           </span>
-          <IconClose
-            :title="$t('Icons.close')"
-            @click.native="closeAccount()"
-          />
+          <CloseIcon @click.native="closeAccount()" />
         </div>
         <InputForms
           v-if="accountPoint === 1"
@@ -138,13 +135,16 @@
 <script>
 import { mapActions } from 'vuex'
 
-import IconClose from '~/components/Svgs/IconClose.vue'
+// import IconClose from '~/components/Svgs/IconClose.vue'
+import CloseIcon from 'vue-material-design-icons/Close.vue'
 import Logo from '~/components/Svgs/Logo.vue'
+import { createAccount, makeLogin } from '~/utils/Supabase/auth.js'
+import { insertUser, getUser } from '~/utils/Supabase/user.js'
 
 export default {
   name: 'LoginPage',
 
-  components: { IconClose, Logo },
+  components: { CloseIcon, Logo },
 
   layout: 'DefaultLayout',
 
@@ -195,27 +195,23 @@ export default {
         return
 
       try {
-        const { session, authError } = await this.$supabase.auth.signIn({
-          email: this.email_login,
-          password: this.password_login,
-        })
-        if (authError) throw new Error(authError.message)
+        const { session, error: authError } = await makeLogin(
+          this.email_login,
+          this.password_login
+        )
+        if (authError) throw new Error(authError)
         if (!session) throw new Error('error in singIn')
 
-        const { data: user } = await this.$supabase
-          .from('users')
-          .select('*')
-          .filter('_id', 'eq', session.user.id)
+        const { data: user } = await getUser(session.user.id)
 
-        if (!user) throw new Error('not auth')
+        if (user.length === 0) throw new Error('not auth')
 
-        this.SetUser({
-          User: user[0]._id,
-        })
+        this.SetUser(user[0])
 
         this.toastSuccess(this.$t('Login.success.login'))
         return this.$router.push('/HomePage')
       } catch (error) {
+        console.log(error)
         if (error.message === 'Email not confirmed') {
           this.$router.push(`/confirm?${this.email_login}`)
         } else {
@@ -236,26 +232,27 @@ export default {
         return
 
       try {
-        const { user, authError } = await this.$supabase.auth.signUp({
-          email: this.email_account,
-          password: this.confirm_password,
-        })
+        const { user, authError } = await createAccount(
+          this.email_account,
+          this.confirm_password
+        )
 
-        if (!user) throw new Error(authError.message)
+        if (!user) throw new Error(authError)
 
-        const { data, error } = await this.$supabase.from('users').insert({
-          _id: user.id,
-          name: this.name_account,
-          bio: null,
-          created_at: user.created_at,
-        })
+        const { data, error } = await insertUser(
+          user,
+          this.email_account,
+          this.name_account
+        )
 
         if (error) throw new Error(authError.message)
         if (!data) throw new Error('Error in Insert')
 
+        this.SetUser(data[0])
+
         if (user.aud === 'authenticated') {
           this.toastSuccess(this.$t('Login.success.create_account'))
-          return this.$router.push('/confirm')
+          return this.$router.push(`/confirm?${this.email_account}`)
         } else {
           this.toastError(this.$t('Login.Error.Account'))
         }

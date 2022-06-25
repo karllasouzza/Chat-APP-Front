@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapMutations } from 'vuex'
 
 import { VLibras } from '@vue-a11y/vlibras'
 import NavBar from '~/components/NavBar.vue'
@@ -15,29 +15,27 @@ import NavBar from '~/components/NavBar.vue'
 export default {
   name: 'LayoutWithNavBar',
   components: { VLibras, NavBar },
+  data() {
+    return {
+      user: this.$supabase.auth.user(),
+    }
+  },
   head() {
     return this.$nuxtI18nHead()
   },
-  computed: {
-    ...mapState({
-      user: (state) => state.User.userID,
-    }),
-  },
   async created() {
     await this.authUser()
+    await this.loadUser()
   },
 
   methods: {
-    async authUser() {
+    ...mapMutations({
+      loadUser: 'User/loadUser',
+    }),
+
+    authUser() {
       try {
-        if (!this.user) throw new Error('not logged')
-
-        const { data: user } = await this.$supabase
-          .from('users')
-          .select('*')
-          .filter('_id', 'eq', this.user)
-
-        if (!user) throw new Error('not logged')
+        if (!this.user.id) throw new Error('not logged')
       } catch (e) {
         this.$router.push('/login')
       }

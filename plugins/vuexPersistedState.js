@@ -5,6 +5,8 @@ export default ({ store }) => {
     key: '_abc',
     reducer: (state) => ({
       User: state.User ,
+      FriendsProfiles: state.FriendsProfiles ,
+      Chats: state.Chats,
     }),
     storage: {
       getItem(key) {
