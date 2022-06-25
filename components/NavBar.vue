@@ -1,7 +1,10 @@
 <template>
   <nav class="navbar">
     <nuxt-link :to="localePath('/HomePage')">
-      <IconHome v-if="routName !== 'HomePage'" :title="$t('Icons.home')" />
+      <IconHome
+        v-if="extractLangInName($route.name) !== 'HomePage'"
+        :title="$t('Icons.home')"
+      />
 
       <div v-else class="label">
         <span>{{ $t('Navbar.home') }}</span>
@@ -10,7 +13,10 @@
     </nuxt-link>
 
     <nuxt-link :to="localePath('/chats')">
-      <IconStatus v-if="routName !== 'chats'" :title="$t('Icons.chat')" />
+      <IconStatus
+        v-if="extractLangInName($route.name) !== 'chats'"
+        :title="$t('Icons.chat')"
+      />
 
       <div v-else class="label">
         <span>{{ $t('Navbar.chat') }}</span>
@@ -19,7 +25,10 @@
     </nuxt-link>
 
     <nuxt-link :to="localePath('/profile')">
-      <IconProfile v-if="routName !== 'profile'" :title="$t('Icons.profile')" />
+      <IconProfile
+        v-if="extractLangInName($route.name) !== 'profile'"
+        :title="$t('Icons.profile')"
+      />
 
       <div v-else class="label">
         <span>{{ $t('Navbar.profile') }}</span>
@@ -37,14 +46,6 @@ import IconDot from './Svgs/IconDot.vue'
 
 export default {
   components: { IconHome, IconStatus, IconProfile, IconDot },
-  data() {
-    return {
-      routName: '',
-    }
-  },
-  mounted() {
-    this.routName = this.extractLangInName(this.$route.name)
-  },
   methods: {
     extractLangInName(name) {
       name = name.split('___')

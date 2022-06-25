@@ -1,30 +1,24 @@
 <template>
   <section class="container">
-    <header>
-      <nuxt-link to="/homePage">Esk</nuxt-link>
-      <img :src="src" alt="" />
-      <h1>{{ userTo.name }}</h1>
-    </header>
+    <ReturnSmallChat
+      v-if="indexFriendProfile > -1"
+      :label="friendsProfiles[indexFriendProfile].name"
+      :src="friendsProfiles[indexFriendProfile].src"
+      to="/homePage"
+    />
 
     <main
       v-chat-scroll="{
         always: false,
         smooth: true,
         notSmoothOnInit: true,
-        scrollonremoved: true,
       }"
       class="main"
     >
       <ChatCard
         v-for="(item, index) in messages"
         :key="index"
-        v-observe-visibility="
-          user.id !== item.user_from
-            ? 'View'
-              ? ''
-              : updateStatusMessage(item._id, 'View')
-            : ''
-        "
+        v-observe-visibility="item.user_from !== user.id ? Viewer(item) : ''"
         :text="item.content"
         :user-i-d="item.user_from"
         :before="
@@ -57,34 +51,33 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import PushMessage from '~/components/PushMessage.vue'
+import ReturnSmallChat from '~/components/topBar/ReturnSmallChat.vue'
 // import ModelMessage from '~/static/Models/ModelMessage'
 
 export default {
   name: 'ChatPage',
-  components: { PushMessage },
+  components: { PushMessage, ReturnSmallChat },
   layout: 'ChatLayout',
   data() {
     return {
       messages: [],
-      // InfiniteScroll
-      currentPage: 1,
-      maxPerPage: parseInt(screen.height / 70),
-      totalResults: 100,
-      // New Message
+
       onBottom: false,
       newMessage: false,
       quantNewMessage: 0,
       user: this.$supabase.auth.user(),
-      userTo: {},
-      src: {},
+      indexFriendProfile: -1,
       subscriptionMessages: undefined,
     }
   },
   computed: {
-    sumMaxPerPage() {
-      return screen.height / 70
-    },
+    ...mapState({
+      friendsProfiles: (state) => state.FriendsProfiles.profiles,
+      chats: (state) => state.Chats.userChats,
+    }),
   },
   async created() {
     await this.fetchMessages()
@@ -132,9 +125,14 @@ export default {
           } else return this.messages.push(message.new)
         })
         .on('UPDATE', (message) => {
-          const index = this.messages.indexOf(message.new)
-          console.log(index)
-          this.messages.splice(index, 1)
+          if (message.new.user_from === this.user.id) {
+            setTimeout(() => {
+              const index = this.messages
+                .map((msg) => msg._id)
+                .indexOf(message.new._id)
+              this.messages[index].status = message.new.status
+            }, 800)
+          }
         })
         .on('DELETE', (message) => {
           const index = this.messages.indexOf(message.new)
@@ -147,57 +145,33 @@ export default {
       this.$supabase.removeSubscription(this.subscribeMessages)
     },
 
-    async getChat() {
+    getChat() {
       try {
-        const { data: res, error } = await this.$supabase
-          .from('chats')
-          .select('*')
-          .eq('_id', this.$route.params.id)
-        if (!res) throw new Error('no data')
-        if (error) throw new Error(error)
-        await this.getUser(
-          this.user.id !== res[0].user_from ? res[0].user_from : res[0].user_to
+        const chat = this.chats.filter(
+          (chat) => chat._id === this.$route.params.id
         )
+        this.indexFriendProfile = this.friendsProfiles
+          .map((profile) => profile._id)
+          .indexOf(
+            this.user.id !== chat[0].user_from
+              ? chat[0].user_from
+              : chat[0].user_to
+          )
       } catch (e) {
         console.log(e)
       }
     },
-
-    async getUser(userId) {
-      try {
-        const { data: res, error } = await this.$supabase
-          .from('users')
-          .select('*')
-          .eq('_id', userId)
-        if (!res) throw new Error('no data')
-        if (error) throw new Error(error)
-        this.userTo = res[0]
-        await this.getImage(userId)
-      } catch (e) {
-        console.log(e)
-      }
-    },
-
-    async getImage(userID) {
-      try {
-        const { data: dataSigned, errorSigned } = await this.$supabase.storage
-          .from('public')
-          .createSignedUrl(`userProfile/${userID}.png`, 60)
-        if (!dataSigned) throw new Error('no data')
-        if (errorSigned) throw new Error(errorSigned)
-        this.src = dataSigned.signedURL
-      } catch (e) {
-        console.log(e)
-      }
-    },
-
-    updateStatusMessage(id, NewStatus) {
-      this.$supabase
+    async updateStatusMessage(idOut, statusOut) {
+      await this.$supabase
         .from('messages')
-        .update({ status: NewStatus })
-        .match({ _id: id })
-        .then(() => true)
-        .catch(() => false)
+        .update({ status: statusOut })
+        .match({ _id: idOut })
+    },
+
+    Viewer(message) {
+      if (message.user_from !== this.user.id && message.status !== 'View') {
+        this.updateStatusMessage(message._id, 'View')
+      }
     },
   },
 }
@@ -210,37 +184,13 @@ section.container {
 
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 55px 1fr auto;
+  grid-template-rows: 62px 1fr auto;
 
   padding-bottom: 6px;
+  background: $Neural99;
 
   header {
-    width: 100%;
-    height: 55px;
-
     grid-row: 1/2;
-
-    background-color: $PrimaryColor;
-
-    display: flex;
-    align-items: center;
-
-    padding: 0 5px;
-
-    img {
-      width: 45px;
-      height: 45px;
-
-      border-radius: 50%;
-
-      margin-left: 10px;
-    }
-
-    h1 {
-      @include bold-text($white);
-      text-transform: none;
-      margin-left: 10px;
-    }
   }
 
   main.main {
@@ -252,14 +202,11 @@ section.container {
 
     padding: 10px 5px;
     margin: auto;
+    background: $Neural99;
   }
 
   footer {
     grid-row: 3/4;
-  }
-
-  .wave-item {
-    background-color: $PrimaryColor;
   }
 }
 </style>
