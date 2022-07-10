@@ -23,7 +23,7 @@
     "emoji-mart-vue-fast": "^10.2.2",
     "glob-parent": "6.0.2",
     "global": "^4.4.0",
-    "moment": "^2.29.3",
+    "moment": "^2.29.4",
     "node-sass": "^7.0.1",
     "nth-check": "2.1.1",
     "nuxt": "^2.15.8",
