@@ -1,17 +1,22 @@
 <template>
   <div class="container">
-    <BlurPopup
+    <!-- <BlurPopup
       v-if="login || account"
       @click.native="login ? closeLogin() : closeAccount()"
-    />
+    /> -->
 
-    <Logo :title="$t('Title_Icon')" />
-    <aside>
+    <figure class="splashScreen">
+      <img src="@/assets/images/splashScreen.png" :class="fluidClass" alt="" />
+      <figcaption>Chat-app</figcaption>
+    </figure>
+
+    <!-- <Logo :title="$t('Title_Icon')" /> -->
+    <!-- <aside>
       <h1>{{ $t('Login.label') }}</h1>
       <span>
         {{ $t('Login.text') }}
       </span>
-    </aside>
+    </aside> -->
     <div>
       <BtnPrimary
         :type="$t('Login.buttons[1].type')"
@@ -136,15 +141,14 @@
 import { mapActions } from 'vuex'
 
 // import IconClose from '~/components/Svgs/IconClose.vue'
-import CloseIcon from 'vue-material-design-icons/Close.vue'
-import Logo from '~/components/Svgs/Logo.vue'
+import CloseIcon from '@/assets/icons/IconClose.vue'
 import { createAccount, makeLogin } from '~/utils/Supabase/auth.js'
 import { insertUser, getUser } from '~/utils/Supabase/user.js'
 
 export default {
   name: 'LoginPage',
 
-  components: { CloseIcon, Logo },
+  components: { CloseIcon },
 
   layout: 'DefaultLayout',
 
@@ -153,6 +157,7 @@ export default {
       login: false,
       account: false,
       accountPoint: 0,
+      fluidClass: 't60',
 
       /* V values */
       email_login: '',
@@ -211,7 +216,6 @@ export default {
         this.toastSuccess(this.$t('Login.success.login'))
         return this.$router.push('/HomePage')
       } catch (error) {
-        console.log(error)
         if (error.message === 'Email not confirmed') {
           this.$router.push(`/confirm?${this.email_login}`)
         } else {
@@ -362,7 +366,52 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  background-color: $white;
+  background-color: $Neutral100;
+
+  .splashScreen {
+    width: 100%;
+    height: 50%;
+
+    display: flex;
+
+    > img {
+      width: 100%;
+
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+
+      object-fit: cover;
+      transition: all 0.7s linear;
+      z-index: 2;
+    }
+
+    figcaption {
+      width: 50%;
+      height: 50px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      position: absolute;
+      top: 35%;
+      left: 0;
+      right: 0;
+      margin: auto;
+
+      color: $Primary60;
+      @include title_large();
+      font-size: 28px;
+    }
+    .t60 {
+      transform: translateY(-60%);
+    }
+    .t65 {
+      transform: translateY(-65%);
+    }
+  }
 
   > div {
     width: 100%;
@@ -376,61 +425,30 @@ export default {
       width: 80%;
       height: 50px;
 
-      background: $PrimaryColor;
+      background: $Primary60;
       transition: 0.7s ease-in-out;
 
       border-radius: 10pt;
 
-      color: $white;
+      color: $Neutral100;
+      font-weight: bold;
 
-      @include bold-text($white);
-      @include FilterShadow($PrimaryColor);
+      @include title_medium();
+      @include FilterShadow($Primary60);
 
       &:last-child {
-        background: $Secondary;
-        @include FilterShadow($Secondary);
+        border: $Primary60 2px solid;
+        color: $Primary60;
+        background: transparent;
+        @include FilterShadow($Primary60);
       }
-    }
-  }
-  > svg {
-    width: 130px;
-    height: 130px;
-  }
-  > aside {
-    width: 100%;
-    height: 120px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-
-    h1 {
-      font-size: 2rem;
-      font-weight: bold;
-      font-family: 'Raleway';
-      color: $Secondary;
-    }
-    span {
-      width: 80%;
-      height: fit-content;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      color: $black;
-      text-align: center;
-      font-family: 'Montserrat', 'Helvetica';
-      line-height: 20px;
-      font-size: 1rem;
     }
   }
 
   > form {
     height: 300px;
 
-    background-color: $white;
+    background-color: $Neutral100;
     border-radius: 20px 20px 0 0;
 
     flex-direction: column;
@@ -461,10 +479,10 @@ export default {
         justify-content: space-evenly;
         flex-direction: column;
 
-        color: $black;
+        color: $Neutral0;
 
         > strong {
-          @include bold-text($black);
+          @include bold-text($Neutral0);
           font-size: 1.2rem;
         }
       }
@@ -473,12 +491,12 @@ export default {
     button {
       width: 88%;
       height: 40px;
-      background: $PrimaryColor;
+      background: $Primary60;
       transition: 0.7s ease-in-out;
-      @include bold-text($white);
+      @include bold-text($Neutral100);
 
       border-radius: 10pt;
-      @include FilterShadow();
+      @include FilterShadow($Primary60);
     }
 
     .returnBtn {
@@ -487,7 +505,10 @@ export default {
       margin-right: 10px;
       font-size: 14px;
 
-      background: $Secondary;
+      border: $Primary60 2px solid;
+      color: $Primary60;
+      background: transparent;
+      @include FilterShadow($Primary60);
     }
   }
 

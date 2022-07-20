@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import More from '~/components/Svgs/More.vue'
+import More from '~/assets/icons/More.vue'
 
 export default {
   components: { More },
@@ -54,7 +54,7 @@ div.status {
     z-index: 2;
 
     > figcaption {
-      background: $white;
+      background: $Neutral100;
     }
   }
   ul.statusList {
@@ -101,7 +101,7 @@ div.status {
     }
 
     .img {
-      background: $PrimaryColor;
+      background: $Primary20;
 
       cursor: pointer;
 
@@ -119,8 +119,8 @@ div.status {
       width: 25px;
       height: 25px !important;
       position: absolute;
-      background: $PrimaryColor;
-      color: $white;
+      background: $Primary20;
+      color: $Neutral100;
       bottom: 26px;
       left: 3px;
       border-radius: 0px 10px 0px 10px;
@@ -129,7 +129,7 @@ div.status {
       align-items: center;
       justify-content: center;
 
-      @include bold-text($white);
+      @include bold-text($Neutral100);
       font-family: 'Montserrat';
       font-size: 10px;
     }

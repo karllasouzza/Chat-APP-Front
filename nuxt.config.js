@@ -6,14 +6,14 @@ export default {
     SUPABASE_KEY: process.env.EXTERNAL_ENV_SUPABASE_KEY,
   },
 
-  ssr: false,
+  ssr: true,
+  target: 'static',
+  components: true,
 
   server: {
     host: '0.0.0.0',
     port: 3000,
   },
-
-  target: 'static',
 
   head: {
     title: 'Chat-APP',
@@ -43,14 +43,8 @@ export default {
       },
     ],
   },
-
   styleResources: {
-    scss: [
-      './static/Scss/color.scss',
-      './static/Scss/reset.scss',
-      './static/Scss/mixins.scss',
-      './static/Scss/transitions.scss',
-    ],
+    scss: './assets/Scss/main.scss',
   },
 
   plugins: [
@@ -65,15 +59,6 @@ export default {
     { src: './plugins/croppie.js', mode: 'client' },
   ],
 
-  components: true,
-
-  buildModules: [
-    '@nuxtjs/eslint-module',
-    '@nuxtjs/pwa',
-    '@nuxtjs/style-resources',
-    '@nuxtjs/dotenv',
-  ],
-
   modules: ['@nuxtjs/axios', '@nuxtjs/i18n', '@nuxtjs/pwa', '@nuxtjs/dotenv'],
 
   dotenv: {
@@ -85,13 +70,8 @@ export default {
       title: 'Chat App',
       author: 'Karlla.Souzza',
     },
-    // manifest: {
-    //   name: 'aplicativo de chat ao vivo',
-    //   short_name: 'Chat App',
-    // },
   },
 
-  // i18n
   i18n: {
     defaultLocale: 'br',
     locales: [
@@ -105,48 +85,30 @@ export default {
         file: 'en-US.js',
         iso: 'en',
       },
-      /*  {
-        code: 'es',
-        file: 'es-ES.js',
-      },
-      {
-        code: 'fr',
-        file: 'fr-FR.js',
-      }, */
     ],
     silentTranslationWarn: true,
     silentFallbackWarn: true,
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'i18n_redirected',
-      redirectOn: 'root', // recommended
+      redirectOn: 'root',
     },
     lazy: true,
     langDir: 'lang/',
   },
-
-  // axios: {
-  //   proxy: true,
-  //   retry: { retries: 3 },
-  // },
-
-  // proxy: {
-  //   '/api/': {
-  //     target: 'https://chat-app-karlla.herokuapp.com/',
-  //     pathRewrite: { '^/api/': '' },
-  //   },
-  //   '/dev/': {
-  //     target: 'http://localhost:4000',
-  //     pathRewrite: { '^/dev/': '' },
-  //   },
-  // },
 
   toast: {
     timeout: 2000,
     closeOnClick: false,
   },
 
-  // Build Configuration: https://go.nuxtjs.dev/config-build
+  buildModules: [
+    '@nuxtjs/eslint-module',
+    '@nuxtjs/pwa',
+    '@nuxtjs/style-resources',
+    '@nuxtjs/dotenv',
+  ],
+
   build: {
     loaders: {
       sass: {

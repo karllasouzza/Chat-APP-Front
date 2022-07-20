@@ -10,18 +10,19 @@
 
     <path
       d="M11.1959 18.4448C5.15765 18.4448 0 19.3968 0 23.2049C0 27.9999 0 27.5 11.1959 27.9999C17.2342 27.9999 22.3918 27.0493 22.3918 23.2399C22.3918 19.4304 17.2678 18.4448 11.1959 18.4448Z"
-      :fill="colors.Primary"
+      :fill="Primary20"
     />
     <path
       opacity="0.8"
       d="M11.1959 14.8177C15.3092 14.8177 18.6048 11.5207 18.6048 7.40887C18.6048 3.29703 15.3092 0 11.1959 0C7.08408 0 3.78705 3.29703 3.78705 7.40887C3.78705 14.8177 3.78705 14.8177 11.1959 14.8177Z"
-      :fill="colors.Secondary"
+      :fill="Secondary20"
     />
   </svg>
 </template>
 
 <script>
-import colors from '~/static/Scss/color.scss'
+import pallet from '~/assets/Scss/main.scss'
+
 
 export default {
   props: {
@@ -32,7 +33,8 @@ export default {
   },
   data() {
     return {
-      colors: { ...colors },
+      Secondary20: pallet.Secondary20,
+      Primary20: pallet.Primary20,
     }
   },
 }

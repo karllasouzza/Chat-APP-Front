@@ -39,10 +39,10 @@
 </template>
 
 <script>
-import IconHome from './Svgs/IconHome.vue'
-import IconStatus from './Svgs/IconStatus.vue'
-import IconProfile from './Svgs/IconProfile.vue'
-import IconDot from './Svgs/IconDot.vue'
+import IconHome from '../assets/icons/IconHome.vue'
+import IconStatus from '../assets/icons/IconStatus.vue'
+import IconProfile from '../assets/icons/IconProfile.vue'
+import IconDot from '../assets/icons/IconDot.vue'
 
 export default {
   components: { IconHome, IconStatus, IconProfile, IconDot },
@@ -73,7 +73,7 @@ nav.navbar {
   z-index: 5;
   padding: 0px 15px 0 15px;
 
-  background: $white;
+  background: $Neutral100;
 
   > a > svg {
     width: 25px;
@@ -86,7 +86,7 @@ nav.navbar {
     align-items: flex-start;
 
     > span {
-      @include bold-text($Secondary);
+      @include bold-text($Secondary20);
       text-transform: none;
 
       font-size: 16px;
@@ -114,9 +114,9 @@ nav.navbar {
     bottom: 84%;
     margin: 0 auto;
 
-    border-left: 9px solid $white;
-    border-bottom: 9px solid $white;
-    border-right: 9px solid $white;
+    border-left: 9px solid $Neutral100;
+    border-bottom: 9px solid $Neutral100;
+    border-right: 9px solid $Neutral100;
     border-radius: 0 0 30px 30px;
   }
 }

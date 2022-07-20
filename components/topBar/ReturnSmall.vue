@@ -32,7 +32,7 @@ header.greet {
   width: 100%;
   height: 61px;
 
-  background: $Neural99;
+  background: $Neutral99;
 
   grid-row: 2/3;
   grid-column: 1/4;

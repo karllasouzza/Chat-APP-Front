@@ -54,8 +54,8 @@
 import { mapState } from 'vuex'
 
 import TitleProfile from '../components/Profile/Title.vue'
-import IconOk from '../components/Svgs/IconOk.vue'
-import IconClose from '~/components/Svgs/IconClose.vue'
+import IconOk from '../assets/icons/IconOk.vue'
+import IconClose from '~/assets/icons/IconClose.vue'
 import BtnPrimary from '~/components/BtnPrimary.vue'
 import CutImg from '~/components/Profile/CutImg.vue'
 
@@ -200,7 +200,7 @@ export default {
       width: fit-content;
       padding: 3px 5px;
 
-      background: $white;
+      background: $Neutral100;
 
       position: absolute;
       top: -12px;
@@ -221,7 +221,7 @@ export default {
       left: 0;
       z-index: -1;
 
-      border: 2px solid $PrimaryColor;
+      border: 2px solid $Primary20;
       border-radius: 30px 30px 30px 5px;
     }
   }
@@ -261,7 +261,7 @@ export default {
       width: 60px;
       height: 45px;
 
-      background: $PrimaryColor;
+      background: $Primary20;
       border-radius: 15px 15px 15px 2.5px;
 
       display: flex;
@@ -275,7 +275,7 @@ export default {
 
       &:last-child {
         background: none;
-        border: $Secondary 2px solid;
+        border: $Secondary20 2px solid;
 
         border-radius: 15px 15px 2.5px 15px;
       }
@@ -296,19 +296,19 @@ export default {
     width: 100px;
     height: 50px;
 
-    background: $Secondary;
-    color: $white;
+    background: $Secondary20;
+    color: $Neutral100;
 
     border-radius: 30px;
   }
 
   .btnEdit {
-    border-color: $PrimaryColor;
-    color: $PrimaryColor;
+    border-color: $Primary20;
+    color: $Primary20;
   }
   .btnLogout {
-    border-color: $Secondary;
-    color: $Secondary;
+    border-color: $Secondary20;
+    color: $Secondary20;
 
     border-radius: 30px 30px 5px 30px;
   }

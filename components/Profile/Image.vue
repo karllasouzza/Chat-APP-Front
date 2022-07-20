@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import IconAddImage from '~/components/Svgs/IconAddImage.vue'
+import IconAddImage from '~/assets/icons/IconAddImage.vue'
 
 export default {
   name: 'ProfileImage',
@@ -55,8 +55,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-
 #formFileLg {
   display: none;
 }

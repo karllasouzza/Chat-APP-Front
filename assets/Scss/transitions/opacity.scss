@@ -1,0 +1,8 @@
+.Opacity-enter-active,
+.Opacity-leave-active {
+  transition: opacity 0.5s;
+}
+.Opacity-enter,
+.Opacity-leave-active {
+  opacity: 0;
+}

@@ -52,7 +52,7 @@ export default {
   display: grid;
   grid-template-columns: 10px 1fr 10px;
   grid-template-rows: 10px 1fr 10px;
-  background-color: $PrimaryColor;
+  background-color: $Primary20;
 }
 
 #__layout {
@@ -71,7 +71,7 @@ export default {
 .main {
   grid-row: 1/2;
   border-radius: 15px 15px 0 0;
-  background: $white;
+  background: $Neutral100;
 }
 
 header {

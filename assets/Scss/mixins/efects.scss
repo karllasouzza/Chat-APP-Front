@@ -1,0 +1,37 @@
+@mixin ButtonHoverToTransparent($Color) {
+  &:hover {
+    background-color: transparent;
+    -webkit-text-stroke: 1px $Color;
+    border: 1px solid $Color;
+  }
+}
+
+@mixin ButtonHoverToSolidColor($Background: $Primary20, $Color: $Neutral10) {
+  &:hover {
+    background-color: $Background;
+    color: $Color;
+    border: none;
+  }
+}
+
+@mixin FilterShadow($color: $Primary20) {
+  &:hover {
+    box-shadow: 2px 4px 45px 3px $color;
+  }
+}
+
+@mixin placeholder($color: $Secondary20) {
+  &::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: $color;
+    opacity: 1; /* Firefox */
+  }
+  &:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: $color;
+  }
+  &::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: $color;
+  }
+}

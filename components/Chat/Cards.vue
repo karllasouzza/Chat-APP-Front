@@ -174,7 +174,7 @@ export default {
     > Strong {
       @include title_medium;
 
-      color: $Neural10;
+      color: $Neutral10;
       font-weight: bold;
     }
 
@@ -220,7 +220,7 @@ export default {
       justify-content: center;
 
       @include title_large;
-      color: $Neural10;
+      color: $Neutral10;
       font-weight: bold;
     }
   }
@@ -252,18 +252,18 @@ export default {
     justify-content: space-around;
 
     > p {
-      color: $PrimaryColor;
+      color: $Primary20;
     }
 
     > strong {
-      color: $PrimaryColor;
+      color: $Primary20;
     }
   }
 }
 
 .View {
   &::before {
-    background: $PrimaryColor;
+    background: $Primary20;
   }
 }
 </style>

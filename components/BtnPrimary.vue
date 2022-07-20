@@ -24,7 +24,7 @@ button {
   display: inline-block;
 
   font-size: 1.2em;
-  background-color: $PrimaryColor;
+  background-color: $Primary20;
 
   border-radius: 10px 10px 10px 1.5px;
 }

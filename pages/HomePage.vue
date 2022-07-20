@@ -108,7 +108,7 @@ export default {
 
   position: relative;
 
-  background: $Neural99;
+  background: $Neutral99;
 }
 
 .chats {

@@ -37,8 +37,8 @@ header.navTopChats {
   width: 100%;
   height: 62px;
 
-  background: $Neural99;
-  border-bottom: $Neural10 1px solid;
+  background: $Neutral99;
+  border-bottom: $Neutral10 1px solid;
 
   grid-row: 2/3;
   grid-column: 1/4;

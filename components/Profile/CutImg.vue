@@ -44,10 +44,10 @@
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
 
-import IconChange from '../Svgs/IconChange.vue'
-import IconClose from '../Svgs/IconClose.vue'
-import IconOk from '../Svgs/IconOk.vue'
-import IconAddImage from '~/components/Svgs/IconAddImage.vue'
+import IconChange from '../../assets/icons/IconChange.vue'
+import IconClose from '../../assets/icons/IconClose.vue'
+import IconOk from '../../assets/icons/IconOk.vue'
+import IconAddImage from '~/assets/icons/IconAddImage.vue'
 
 export default {
   name: 'CutImg',
@@ -145,7 +145,7 @@ export default {
   top: 0;
   z-index: 999;
 
-  background: $white;
+  background: $Neutral100;
 
   display: flex;
   flex-direction: column;
@@ -170,7 +170,7 @@ export default {
     button {
       width: 90px;
       height: 60px;
-      border: 4px solid $PrimaryColor;
+      border: 4px solid $Primary20;
       border-radius: 20px;
 
       display: flex;
@@ -183,21 +183,21 @@ export default {
 
       border-bottom-left-radius: 5px;
 
-      background: $white;
-      border-color: $white;
+      background: $Neutral100;
+      border-color: $Neutral100;
     }
 
     button.cute {
       width: 100px;
 
-      background: $PrimaryColor;
+      background: $Primary20;
     }
 
     button.exit {
       width: 80px;
 
       border-bottom-right-radius: 5px;
-      border-color: $Secondary;
+      border-color: $Secondary20;
     }
   }
 }
@@ -225,7 +225,7 @@ export default {
     width: 50px;
     height: 50px;
 
-    background: $PrimaryColor;
+    background: $Primary20;
 
     position: absolute;
 
@@ -243,7 +243,7 @@ export default {
 }
 
 .edit {
-  background-color: $PrimaryColor;
+  background-color: $Primary20;
 }
 
 input {
@@ -253,7 +253,7 @@ input {
 .public {
   width: 120px;
   height: 120px;
-  background-color: $PrimaryColor;
+  background-color: $Primary20;
   background-size: 81%;
   background-repeat: no-repeat;
   background-position: center;

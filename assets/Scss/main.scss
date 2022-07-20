@@ -1,0 +1,119 @@
+// Colors
+@import './colors/pallet.scss';
+
+// Fonts
+@import './mixins/font_android.scss';
+
+// Efects
+@import './mixins/elevations.scss';
+@import './mixins/efects.scss';
+
+// Reset
+@import './reset/elements.scss';
+@import './reset/custom.scss';
+
+// Transitions
+@import './transitions/opacity.scss';
+@import './transitions/translateY.scss';
+
+:export {
+  Primary10: $Primary10;
+  Primary20: $Primary20;
+  Primary30: $Primary30;
+  Primary40: $Primary40;
+  Primary50: $Primary50;
+  Primary60: $Primary60;
+  Primary70: $Primary70;
+  Primary80: $Primary80;
+  Primary90: $Primary90;
+  Primary95: $Primary95;
+  Primary99: $Primary99;
+
+  Secondary10: $Secondary10;
+  Secondary20: $Secondary20;
+  Secondary30: $Secondary30;
+  Secondary40: $Secondary40;
+  Secondary50: $Secondary50;
+  Secondary60: $Secondary60;
+  Secondary70: $Secondary70;
+  Secondary80: $Secondary80;
+  Secondary90: $Secondary90;
+  Secondary95: $Secondary95;
+  Secondary99: $Secondary99;
+
+  Tertiary10: $Tertiary10;
+  Tertiary20: $Tertiary20;
+  Tertiary30: $Tertiary30;
+  Tertiary40: $Tertiary40;
+  Tertiary50: $Tertiary50;
+  Tertiary60: $Tertiary60;
+  Tertiary70: $Tertiary70;
+  Tertiary80: $Tertiary80;
+  Tertiary90: $Tertiary90;
+  Tertiary95: $Tertiary95;
+  Tertiary99: $Tertiary99;
+
+  Neutral0: $Neutral0;
+  Neutral10: $Neutral10;
+  Neutral20: $Neutral20;
+  Neutral30: $Neutral30;
+  Neutral40: $Neutral40;
+  Neutral50: $Neutral50;
+  Neutral60: $Neutral60;
+  Neutral70: $Neutral70;
+  Neutral80: $Neutral80;
+  Neutral90: $Neutral90;
+  Neutral95: $Neutral95;
+  Neutral99: $Neutral99;
+  Neutral100: $Neutral100;
+
+  Neutral-Variant0: $Neutral-Variant0;
+  Neutral-Variant10: $Neutral-Variant10;
+  Neutral-Variant20: $Neutral-Variant20;
+  Neutral-Variant30: $Neutral-Variant30;
+  Neutral-Variant40: $Neutral-Variant40;
+  Neutral-Variant50: $Neutral-Variant50;
+  Neutral-Variant60: $Neutral-Variant60;
+  Neutral-Variant70: $Neutral-Variant70;
+  Neutral-Variant80: $Neutral-Variant80;
+  Neutral-Variant90: $Neutral-Variant90;
+  Neutral-Variant95: $Neutral-Variant95;
+  Neutral-Variant99: $Neutral-Variant99;
+  Neutral-Variant100: $Neutral-Variant100;
+
+  Success10: $Success10;
+  Success20: $Success20;
+  Success30: $Success30;
+  Success40: $Success40;
+  Success50: $Success50;
+  Success60: $Success60;
+  Success70: $Success70;
+  Success80: $Success80;
+  Success90: $Success90;
+  Success95: $Success95;
+  Success99: $Success99;
+
+  Alert10: $Alert10;
+  Alert20: $Alert20;
+  Alert30: $Alert30;
+  Alert40: $Alert40;
+  Alert50: $Alert50;
+  Alert60: $Alert60;
+  Alert70: $Alert70;
+  Alert80: $Alert80;
+  Alert90: $Alert90;
+  Alert95: $Alert95;
+  Alert99: $Alert99;
+
+  Error10: $Error10;
+  Error20: $Error20;
+  Error30: $Error30;
+  Error40: $Error40;
+  Error50: $Error50;
+  Error60: $Error60;
+  Error70: $Error70;
+  Error80: $Error80;
+  Error90: $Error90;
+  Error95: $Error95;
+  Error99: $Error99;
+}

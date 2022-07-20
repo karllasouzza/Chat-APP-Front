@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import HidePass from '~/components/Svgs/HidePass.vue'
-import ShowPass from '~/components/Svgs/ShowPass.vue'
+import HidePass from '~/assets/icons/HidePass.vue'
+import ShowPass from '~/assets/icons/ShowPass.vue'
 export default {
   components: {
     HidePass,
@@ -60,11 +60,11 @@ export default {
   height: 40px;
 
   border: none;
-  border: 1px solid $black;
+  border: 1px solid $Neutral0;
   border-radius: 10px;
   position: relative;
 
-  @include placeholder(#000);
+  @include placeholder($Neutral100);
 
   svg {
     width: 20px;

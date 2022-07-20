@@ -7,7 +7,8 @@ div#popup {
   width: 100%;
   height: 100%;
 
-  background-color: rgba(0, 0, 0, 0.596);
+  background-color: $Neutral10;
+  opacity: 0.5;
 
   position: absolute;
   top: 0;

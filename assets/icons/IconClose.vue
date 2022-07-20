@@ -1,9 +1,9 @@
 <template>
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 52 52">
     <g filter="url(#a)">
-      <title>{{ $t('Icons.close') }}</title>
+      <title>{{ title }}</title>
       <path
-        :fill="colors.Error"
+        :fill="Error50"
         fill-rule="evenodd"
         d="M45.9986 5.96041c2.6139 2.61388 2.6139 6.85179 0 9.46569l-10.614 10.614 10.4313 10.4314c2.6139 2.6139 2.6139 6.8518 0 9.4657-2.6138 2.6139-6.8518 2.6139-9.4656 0L25.9189 35.5058 15.6088 45.8159c-2.6139 2.6139-6.85182 2.6139-9.4657 0-2.61388-2.6138-2.61388-6.8518 0-9.4657l10.3101-10.3101L5.96041 15.5474c-2.61388-2.6139-2.61388-6.85185 0-9.46573 2.61388-2.61388 6.85179-2.61388 9.46569 0L25.9189 16.5745l10.614-10.61409c2.6139-2.61388 6.8518-2.61388 9.4657 0Z"
         clip-rule="evenodd"
@@ -43,11 +43,13 @@
 </template>
 
 <script>
-import colors from '~/static/Scss/color.scss'
+import { Error50 } from '~/assets/Scss/main.scss'
+
 export default {
+  props: { title: { type: String, required: true } },
   data() {
     return {
-      colors: { ...colors },
+      Error50,
     }
   },
 }

@@ -22,7 +22,7 @@ export default {
 
 <style lang="scss" scoped>
 p.title > strong {
-  @include bold-text($PrimaryColor);
+  @include bold-text($Primary20);
   text-transform: none;
   font-size: 28px;
 }
@@ -35,7 +35,7 @@ p.label {
   justify-content: flex-start;
 
   strong {
-    @include bold-text($PrimaryColor);
+    @include bold-text($Primary20);
     font-size: 20px;
     text-transform: none;
 

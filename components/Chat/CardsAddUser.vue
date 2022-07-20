@@ -94,7 +94,7 @@ export default {
     > Strong {
       @include title_medium;
 
-      color: $Neural10;
+      color: $Neutral10;
       font-weight: bold;
     }
 

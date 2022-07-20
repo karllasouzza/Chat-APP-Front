@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import SendMessage from './Svgs/SendMessage.vue'
+import SendMessage from '../assets/icons/SendMessage.vue'
 
 export default {
   components: { SendMessage },
@@ -67,11 +67,11 @@ footer.pushMessage {
   align-items: center;
   justify-content: space-between;
 
-  background: $Third;
+  background: $Tertiary90;
   border-radius: 30pt;
   margin: auto;
   margin-top: 5px;
-  padding:  10px 10px;
+  padding: 10px 10px;
 
   textarea {
     resize: none;
@@ -84,7 +84,7 @@ footer.pushMessage {
     border: none;
 
     background: transparent;
-    color: $white;
+    color: $Neutral100;
 
     text-align: start;
 
@@ -96,17 +96,17 @@ footer.pushMessage {
 
     &::placeholder {
       /* Firefox, Chrome, Opera */
-      color: $white;
+      color: $Neutral100;
     }
 
     &:-ms-input-placeholder {
       /* Internet Explorer 10-11 */
-      color: $white;
+      color: $Neutral100;
     }
 
     &::-ms-input-placeholder {
       /* Microsoft Edge */
-      color: $white;
+      color: $Neutral100;
     }
   }
 

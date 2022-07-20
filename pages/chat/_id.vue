@@ -187,7 +187,7 @@ section.container {
   grid-template-rows: 62px 1fr auto;
 
   padding-bottom: 6px;
-  background: $Neural99;
+  background: $Neutral99;
 
   header {
     grid-row: 1/2;
@@ -202,7 +202,7 @@ section.container {
 
     padding: 10px 5px;
     margin: auto;
-    background: $Neural99;
+    background: $Neutral99;
   }
 
   footer {

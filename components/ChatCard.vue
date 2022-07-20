@@ -70,7 +70,7 @@ export default {
   padding: 5px 5px;
 
   box-shadow: 0 0 2px 0.3px rgba(0, 0, 0, 0.212);
-  background: $white;
+  background: $Neutral0;
 
   span {
     width: 100%;
@@ -105,7 +105,7 @@ export default {
 .MyCard {
   border-radius: 25px 25px 0px 25px;
 
-  background: $Third;
+  background: $Tertiary90;
   align-self: flex-end;
 
   footer {

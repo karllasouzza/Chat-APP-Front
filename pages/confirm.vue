@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import IlustrationEmail from '~/components/Svgs/IlustrationEmail.vue'
+import IlustrationEmail from '~/assets/icons/IlustrationEmail.vue'
 import BtnPrimary from '~/components/BtnPrimary.vue'
 
 export default {
@@ -64,7 +64,7 @@ main {
       align-items: center;
 
       h1 {
-        @include bold-text($Secondary);
+        @include bold-text($Secondary20);
       }
       p {
         font-weight: bold;
@@ -77,9 +77,9 @@ main {
     height: 45px;
     border-radius: 20px 20px 20px 5px;
 
-    background: $PrimaryColor;
+    background: $Primary20;
 
-    @include bold-text($white);
+    @include bold-text($Neutral100);
     text-transform: none;
   }
 }
