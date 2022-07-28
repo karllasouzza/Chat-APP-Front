@@ -4255,10 +4255,10 @@ eslint-plugin-vue@^8.5.0, eslint-plugin-vue@^8.7.1:
     semver "^7.3.5"
     vue-eslint-parser "^8.0.1"
 
-eslint-plugin-vue@^9.2.0:
-  version "9.2.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-9.2.0.tgz#b7ca02b2ce8218b7586346440fc61c2655db353a"
-  integrity sha512-W2hc+NUXoce8sZtWgZ45miQTy6jNyuSdub5aZ1IBune4JDeAyzucYX0TzkrQ1jMO52sNUDYlCIHDoaNePe0p5g==
+eslint-plugin-vue@^9.3.0:
+  version "9.3.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-9.3.0.tgz#c3f5ce515dae387e062428725c5cf96098d9da0b"
+  integrity sha512-iscKKkBZgm6fGZwFt6poRoWC0Wy2dQOlwUPW++CiPoQiw1enctV2Hj5DBzzjJZfyqs+FAXhgzL4q0Ww03AgSmQ==
   dependencies:
     eslint-utils "^3.0.0"
     natural-compare "^1.4.0"
@@ -9401,9 +9401,9 @@ terser-webpack-plugin@^4.2.3:
     webpack-sources "^1.4.3"
 
 terser@^4.1.2, terser@^4.6.3:
-  version "4.8.0"
-  resolved "https://registry.yarnpkg.com/terser/-/terser-4.8.0.tgz#63056343d7c70bb29f3af665865a46fe03a0df17"
-  integrity sha512-EAPipTNeWsb/3wLPeup1tVPaXfIaU68xMnVdPafIL1TV05OhASArYyIfFvnvJCNrR2NIOvDVNNTFRa+Re2MWyw==
+  version "4.8.1"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-4.8.1.tgz#a00e5634562de2239fd404c649051bf6fc21144f"
+  integrity sha512-4GnLC0x667eJG0ewJTa6z/yXrbLGv80D9Ru6HIpCQmO+Q4PfEtBFi0ObSckqwL6VyQv/7ENJieXHo2ANmdQwgw==
   dependencies:
     commander "^2.20.0"
     source-map "~0.6.1"
