@@ -14,7 +14,7 @@
     "@nuxtjs/auth": "4.9.1",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/dotenv": "^1.4.1",
-    "@nuxtjs/i18n": "^7.2.2",
+    "@nuxtjs/i18n": "^7.2.3",
     "@nuxtjs/style-resources": "^1.2.1",
     "@supabase/supabase-js": "^1.35.6",
     "@vue-a11y/vlibras": "^0.1.0",
