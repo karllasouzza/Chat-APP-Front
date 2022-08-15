@@ -14,12 +14,12 @@
     "@nuxtjs/auth": "4.9.1",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/dotenv": "^1.4.1",
-    "@nuxtjs/i18n": "^7.2.2",
+    "@nuxtjs/i18n": "^7.2.3",
     "@nuxtjs/style-resources": "^1.2.1",
-    "@supabase/supabase-js": "^1.35.4",
+    "@supabase/supabase-js": "^1.35.6",
     "@vue-a11y/vlibras": "^0.1.0",
     "base64-arraybuffer": "^1.0.2",
-    "core-js": "^3.24.0",
+    "core-js": "^3.24.1",
     "glob-parent": "6.0.2",
     "global": "^4.4.0",
     "moment": "^2.29.4",
@@ -39,12 +39,13 @@
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/pwa": "^3.3.5",
     "@originjs/vite-plugin-commonjs": "^1.0.1",
-    "eslint": "^8.20.0",
+    "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-nuxt": "^3.1.0",
     "prettier": "^2.7.1",
-    "eslint-plugin-vue": "^9.2.0",
     "sass": "^1.54.4",
+    "eslint-plugin-vue": "^9.3.0",
+    
     "sass-loader": "10.1.1"
   }
 }
