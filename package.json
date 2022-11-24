@@ -16,7 +16,7 @@
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/i18n": "^7.3.0",
     "@nuxtjs/style-resources": "^1.2.1",
-    "@supabase/supabase-js": "^2.1.0",
+    "@supabase/supabase-js": "^2.1.1",
     "@vue-a11y/vlibras": "^0.1.0",
     "base64-arraybuffer": "^1.0.2",
     "core-js": "^3.26.1",
